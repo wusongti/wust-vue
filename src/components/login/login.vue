@@ -53,7 +53,7 @@
       login: function () {
         Vue.$ajax({
           method: 'post',
-          url:Vue.$baseURL + '/api-sso-server/AuthenticationController/login',
+          url:Vue.$baseURL + '/api-sso-server/LoginController/login',
           data: {
             'loginName': this.loginName,
             'password': this.password

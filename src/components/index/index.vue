@@ -171,7 +171,7 @@
 
             Vue.$ajax({
               method: 'post',
-              url:Vue.$baseURL + '/api-sso-server/AuthenticationController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId,
+              url:Vue.$baseURL + '/api-sso-server/LoginController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId,
             }).then(res => {
               if(res.data.flag == 'SUCCESS') {
                   this.twoLevelMenus = res.data.obj;
@@ -195,7 +195,7 @@
             () => {// 点击确定
               Vue.$ajax({
                 method: 'post',
-                url:Vue.$baseURL + '/api-sso-server/AuthenticationController/logout/' + this.loginContext.getLoginContext().loginName,
+                url:Vue.$baseURL + '/api-sso-server/LoginController/logout/' + this.loginContext.getLoginContext().loginName,
               }).then(res => {
                 if(res.data.flag === 'SUCCESS') {
                   this.$router.push({path:'/Login'});
