@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/28.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="lookup-list">
     <!-- Nav tabs -->
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
@@ -165,226 +165,226 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
-  import  '../../../../static/treeTable/jquery.treeTable.js'
-  import LookupUpdate from "./lookup-update";
-  import LookupCopy from "./lookup-copy";
+import Vue from 'vue'
+import '../../../../static/treeTable/jquery.treeTable.js'
+import LookupUpdate from './lookup-update'
+import LookupCopy from './lookup-copy'
 
-  export default {
-    components: {
-      LookupCopy,
-      LookupUpdate},
-    name: 'LookupList',
-    data () {
-      return {
-        showUpdateIndividuationPopover:false,
-        showCopyIndividuationPopover:false,
-        selectModel:{},
-        searchModel: {
-            code:'',
-            name:'',
-            visible:''
-        },
-        searchModel1: {
-          code:'',
-          name:'',
-          visible:''
-        },
-        baseDto: {},
-        baseDto1: {}
+export default {
+  components: {
+    LookupCopy,
+    LookupUpdate},
+  name: 'LookupList',
+  data () {
+    return {
+      showUpdateIndividuationPopover: false,
+      showCopyIndividuationPopover: false,
+      selectModel: {},
+      searchModel: {
+        code: '',
+        name: '',
+        visible: ''
+      },
+      searchModel1: {
+        code: '',
+        name: '',
+        visible: ''
+      },
+      baseDto: {},
+      baseDto1: {}
+    }
+  },
+  created: function () {
+    this.getLookupTableTreeData()
+  },
+  updated: function () {
+    this.initTableTree1()
+    this.initTableTree2()
+  },
+  methods: {
+    showLookupTableTreePage: function () {
+      $('#myTabs li:eq(1) a').tab('show')
+      this.getLookupTableTreeData()
+    },
+    getLookupTableTreeData: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/getLookupTableTreeData',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    showIndividuationLookupTableTreePage: function () {
+      // eslint-disable-next-line no-undef
+      $('#myTabs li:eq(1) a').tab('show')
+      this.getIndividuationLookupTableTreeData()
+    },
+    getIndividuationLookupTableTreeData: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/getIndividuationLookupTableTreeData',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto1 = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    search: function () {
+      this.getLookupTableTreeData()
+    },
+    search1: function () {
+      this.getIndividuationLookupTableTreeData()
+    },
+    updateStatus: function (data) {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/updateStatus',
+        data: data
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.$message('success', '操作成功', 3000)
+          this.getIndividuationLookupTableTreeData()
+        }
+      })
+    },
+    updateVisible: function (data) {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/updateVisible',
+        data: data
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.$message('success', '操作成功', 3000)
+          this.getIndividuationLookupTableTreeData()
+        }
+      })
+    },
+    create: function (data) {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/exist',
+        data: data
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$dialog('询问', res.data.message + ',您需要覆盖原来的数据吗？', true, true,
+            () => { // 点击确定
+              Vue.$ajax({
+                method: 'post',
+                url: Vue.$adminServerURL + '/DataDictionaryController/create',
+                data: data
+              }).then(res => {
+                if (res.data.flag !== 'SUCCESS') {
+                  this.$message('warning', res.data.message, 3000)
+                } else {
+                  this.$dialog('询问', '添加到个性化成功，是否转到个性化页面？', true, true,
+                    () => { // 点击确定
+                      this.showIndividuationLookupTableTreePage()
+                    },
+                    () => {
+                      // 点击关闭
+                    }
+                  )
+                }
+              })
+            },
+            () => {
+              // 点击关闭
+            }
+          )
+        } else {
+          Vue.$ajax({
+            method: 'post',
+            url: Vue.$adminServerURL + '/DataDictionaryController/create',
+            data: data
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$dialog('询问', '添加到个性化成功，是否转到个性化页面？', true, true,
+                () => { // 点击确定
+                  this.showIndividuationLookupTableTreePage()
+                },
+                () => {
+                  // 点击关闭
+                }
+              )
+            }
+          })
+        }
+      })
+    },
+    copy: function (data) {
+      if (this.showCopyIndividuationPopover) {
+        this.showCopyIndividuationPopover = false
+      } else {
+        this.selectModel = data
+        this.showCopyIndividuationPopover = true
       }
     },
-    created: function () {
-      this.getLookupTableTreeData();
-    },
-    updated : function () {
-      this.initTableTree1();
-      this.initTableTree2();
-    },
-    methods: {
-      showLookupTableTreePage:function () {
-        $('#myTabs li:eq(1) a').tab('show');
-        this.getLookupTableTreeData();
-      },
-      getLookupTableTreeData:function () {
-        let taht = this;
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/getLookupTableTreeData',
-          data:this.searchModel
-        }).then(res => {
-          if(res.data.messageMap.flag == 'SUCCESS') {
-            this.baseDto = res.data;
-          }else{
-            this.$message('info',res.data.message,3000);
-          }
-        })
-      },
-      showIndividuationLookupTableTreePage:function () {
-        $('#myTabs li:eq(1) a').tab('show');
-        this.getIndividuationLookupTableTreeData();
-      },
-      getIndividuationLookupTableTreeData:function () {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/getIndividuationLookupTableTreeData',
-          data:this.searchModel
-        }).then(res => {
-          if(res.data.messageMap.flag == 'SUCCESS') {
-            this.baseDto1 = res.data;
-          }else{
-            this.$message('info',res.data.message,3000);
-          }
-        })
-
-      },
-      search:function () {
-        this.getLookupTableTreeData();
-      },
-      search1:function () {
-        this.getIndividuationLookupTableTreeData();
-      },
-      updateStatus:function (data) {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/updateStatus',
-          data:data
-        }).then(res => {
-          if(res.data.flag != 'SUCCESS') {
-            this.$message('warning',res.data.message,3000);
-          }else{
-            this.$message('success','操作成功',3000);
-            this.getIndividuationLookupTableTreeData();
-          }
-        })
-      },
-      updateVisible:function (data) {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/updateVisible',
-          data:data
-        }).then(res => {
-          if(res.data.flag != 'SUCCESS') {
-            this.$message('warning',res.data.message,3000);
-          }else{
-            this.$message('success','操作成功',3000);
-            this.getIndividuationLookupTableTreeData();
-          }
-        })
-      },
-      create:function (data) {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/exist',
-          data:data
-        }).then(res => {
-          if(res.data.flag != 'SUCCESS') {
-            this.$dialog('询问',res.data.message+",您需要覆盖原来的数据吗？",true,true,
-              () => {// 点击确定
-                Vue.$ajax({
-                  method: 'post',
-                  url:Vue.$adminServerURL + '/DataDictionaryController/create',
-                  data:data
-                }).then(res => {
-                  if(res.data.flag != 'SUCCESS') {
-                    this.$message('warning',res.data.message,3000);
-                  }else{
-                    this.$dialog('询问','添加到个性化成功，是否转到个性化页面？',true,true,
-                      () => {// 点击确定
-                        this.showIndividuationLookupTableTreePage();
-                      },
-                      () => {
-                        // 点击关闭
-                      }
-                    );
-                  }
-                })
-              },
-              () => {
-                // 点击关闭
-              }
-            );
-          }else{
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/DataDictionaryController/create',
-              data:data
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.$dialog('询问','添加到个性化成功，是否转到个性化页面？',true,true,
-                  () => {// 点击确定
-                    this.showIndividuationLookupTableTreePage();
-                  },
-                  () => {
-                    // 点击关闭
-                  }
-                );
-              }
-            })
-          }
-        })
-      },
-      copy:function (data) {
-        if(this.showCopyIndividuationPopover){
-          this.showCopyIndividuationPopover = false;
-        }else{
-          this.selectModel = data;
-          this.showCopyIndividuationPopover = true;
-        }
-      },
-      update:function (data) {
-        if(this.showUpdateIndividuationPopover){
-            this.showUpdateIndividuationPopover = false;
-        }else{
-            this.selectModel = data;
-            this.showUpdateIndividuationPopover = true;
-        }
-      },
-      closePopver:function (type) {
-          if(type == 'update'){
-            this.showUpdateIndividuationPopover = false;
-            this.getIndividuationLookupTableTreeData();
-          }else if(type == 'copy'){
-            this.showCopyIndividuationPopover = false;
-          }
-      },
-      changeTab:function (tabId) {
-        if(tabId == 'LookupList'){
-          this.getLookupTableTreeData();
-        }else{
-          this.getIndividuationLookupTableTreeData();
-        }
-      },
-      initTableTree1:function () {
-        var option = {
-          theme:'vsStyle',
-          expandLevel : 1,
-          beforeExpand : function($treeTable, id) {
-            console.log('beforeExpand:' + id);
-          },
-          onSelect : function($treeTable, id) {
-            console.log('onSelect:' + id);
-          }
-        };
-        $('#treeTable1').treeTable(option);
-      },
-      initTableTree2:function () {
-        var option = {
-          theme:'vsStyle',
-          expandLevel : 1,
-          beforeExpand : function($treeTable, id) {
-            console.log('beforeExpand:' + id);
-          },
-          onSelect : function($treeTable, id) {
-            console.log('onSelect:' + id);
-          }
-        };
-        $('#treeTable2').treeTable(option);
+    update: function (data) {
+      if (this.showUpdateIndividuationPopover) {
+        this.showUpdateIndividuationPopover = false
+      } else {
+        this.selectModel = data
+        this.showUpdateIndividuationPopover = true
       }
+    },
+    closePopver: function (type) {
+      if (type === 'update') {
+        this.showUpdateIndividuationPopover = false
+        this.getIndividuationLookupTableTreeData()
+      } else if (type === 'copy') {
+        this.showCopyIndividuationPopover = false
+      }
+    },
+    changeTab: function (tabId) {
+      if (tabId === 'LookupList') {
+        this.getLookupTableTreeData()
+      } else {
+        this.getIndividuationLookupTableTreeData()
+      }
+    },
+    initTableTree1: function () {
+      let option = {
+        theme: 'vsStyle',
+        expandLevel: 1,
+        beforeExpand: function ($treeTable, id) {
+          console.log('beforeExpand:' + id)
+        },
+        onSelect: function ($treeTable, id) {
+          console.log('onSelect:' + id)
+        }
+      }
+      $('#treeTable1').treeTable(option)
+    },
+    initTableTree2: function () {
+      let option = {
+        theme: 'vsStyle',
+        expandLevel: 1,
+        beforeExpand: function ($treeTable, id) {
+          console.log('beforeExpand:' + id)
+        },
+        onSelect: function ($treeTable, id) {
+          console.log('onSelect:' + id)
+        }
+      }
+      // eslint-disable-next-line no-undef
+      $('#treeTable2').treeTable(option)
     }
   }
+}
 </script>
 <style>
 </style>

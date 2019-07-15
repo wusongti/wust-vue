@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/23.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="import-export-list">
     <form>
       <div class="row">
@@ -95,53 +95,53 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
 
-  export default {
-    name: 'ImportExportList',
-    components: {
-      PaginationComponent
+export default {
+  name: 'ImportExportList',
+  components: {
+    PaginationComponent
+  },
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        status: ''
+      },
+      baseDto: {page: {totalResult: 0}}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/MyImportExportController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
     },
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          status:''
-        },
-        baseDto:{page:{totalResult:0}}
-      }
+    downloadExcel: function (id) {
+      window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=excel'
     },
-    created:function () {
-      this.listPage();
+    downloadLog: function (id) {
+      window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=log'
     },
-    methods: {
-      listPage:function () {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/MyImportExportController/listPage',
-          data:this.searchModel
-        }).then(res => {
-          if(res.data.messageMap.flag == 'SUCCESS') {
-            this.baseDto = res.data;
-          }else{
-            this.$message('info',res.data.message,3000);
-          }
-        })
-      },
-      downloadExcel:function (id) {
-        window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=excel';
-      },
-      downloadLog:function (id) {
-        window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=log';
-      },
-      pageIndexChange:function (e) {
-        this.searchModel.pageDto.currentPage = e;
-      },
-      search:function () {
-        this.searchModel.pageDto.currentPage = 1;
-        this.listPage();
-      }
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
     }
   }
+}
 </script>

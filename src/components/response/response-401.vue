@@ -6,24 +6,24 @@
   </div>
 </template>
 <script>
-  export default {
-    name:'401',
-    data(){
-      return{
-        timing:5
-      }
-    },
-    created: function () {
-      var that = this;
-      var intervalId = setInterval(function () {
-        if(that.timing == 0){
-          window.clearInterval(intervalId);
-          that.$goBack()
-        }
-        that.timing --;
-      },1000);
+export default {
+  name: '401',
+  data () {
+    return {
+      timing: 5
     }
+  },
+  created: function () {
+    var that = this
+    var intervalId = setInterval(function () {
+      if (that.timing == 0) {
+        window.clearInterval(intervalId)
+        that.$goBack()
+      }
+      that.timing--
+    }, 1000)
   }
+}
 </script>
 <style>
   @import "response.css";

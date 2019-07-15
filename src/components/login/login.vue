@@ -31,44 +31,44 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  export default {
-    name: 'Login',
-    data () {
-      return {
-        loginName:'',
-        password:''
-      }
-    },
-    created:function () {
-      var that = this;
-      document.onkeydown = function (e) {
-        var key = window.event.keyCode;
-        if (key == 13) {
-            that.login();
-        }
-      }
-    },
-    methods: {
-      login: function () {
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$baseURL + '/api-sso-server/LoginController/login',
-          data: {
-            'loginName': this.loginName,
-            'password': this.password
-          }
-        }).then(res => {
-          if(res.data.flag === 'SUCCESS') {
-              this.loginContext.setLoginContext(res);
-              this.$router.push({path:'/Index'});
-          }else{
-            this.$message('info',res.data.message,3000);
-          }
-        })
+import Vue from 'vue'
+export default {
+  name: 'Login',
+  data () {
+    return {
+      loginName: '',
+      password: ''
+    }
+  },
+  created: function () {
+    let that = this
+    document.onkeydown = function (e) {
+      let key = window.event.keyCode
+      if (key === 13) {
+        that.login()
       }
     }
+  },
+  methods: {
+    login: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$baseURL + '/api-sso-server/LoginController/login',
+        data: {
+          'loginName': this.loginName,
+          'password': this.password
+        }
+      }).then(res => {
+        if (res.data.flag === 'SUCCESS') {
+          this.loginContext.setLoginContext(res)
+          this.$router.push({path: '/Index'})
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    }
   }
+}
 </script>
 
 <style>

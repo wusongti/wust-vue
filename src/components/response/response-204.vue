@@ -6,30 +6,30 @@
   </div>
 </template>
 <script>
-  export default {
-    name:'204',
-    data(){
-      return{
-          timing:5
-      }
-    },
-    methods: {
-        toLogin:function () {
-            this.loginContext.removeLoginContext();
-            this.$router.push({path:'/Login'});
-        }
-    },
-    created: function () {
-        var that = this;
-        var intervalId = setInterval(function () {
-          if(that.timing == 0){
-            window.clearInterval(intervalId);
-            that.toLogin();
-          }
-          that.timing --;
-        },1000);
+export default {
+  name: '204',
+  data () {
+    return {
+      timing: 5
     }
+  },
+  methods: {
+    toLogin: function () {
+      this.loginContext.removeLoginContext()
+      this.$router.push({path: '/Login'})
+    }
+  },
+  created: function () {
+    let that = this
+    let intervalId = setInterval(function () {
+      if (that.timing === 0) {
+        window.clearInterval(intervalId)
+        that.toLogin()
+      }
+      that.timing--
+    }, 1000)
   }
+}
 </script>
 <style>
   @import "response.css";

@@ -82,156 +82,156 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import JobUpdate from "./job-update";
-  import JobCreate from "./job-create";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import JobUpdate from './job-update'
+import JobCreate from './job-create'
 
-  export default {
-    name: 'JobList',
-    components: {
-      JobCreate,
-      JobUpdate,
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          name:''
-        },
-        baseDto:{page:{totalResult:0}},
-        showAddPopover:false,
-        showUpdatePopover:false,
-        selectedModel:{
-          jobName:'',
-          jobClassName:'',
-          jobGroupName:'',
-          cronExpression:''
+export default {
+  name: 'JobList',
+  components: {
+    JobCreate,
+    JobUpdate,
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        name: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      showAddPopover: false,
+      showUpdatePopover: false,
+      selectedModel: {
+        jobName: '',
+        jobClassName: '',
+        jobGroupName: '',
+        cronExpression: ''
+      }
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$autotaskServerURL + '/JobController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
         }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    create: function () {
+      if (this.showAddPopover) {
+        this.showAddPopover = false
+      } else {
+        this.showAddPopover = true
       }
     },
-    created:function () {
-      this.listPage();
-    },
-    methods: {
-        listPage:function () {
+    pause: function (data) {
+      this.$dialog('询问', '您确定要暂停该作业吗？', true, true,
+        () => { // 点击确定
           Vue.$ajax({
             method: 'post',
-            url:Vue.$autotaskServerURL + '/JobController/listPage',
-            data:this.searchModel
+            url: Vue.$autotaskServerURL + '/JobController/pause',
+            data: {
+              jobName: data.qrtzJobDetails.jobName,
+              jobClassName: data.qrtzJobDetails.jobClassName,
+              jobGroupName: data.qrtzJobDetails.jobGroup,
+              cronExpression: data.qrtzCronTriggers.cronExpression
+            }
           }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.search()
+              this.$message('success', '操作成功', 3000)
             }
           })
         },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        create:function () {
-          if(this.showAddPopover){
-            this.showAddPopover = false;
-          }else{
-            this.showAddPopover = true;
-          }
-        },
-        pause:function (data) {
-          this.$dialog('询问','您确定要暂停该作业吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'post',
-                url:Vue.$autotaskServerURL + '/JobController/pause',
-                data:{
-                  jobName:data.qrtzJobDetails.jobName,
-                  jobClassName: data.qrtzJobDetails.jobClassName,
-                  jobGroupName:data.qrtzJobDetails.jobGroup,
-                  cronExpression:data.qrtzCronTriggers.cronExpression
-                }
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.search();
-                  this.$message('success','操作成功',3000);
-                }
-              })
-            },
-            () => { // 点击关闭
+        () => { // 点击关闭
 
-            }
-          );
-        },
-        resume:function (data) {
-          this.$dialog('询问','您确定要恢复该作业吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'post',
-                url:Vue.$autotaskServerURL + '/JobController/resume',
-                data:{
-                  jobName:data.qrtzJobDetails.jobName,
-                  jobClassName: data.qrtzJobDetails.jobClassName,
-                  jobGroupName:data.qrtzJobDetails.jobGroup,
-                  cronExpression:data.qrtzCronTriggers.cronExpression
-                }
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.search();
-                  this.$message('success','操作成功',3000);
-                }
-              })
-            },
-            () => { // 点击关闭
-
-            }
-          );
-        },
-        update:function (data) {
-          this.selectedModel.jobName = data.qrtzJobDetails.jobName;
-          this.selectedModel.jobClassName = data.qrtzJobDetails.jobClassName;
-          this.selectedModel.jobGroupName = data.qrtzJobDetails.jobGroup;
-          this.selectedModel.cronExpression = data.qrtzCronTriggers.cronExpression;
-          if(this.showUpdatePopover){
-            this.showUpdatePopover = false;
-          }else{
-            this.showUpdatePopover = true;
-          }
-        },
-        deleteJob:function (data) {
-          this.$dialog('询问','您确定删除该记录吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'delete',
-                url:Vue.$autotaskServerURL + '/JobController/delete/' + data.qrtzJobDetails.jobName + '/' + data.qrtzJobDetails.jobGroup
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.$message('success','成功',3000);
-                  this.search();
-                }
-              })
-            },
-            () => { // 点击关闭
-
-            }
-          );
-        },
-        closePopover:function (type) {
-            if(type == 'create'){
-              this.showAddPopover = false;
-            }else{
-              this.showUpdatePopover = false;
-            }
-            this.listPage();
         }
+      )
+    },
+    resume: function (data) {
+      this.$dialog('询问', '您确定要恢复该作业吗？', true, true,
+        () => { // 点击确定
+          Vue.$ajax({
+            method: 'post',
+            url: Vue.$autotaskServerURL + '/JobController/resume',
+            data: {
+              jobName: data.qrtzJobDetails.jobName,
+              jobClassName: data.qrtzJobDetails.jobClassName,
+              jobGroupName: data.qrtzJobDetails.jobGroup,
+              cronExpression: data.qrtzCronTriggers.cronExpression
+            }
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.search()
+              this.$message('success', '操作成功', 3000)
+            }
+          })
+        },
+        () => { // 点击关闭
+
+        }
+      )
+    },
+    update: function (data) {
+      this.selectedModel.jobName = data.qrtzJobDetails.jobName
+      this.selectedModel.jobClassName = data.qrtzJobDetails.jobClassName
+      this.selectedModel.jobGroupName = data.qrtzJobDetails.jobGroup
+      this.selectedModel.cronExpression = data.qrtzCronTriggers.cronExpression
+      if (this.showUpdatePopover) {
+        this.showUpdatePopover = false
+      } else {
+        this.showUpdatePopover = true
+      }
+    },
+    deleteJob: function (data) {
+      this.$dialog('询问', '您确定删除该记录吗？', true, true,
+        () => { // 点击确定
+          Vue.$ajax({
+            method: 'delete',
+            url: Vue.$autotaskServerURL + '/JobController/delete/' + data.qrtzJobDetails.jobName + '/' + data.qrtzJobDetails.jobGroup
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$message('success', '成功', 3000)
+              this.search()
+            }
+          })
+        },
+        () => { // 点击关闭
+
+        }
+      )
+    },
+    closePopover: function (type) {
+      if (type === 'create') {
+        this.showAddPopover = false
+      } else {
+        this.showUpdatePopover = false
+      }
+      this.listPage()
     }
   }
+}
 </script>

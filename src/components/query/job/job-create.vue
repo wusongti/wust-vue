@@ -40,58 +40,58 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'JobCreate',
-    data(){
-      return {
-          addModel:{
-            jobName:'',
-            jobClassName:'',
-            jobGroupName:'',
-            cronExpression:''
-          }
+export default {
+  name: 'JobCreate',
+  data () {
+    return {
+      addModel: {
+        jobName: '',
+        jobClassName: '',
+        jobGroupName: '',
+        cronExpression: ''
       }
+    }
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    methods:{
-          closePopover:function () {
-            this.$emit('closePopover', false);
-          },
-          doAdd:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobName)){
-              this.$message('warning','请输入作业名称',3000);
-              return;
-            }
-              if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobClassName)){
-                this.$message('warning','请输入作业全限定类名称',3000);
-                return;
-              }
+    doAdd: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobName)) {
+        this.$message('warning', '请输入作业名称', 3000)
+        return
+      }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobClassName)) {
+        this.$message('warning', '请输入作业全限定类名称', 3000)
+        return
+      }
 
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobGroupName)){
-              this.$message('warning','请输入作业分组',3000);
-              return;
-            }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobGroupName)) {
+        this.$message('warning', '请输入作业分组', 3000)
+        return
+      }
 
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.cronExpression)){
-              this.$message('warning','请输入表达式',3000);
-              return;
-            }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.cronExpression)) {
+        this.$message('warning', '请输入表达式', 3000)
+        return
+      }
 
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$autotaskServerURL + '/JobController/create',
-              data:this.addModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$autotaskServerURL + '/JobController/create',
+        data: this.addModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

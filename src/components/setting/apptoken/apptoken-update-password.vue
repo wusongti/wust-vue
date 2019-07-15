@@ -46,55 +46,54 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'ApptokenUpdatePassword',
-    props: ['selectedModel'],
-    data(){
-      return {
-        updateModel:{
-            id:'',
-            appId:'',
-            loginName:'',
-            password:''
-        },
+export default {
+  name: 'ApptokenUpdatePassword',
+  props: ['selectedModel'],
+  data () {
+    return {
+      updateModel: {
+        id: '',
+        appId: '',
+        loginName: '',
+        password: ''
       }
+    }
+  },
+  created: function () {
+    this.updateModel = this.selectedModel
+    this.updateModel.password = ''
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopver', false)
     },
-    created:function () {
-      this.updateModel = this.selectedModel;
-      this.updateModel.password = '';
-    },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopver', false);
-        },
-        doUpdate:function () {
-          if(Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.password)){
-            this.$message('warning','请输入密码',3000);
-            return;
-          }
+    doUpdate: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.password)) {
+        this.$message('warning', '请输入密码', 3000)
+        return
+      }
 
-          if(!Vue.$isPassword(this.updateModel.password)){
-            this.$message('warning','合法的密码格式为：字母、数字、下划线或三者组成的字符',3000);
-            return;
-          }
+      if (!Vue.$isPassword(this.updateModel.password)) {
+        this.$message('warning', '合法的密码格式为：字母、数字、下划线或三者组成的字符', 3000)
+        return
+      }
 
-
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/AppTokenController/update',
-            data:this.updateModel
-          }).then(res => {
-            if(res.data.flag != 'SUCCESS') {
-              this.$message('warning',res.data.message,3000);
-            }else{
-              this.closePopover();
-            }
-          })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/AppTokenController/update',
+        data: this.updateModel
+      }).then(res => {
+        if (res.data.flag != 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

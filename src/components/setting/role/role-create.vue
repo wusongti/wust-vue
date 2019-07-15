@@ -38,43 +38,43 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'RoleCreate',
-    data(){
-      return {
-          addModel:{
-            code:'',
-            name:'',
-            description:''
-          }
+export default {
+  name: 'RoleCreate',
+  data () {
+    return {
+      addModel: {
+        code: '',
+        name: '',
+        description: ''
       }
+    }
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doAdd:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.name)){
-              this.$message('warning','请输入角色名称',3000);
-              return;
-            }
+    doAdd: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.name)) {
+        this.$message('warning', '请输入角色名称', 3000)
+        return
+      }
 
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/RoleController/create',
-              data:this.addModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/RoleController/create',
+        data: this.addModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

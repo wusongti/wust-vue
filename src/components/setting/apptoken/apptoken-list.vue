@@ -89,115 +89,114 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import ApptokenCreate from "./apptoken-create";
-  import ApptokenUpdatePassword from "./apptoken-update-password";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import ApptokenCreate from './apptoken-create'
+import ApptokenUpdatePassword from './apptoken-update-password'
 
-
-  export default {
-    name: 'ApptokenList',
-    components: {
-      ApptokenUpdatePassword,
-      ApptokenCreate,
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          loginName:''
-        },
-        baseDto:{page:{totalResult:0}},
-        showAddPopover:false,
-        showUpdatePopover:false,
-        selectedModel:{},
-        exportExcelPar:{
-          excelSuffix: 'xls',
-          xmlName: 'admin_apptoken',
-          moduleName: 'apptoken'}
+export default {
+  name: 'ApptokenList',
+  components: {
+    ApptokenUpdatePassword,
+    ApptokenCreate,
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        loginName: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      showAddPopover: false,
+      showUpdatePopover: false,
+      selectedModel: {},
+      exportExcelPar: {
+        excelSuffix: 'xls',
+        xmlName: 'admin_apptoken',
+        moduleName: 'apptoken'}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/AppTokenController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    create: function () {
+      if (this.showAddPopover) {
+        this.showAddPopover = false
+      } else {
+        this.showAddPopover = true
       }
     },
-    created:function () {
-      this.listPage();
+    updatePassword: function (data) {
+      this.selectedModel = data
+      if (this.showUpdatePopover) {
+        this.showUpdatePopover = false
+      } else {
+        this.showUpdatePopover = true
+      }
     },
-    methods: {
-        listPage:function () {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/AppTokenController/listPage',
-            data:this.searchModel
-          }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
-            }
-          })
-        },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        create:function () {
-          if(this.showAddPopover){
-              this.showAddPopover = false;
-          }else{
-            this.showAddPopover = true;
-          }
-        },
-        updatePassword:function (data) {
-          this.selectedModel = data;
-          if(this.showUpdatePopover){
-            this.showUpdatePopover = false;
-          }else{
-            this.showUpdatePopover = true;
-          }
-        },
-        updateStatus:function (data) {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/AppTokenController/updateStatus',
-            data:data
-          }).then(res => {
-            if(res.data.flag != 'SUCCESS') {
-              this.$message('warning',res.data.message,3000);
-            }else{
-              this.$message('success','操作成功',3000);
-              this.listPage();
-            }
-          })
-        },
-        deleteById:function (id) {
-          this.$dialog('询问','您确定删除该记录吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'delete',
-                url:Vue.$adminServerURL + '/AppTokenController/delete/' + id
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.$message('success','成功',3000);
-                  this.listPage();
-                }
-              })
-            },
-            () => { // 点击关闭
-
-            }
-          );
-        },
-        closePopver:function (type) {
-          if(type == 'create'){
-            this.showAddPopover = false;
-          }else{
-            this.showUpdatePopover = false;
-          }
-          this.listPage();
+    updateStatus: function (data) {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/AppTokenController/updateStatus',
+        data: data
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.$message('success', '操作成功', 3000)
+          this.listPage()
         }
+      })
+    },
+    deleteById: function (id) {
+      this.$dialog('询问', '您确定删除该记录吗？', true, true,
+        () => { // 点击确定
+          Vue.$ajax({
+            method: 'delete',
+            url: Vue.$adminServerURL + '/AppTokenController/delete/' + id
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$message('success', '成功', 3000)
+              this.listPage()
+            }
+          })
+        },
+        () => { // 点击关闭
+
+        }
+      )
+    },
+    closePopver: function (type) {
+      if (type === 'create') {
+        this.showAddPopover = false
+      } else {
+        this.showUpdatePopover = false
+      }
+      this.listPage()
     }
   }
+}
 </script>

@@ -66,60 +66,60 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
 
-  export default {
-    name: 'DataSourceList',
-    components: {
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          companyName:''
-        },
-        baseDto:{page:{totalResult:0}},
-      }
-    },
-    created:function () {
-      this.listPage();
-    },
-    methods: {
-        listPage:function () {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/DataSourceController/listPage',
-            data:this.searchModel
-          }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
-            }
-          })
-        },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        initDataSource:function (data) {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/DataSourceController/create',
-            data:data
-          }).then(res => {
-            if(res.data.flag != 'SUCCESS') {
-              this.$message('warning',res.data.message,3000);
-            }else{
-              this.$message('success','操作成功',3000);
-                this.search()
-            }
-          })
+export default {
+  name: 'DataSourceList',
+  components: {
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        companyName: ''
+      },
+      baseDto: {page: {totalResult: 0}}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataSourceController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
         }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    initDataSource: function (data) {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataSourceController/create',
+        data: data
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.$message('success', '操作成功', 3000)
+          this.search()
+        }
+      })
     }
   }
+}
 </script>

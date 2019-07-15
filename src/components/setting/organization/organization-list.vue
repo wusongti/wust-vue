@@ -90,7 +90,6 @@
             </tfoot>
           </table>
 
-
           <!-- 部门列表 -->
           <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
             <thead>
@@ -143,8 +142,6 @@
             </tr>
             </tfoot>
           </table>
-
-
 
           <!-- 角色列表 -->
           <table class="table table-hover table-bordered" v-if="roleList != null && roleList.length > 0">
@@ -203,9 +200,6 @@
             </tr>
             </tfoot>
           </table>
-
-
-
 
           <!-- 用户列表 -->
           <table class="table table-hover table-bordered" v-if="userList != null && userList.length > 0">
@@ -276,293 +270,295 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import  '../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
-  import  '../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
-  import  '../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
-  import CompanyAdd from "./company-add";
-  import DepartmentAdd from "./department-add";
-  import RoleAdd from "./role-add";
-  import UserAdd from "./user-add";
-  import FunctionTree from "./function-tree";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import '../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
+import '../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
+import '../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
+import CompanyAdd from './company-add'
+import DepartmentAdd from './department-add'
+import RoleAdd from './role-add'
+import UserAdd from './user-add'
+import FunctionTree from './function-tree'
 
-  export default {
-    name: 'OrganizationList',
-    components: {
-      FunctionTree,
-      UserAdd,
-      RoleAdd,
-      DepartmentAdd,
-      CompanyAdd,
-      PaginationComponent},
-    data () {
-      return {
-        setting:{
-          view: {
-            showLine: true,
-            fontCss: function(treeId, treeNode) {
-              return (!!treeNode.highlight) ? {color: "#A60000", "font-weight": "bold"} : {
-                color: "#333",
-                "font-weight": "normal"
-              };
-            }
-          },
-          data: {
-            simpleData: {
-              enable: true
-            }
-          },
-          callback: {
-            beforeClick: (treeId, treeNode, clickFlag) => {
-              this.switchButtomAvailableStatus(treeNode.type);
-
-              if("sys_user" == treeNode.type){
-                  return;
-              }
-              this.selectedNode = treeNode;
-              this.searchModel.pid = treeNode.id;
-              this.searchModel.type = treeNode.type;
-              this.listPage();
+export default {
+  name: 'OrganizationList',
+  components: {
+    FunctionTree,
+    UserAdd,
+    RoleAdd,
+    DepartmentAdd,
+    CompanyAdd,
+    PaginationComponent},
+  data () {
+    return {
+      setting: {
+        view: {
+          showLine: true,
+          fontCss: function (treeId, treeNode) {
+            return (treeNode.highlight) ? {color: '#A60000', 'font-weight': 'bold'} : {
+              color: '#333',
+              'font-weight': 'normal'
             }
           }
         },
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          id:'',
-          pid:'-1',
-          type:'',
-          relationId:'',
-          name:''
+        data: {
+          simpleData: {
+            enable: true
+          }
         },
-        baseDto:{page:{totalResult:0}},
-        companyList:{},
-        departmentList:{},
-        roleList:{},
-        userList:{},
-        disableAddCompanyButtom:true,
-        disableAddDepartmentButtom:true,
-        disableAddRoleButtom:true,
-        disableAddUserButtom:true,
-        showAddCompanyPopover:false,
-        showAddDepartmentPopover:false,
-        showAddRolePopover:false,
-        showAddUserPopover:false,
-        showFunctionTreePopover:false,
-        selectedNode:{id:'',pid:'-1',type:'',relationId:''},
-        searchHitZNodes:[],
-        selectedModel:{},
-        exportExcelPar:{
-          excelSuffix: 'xls',
-          xmlName: 'admin_organization',
-          moduleName: 'organization'}
-      }
-    },
-    created:function () {
-      this.buildTree();
-    },
-    methods: {
-        buildTree:function () {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/OrganizationController/buildTree',
-            data:this.searchModel
-          }).then(res => {
-            if(res.data.flag == 'SUCCESS') {
-              let zNodes = JSON.parse(res.data.obj);
-              var treeObj = $.fn.zTree.init($("#tree"), this.setting, zNodes);
+        callback: {
+          beforeClick: (treeId, treeNode, clickFlag) => {
+            this.switchButtomAvailableStatus(treeNode.type)
 
-              if(this.selectedNode != null && this.selectedNode.id != ''){
-                this.expandParentNodes(this.selectedNode.children[0],treeObj);
-                $("#" + this.selectedNode.tId + "_a").click();
-              }else{
-                var nodes = treeObj.getNodes();
-                if (nodes.length > 0) {
-                  $("#tree_1_a").click();
-                }
-              }
-            }else{
-              this.$message('info',res.data.message,3000);
+            if (treeNode.type === 'sys_user') {
+              return
             }
-          })
-        },
-        listPage:function () {
-          this.companyList = null;
-          this.departmentList = null;
-          this.roleList = null;
-          this.userList = null;
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/OrganizationController/listPage',
-            data:this.searchModel
-          }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-              this.companyList = res.data.obj.companyList;
-              this.departmentList = res.data.obj.departmentList;
-              this.roleList = res.data.obj.roleList;
-              this.userList = res.data.obj.userList;
-            }else{
-              this.$message('info',res.data.message,3000);
+            this.selectedNode = treeNode
+            this.searchModel.pid = treeNode.id
+            this.searchModel.type = treeNode.type
+            this.listPage()
+          }
+        }
+      },
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        id: '',
+        pid: '-1',
+        type: '',
+        relationId: '',
+        name: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      companyList: {},
+      departmentList: {},
+      roleList: {},
+      userList: {},
+      disableAddCompanyButtom: true,
+      disableAddDepartmentButtom: true,
+      disableAddRoleButtom: true,
+      disableAddUserButtom: true,
+      showAddCompanyPopover: false,
+      showAddDepartmentPopover: false,
+      showAddRolePopover: false,
+      showAddUserPopover: false,
+      showFunctionTreePopover: false,
+      selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
+      searchHitZNodes: [],
+      selectedModel: {},
+      exportExcelPar: {
+        excelSuffix: 'xls',
+        xmlName: 'admin_organization',
+        moduleName: 'organization'}
+    }
+  },
+  created: function () {
+    this.buildTree()
+  },
+  methods: {
+    buildTree: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/OrganizationController/buildTree',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.flag == 'SUCCESS') {
+          let zNodes = JSON.parse(res.data.obj)
+          var treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
+
+          if (this.selectedNode != null && this.selectedNode.id !== '') {
+            this.expandParentNodes(this.selectedNode.children[0], treeObj)
+            // eslint-disable-next-line no-undef
+            $('#' + this.selectedNode.tId + '_a').click()
+          } else {
+            var nodes = treeObj.getNodes()
+            if (nodes.length > 0) {
+              // eslint-disable-next-line no-undef
+              $('#tree_1_a').click()
             }
-          })
-        },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
+          }
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    listPage: function () {
+      this.companyList = null
+      this.departmentList = null
+      this.roleList = null
+      this.userList = null
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/OrganizationController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+          this.companyList = res.data.obj.companyList
+          this.departmentList = res.data.obj.departmentList
+          this.roleList = res.data.obj.roleList
+          this.userList = res.data.obj.userList
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
 
-        // 树搜索
-        onSearch: function($even) {
-          let searchKeyWord = $even.currentTarget.value;
-          if (!Vue.$isNullOrIsBlankOrIsUndefined(searchKeyWord)) {
-            this.updateHitZNodesStyle(false);
-            let treeObj = $.fn.zTree.getZTreeObj("tree");
-            this.searchHitZNodes = treeObj.getNodesByParamFuzzy('name', searchKeyWord);
-            if (this.searchHitZNodes != null) {
-              this.updateHitZNodesStyle(true);
+    // 树搜索
+    onSearch: function ($even) {
+      let searchKeyWord = $even.currentTarget.value
+      if (!Vue.$isNullOrIsBlankOrIsUndefined(searchKeyWord)) {
+        this.updateHitZNodesStyle(false)
+        // eslint-disable-next-line no-undef
+        let treeObj = $.fn.zTree.getZTreeObj('tree')
+        this.searchHitZNodes = treeObj.getNodesByParamFuzzy('name', searchKeyWord)
+        if (this.searchHitZNodes != null) {
+          this.updateHitZNodesStyle(true)
 
-              /**
+          /**
                * 展开搜索到的节点
                */
-              for(let i =0;i<this.searchHitZNodes.length;i++){
-                this.expandParentNodes(this.searchHitZNodes[i],treeObj);
-              }
-            }
+          for (let i = 0; i < this.searchHitZNodes.length; i++) {
+            this.expandParentNodes(this.searchHitZNodes[i], treeObj)
           }
-        },
-
-      // 展开父节点
-      expandParentNodes:function(treeNode,treeObj) {
-        let parentNode = treeNode.getParentNode();
-        if(parentNode != null){
-          treeObj.expandNode(parentNode,true, true, true);
         }
-      },
+      }
+    },
 
-      // 更新命中节点样式
-      updateHitZNodesStyle: function(highlight) {
-        let treeObj = $.fn.zTree.getZTreeObj("tree");
-        let nodeLength = this.searchHitZNodes.length;
-        for (let i = 0; i < nodeLength; i++) {
-          this.searchHitZNodes[i].highlight = highlight;
-          treeObj.updateNode(this.searchHitZNodes[i]);
-        }
-      },
+    // 展开父节点
+    expandParentNodes: function (treeNode, treeObj) {
+      let parentNode = treeNode.getParentNode()
+      if (parentNode != null) {
+        treeObj.expandNode(parentNode, true, true, true)
+      }
+    },
 
+    // 更新命中节点样式
+    updateHitZNodesStyle: function (highlight) {
+      let treeObj = $.fn.zTree.getZTreeObj('tree')
+      let nodeLength = this.searchHitZNodes.length
+      for (let i = 0; i < nodeLength; i++) {
+        this.searchHitZNodes[i].highlight = highlight
+        treeObj.updateNode(this.searchHitZNodes[i])
+      }
+    },
 
-        /**
+    /**
          * 切换按钮可用状态
          * @param type
          */
-        switchButtomAvailableStatus:function (type) {
-          if(type == ''){
-              this.disableAddCompanyButtom = false;
+    switchButtomAvailableStatus: function (type) {
+      if (type === '') {
+        this.disableAddCompanyButtom = false
 
-              this.disableAddDepartmentButtom = true;
-              this.disableAddRoleButtom = true;
-              this.disableAddUserButtom = true;
-          }else if(type == 'sys_company'){
-            this.disableAddDepartmentButtom = false;
+        this.disableAddDepartmentButtom = true
+        this.disableAddRoleButtom = true
+        this.disableAddUserButtom = true
+      } else if (type === 'sys_company') {
+        this.disableAddDepartmentButtom = false
 
-            this.disableAddCompanyButtom = true;
-            this.disableAddRoleButtom = true;
-            this.disableAddUserButtom = true;
-          }else if(type == 'sys_department'){
-            this.disableAddRoleButtom = false;
+        this.disableAddCompanyButtom = true
+        this.disableAddRoleButtom = true
+        this.disableAddUserButtom = true
+      } else if (type === 'sys_department') {
+        this.disableAddRoleButtom = false
 
-            this.disableAddCompanyButtom = true;
-            this.disableAddDepartmentButtom = true;
-            this.disableAddUserButtom = true;
-          }else if(type == 'sys_role'){
-            this.disableAddUserButtom = false;
+        this.disableAddCompanyButtom = true
+        this.disableAddDepartmentButtom = true
+        this.disableAddUserButtom = true
+      } else if (type === 'sys_role') {
+        this.disableAddUserButtom = false
 
-            this.disableAddCompanyButtom = true;
-            this.disableAddDepartmentButtom = true;
-            this.disableAddRoleButtom = true;
-          }else if(type == 'sys_user'){
-            this.disableAddCompanyButtom = true;
-            this.disableAddDepartmentButtom = true;
-            this.disableAddRoleButtom = true;
-            this.disableAddUserButtom = true;
-          }
-        },
-        addCompany:function () {
-          if(this.showAddCompanyPopover){
-            this.showAddCompanyPopover = false;
-          }else{
-            this.showAddCompanyPopover = true;
-          }
-        },
-        addDepartment:function () {
-          if(this.showAddDepartmentPopover){
-            this.showAddDepartmentPopover = false;
-          }else{
-            this.showAddDepartmentPopover = true;
-          }
-        },
-        addRole:function () {
-          if(this.showAddRolePopover){
-            this.showAddRolePopover = false;
-          }else{
-            this.showAddRolePopover = true;
-          }
-        },
-        addUser:function () {
-          if(this.showAddUserPopover){
-            this.showAddUserPopover = false;
-          }else{
-            this.showAddUserPopover = true;
-          }
-        },
-        deleteById:function (relationId,type) {
-          let that = this;
-          this.$dialog('询问','您确定删除该记录吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'delete',
-                url:Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId + '/' + type
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.$message('success','成功',3000);
-                  this.listPage();
-                }
-              })
-            },
-            () => { // 点击关闭
-
+        this.disableAddCompanyButtom = true
+        this.disableAddDepartmentButtom = true
+        this.disableAddRoleButtom = true
+      } else if (type === 'sys_user') {
+        this.disableAddCompanyButtom = true
+        this.disableAddDepartmentButtom = true
+        this.disableAddRoleButtom = true
+        this.disableAddUserButtom = true
+      }
+    },
+    addCompany: function () {
+      if (this.showAddCompanyPopover) {
+        this.showAddCompanyPopover = false
+      } else {
+        this.showAddCompanyPopover = true
+      }
+    },
+    addDepartment: function () {
+      if (this.showAddDepartmentPopover) {
+        this.showAddDepartmentPopover = false
+      } else {
+        this.showAddDepartmentPopover = true
+      }
+    },
+    addRole: function () {
+      if (this.showAddRolePopover) {
+        this.showAddRolePopover = false
+      } else {
+        this.showAddRolePopover = true
+      }
+    },
+    addUser: function () {
+      if (this.showAddUserPopover) {
+        this.showAddUserPopover = false
+      } else {
+        this.showAddUserPopover = true
+      }
+    },
+    deleteById: function (relationId, type) {
+      let that = this
+      this.$dialog('询问', '您确定删除该记录吗？', true, true,
+        () => { // 点击确定
+          Vue.$ajax({
+            method: 'delete',
+            url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId + '/' + type
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$message('success', '成功', 3000)
+              this.listPage()
             }
-          );
+          })
         },
-        setResource:function (data) {
-          if(this.showFunctionTreePopover){
-            this.showFunctionTreePopover = false;
-          }else{
-            this.showFunctionTreePopover = true;
-          }
-          this.selectedModel = data;
-        },
-        closePopver:function (type) {
-          if(type == 'sys_company'){
-            this.showAddCompanyPopover = false;
-          }else if(type == 'sys_department'){
-            this.showAddDepartmentPopover = false;
-          }else if(type == 'sys_role'){
-            this.showAddRolePopover = false;
-          }else if(type == 'sys_user'){
-            this.showAddUserPopover = false;
-          }else if(type == 'function_tree'){
-            this.showFunctionTreePopover = false;
-          }
-          this.buildTree();
+        () => { // 点击关闭
+
         }
+      )
+    },
+    setResource: function (data) {
+      if (this.showFunctionTreePopover) {
+        this.showFunctionTreePopover = false
+      } else {
+        this.showFunctionTreePopover = true
+      }
+      this.selectedModel = data
+    },
+    closePopver: function (type) {
+      if (type === 'sys_company') {
+        this.showAddCompanyPopover = false
+      } else if (type === 'sys_department') {
+        this.showAddDepartmentPopover = false
+      } else if (type === 'sys_role') {
+        this.showAddRolePopover = false
+      } else if (type === 'sys_user') {
+        this.showAddUserPopover = false
+      } else if (type === 'function_tree') {
+        this.showFunctionTreePopover = false
+      }
+      this.buildTree()
     }
   }
+}
 </script>
 <style>
   @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';

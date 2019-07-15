@@ -40,49 +40,48 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'JobUpdate',
-    props: ['selectedModel'],
-    data(){
-      return {
-        updateModel:{
-          jobName:'',
-          jobClassName:'',
-          jobGroupName:'',
-          cronExpression:''
-        }
+export default {
+  name: 'JobUpdate',
+  props: ['selectedModel'],
+  data () {
+    return {
+      updateModel: {
+        jobName: '',
+        jobClassName: '',
+        jobGroupName: '',
+        cronExpression: ''
       }
+    }
+  },
+  created: function () {
+    this.updateModel = this.selectedModel
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    created:function () {
-      this.updateModel = this.selectedModel;
-    },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doUpdate:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.cronExpression)){
-              this.$message('warning','请输入表达式',3000);
-              return;
-            }
+    doUpdate: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.cronExpression)) {
+        this.$message('warning', '请输入表达式', 3000)
+        return
+      }
 
-
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$autotaskServerURL + '/JobController/update',
-              data:this.updateModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$autotaskServerURL + '/JobController/update',
+        data: this.updateModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

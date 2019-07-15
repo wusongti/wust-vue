@@ -52,56 +52,56 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'DataPrivilegeRulesUpdate',
-    props: ['selectedModel'],
-    data(){
-      return {
-        typeRadio:'',
-        typeCheckbox:''
-      }
+export default {
+  name: 'DataPrivilegeRulesUpdate',
+  props: ['selectedModel'],
+  data () {
+    return {
+      typeRadio: '',
+      typeCheckbox: ''
+    }
+  },
+  created: function () {
+
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    created:function () {
-
-    },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doUpdate:function () {
-            let that = this;
-            let typeStr = '';
-            let typeRadios = document.getElementsByName("typeRadio");
-            for(let k in typeRadios){
-                if(typeRadios[k].checked){
-                  typeStr += typeRadios[k].value;
-                  break;
-                }
-            }
-
-          let typeCheckboxs = document.getElementsByName("typeCheckbox");
-          for(let k in typeCheckboxs){
-            if(typeCheckboxs[k].checked){
-              typeStr += ',' + typeCheckboxs[k].value;
-              break;
-            }
-          }
-
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/DataPrivilegeRulesController/update/' + that.selectedModel.dataPrivilegeId + '/' + typeStr
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+    doUpdate: function () {
+      let that = this
+      let typeStr = ''
+      let typeRadios = document.getElementsByName('typeRadio')
+      for (let k in typeRadios) {
+        if (typeRadios[k].checked) {
+          typeStr += typeRadios[k].value
+          break
         }
+      }
+
+      let typeCheckboxs = document.getElementsByName('typeCheckbox')
+      for (let k in typeCheckboxs) {
+        if (typeCheckboxs[k].checked) {
+          typeStr += ',' + typeCheckboxs[k].value
+          break
+        }
+      }
+
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataPrivilegeRulesController/update/' + that.selectedModel.dataPrivilegeId + '/' + typeStr
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
+        }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

@@ -46,57 +46,57 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'ApptokenCreate',
-    data(){
-      return {
-          addModel:{
-            appId:'',
-            loginName:'',
-            password:''
-          }
+export default {
+  name: 'ApptokenCreate',
+  data () {
+    return {
+      addModel: {
+        appId: '',
+        loginName: '',
+        password: ''
       }
+    }
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopver', false)
     },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopver', false);
-        },
-        doAdd:function () {
-          if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.appId)){
-            this.$message('warning','请输入应用标识',3000);
-            return;
-          }
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.loginName)){
-              this.$message('warning','请输入账号',3000);
-              return;
-            }
+    doAdd: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.appId)) {
+        this.$message('warning', '请输入应用标识', 3000)
+        return
+      }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.loginName)) {
+        this.$message('warning', '请输入账号', 3000)
+        return
+      }
 
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.password)){
-              this.$message('warning','请输入密码',3000);
-              return;
-            }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.password)) {
+        this.$message('warning', '请输入密码', 3000)
+        return
+      }
 
-            if(!Vue.$isPassword(this.addModel.password)){
-              this.$message('warning','合法的密码格式为：字母、数字、下划线或三者组成的字符',3000);
-              return;
-            }
+      if (!Vue.$isPassword(this.addModel.password)) {
+        this.$message('warning', '合法的密码格式为：字母、数字、下划线或三者组成的字符', 3000)
+        return
+      }
 
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/AppTokenController/create',
-              data:this.addModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/AppTokenController/create',
+        data: this.addModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

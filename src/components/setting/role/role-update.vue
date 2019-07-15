@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/16.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="role-update">
     <div class="my-popover">
       <div class="my-popover-box">
@@ -55,54 +55,54 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'RoleUpdate',
-    props: ['selectedModel'],
-    data(){
-      return {
-        updateModel:{
-            id:'',
-            code:'',
-            name:'',
-            description:'',
-            status:''
-        }
+export default {
+  name: 'RoleUpdate',
+  props: ['selectedModel'],
+  data () {
+    return {
+      updateModel: {
+        id: '',
+        code: '',
+        name: '',
+        description: '',
+        status: ''
       }
+    }
+  },
+  created: function () {
+    this.updateModel = this.selectedModel
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    created:function () {
-      this.updateModel = this.selectedModel;
-    },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doUpdate:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.name)){
-              this.$message('warning','请输入角色名',3000);
-              return;
-            }
+    doUpdate: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.name)) {
+        this.$message('warning', '请输入角色名', 3000)
+        return
+      }
 
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.status)){
-              this.$message('warning','请选择状态',3000);
-              return;
-            }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.status)) {
+        this.$message('warning', '请选择状态', 3000)
+        return
+      }
 
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/RoleController/update',
-              data:this.updateModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/RoleController/update',
+        data: this.updateModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

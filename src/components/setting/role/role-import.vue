@@ -21,28 +21,28 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
-  import FileUploadComponent from '../../../common/component/file-upload-component.vue'
-  export default {
-    name: 'RoleImport',
-    components:{
-      FileUploadComponent
+import Vue from 'vue'
+import FileUploadComponent from '../../../common/component/file-upload-component.vue'
+export default {
+  name: 'RoleImport',
+  components: {
+    FileUploadComponent
+  },
+  data () {
+    return {
+      uploadUrl: Vue.$adminServerURL + '/RoleController/importByExcel?moduleName=role'
+    }
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    data(){
-      return {
-          uploadUrl:Vue.$adminServerURL + '/RoleController/importByExcel?moduleName=role'
-      }
-    },
-    methods:{
-      closePopover:function () {
-        this.$emit('closePopover', false);
-      },
-      importCallback:function (e) { // 回调
-        this.closePopover();
-        this.$router.push({path:'/MyImportExportList'});
-      }
+    importCallback: function (e) { // 回调
+      this.closePopover()
+      this.$router.push({path: '/MyImportExportList'})
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

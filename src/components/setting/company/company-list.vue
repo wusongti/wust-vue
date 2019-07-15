@@ -91,100 +91,100 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import CompanyUpdate from "./company-update";
-  import CompanyCreate from "./company-create";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import CompanyUpdate from './company-update'
+import CompanyCreate from './company-create'
 
-  export default {
-    name: 'CompanyList',
-    components: {
-      CompanyCreate,
-      CompanyUpdate,
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          name:''
-        },
-        baseDto:{page:{totalResult:0}},
-        showAddPopover:false,
-        showUpdatePopover:false,
-        selectedModel:{},
-        exportExcelPar:{
-          excelSuffix: 'xls',
-          xmlName: 'admin_company',
-          moduleName: 'company'}
+export default {
+  name: 'CompanyList',
+  components: {
+    CompanyCreate,
+    CompanyUpdate,
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        name: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      showAddPopover: false,
+      showUpdatePopover: false,
+      selectedModel: {},
+      exportExcelPar: {
+        excelSuffix: 'xls',
+        xmlName: 'admin_company',
+        moduleName: 'company'}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/CompanyController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    create: function () {
+      if (this.showAddPopover) {
+        this.showAddPopover = false
+      } else {
+        this.showAddPopover = true
       }
     },
-    created:function () {
-      this.listPage();
+    update: function (data) {
+      this.selectedModel = data
+      if (this.showUpdatePopover) {
+        this.showUpdatePopover = false
+      } else {
+        this.showUpdatePopover = true
+      }
     },
-    methods: {
-        listPage:function () {
+    deleteById: function (id) {
+      this.$dialog('询问', '您确定删除该记录吗？', true, true,
+        () => { // 点击确定
           Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/CompanyController/listPage',
-            data:this.searchModel
+            method: 'delete',
+            url: Vue.$adminServerURL + '/CompanyController/delete/' + id
           }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$message('success', '成功', 3000)
+              this.listPage()
             }
           })
         },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        create:function () {
-          if(this.showAddPopover){
-              this.showAddPopover = false;
-          }else{
-            this.showAddPopover = true;
-          }
-        },
-        update:function (data) {
-          this.selectedModel = data;
-          if(this.showUpdatePopover){
-            this.showUpdatePopover = false;
-          }else{
-            this.showUpdatePopover = true;
-          }
-        },
-        deleteById:function (id) {
-          this.$dialog('询问','您确定删除该记录吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'delete',
-                url:Vue.$adminServerURL + '/CompanyController/delete/' + id
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.$message('success','成功',3000);
-                  this.listPage();
-                }
-              })
-            },
-            () => { // 点击关闭
+        () => { // 点击关闭
 
-            }
-          );
-        },
-        closePopover:function (type) {
-            if(type == 'create'){
-              this.showAddPopover = false;
-            }else{
-              this.showUpdatePopover = false;
-            }
-            this.listPage();
         }
+      )
+    },
+    closePopover: function (type) {
+      if (type === 'create') {
+        this.showAddPopover = false
+      } else {
+        this.showUpdatePopover = false
+      }
+      this.listPage()
     }
   }
+}
 </script>

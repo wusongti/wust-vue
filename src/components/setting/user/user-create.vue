@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/14.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="user-create">
     <div class="my-popover">
       <div class="my-popover-box">
@@ -66,65 +66,65 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'UserCreate',
-    data(){
-      return {
-          addModel:{
-            loginName:'',
-            realName:'',
-            sex:'',
-            email:'',
-            type:'',
-            mobile:'',
-            status:''
-          }
+export default {
+  name: 'UserCreate',
+  data () {
+    return {
+      addModel: {
+        loginName: '',
+        realName: '',
+        sex: '',
+        email: '',
+        type: '',
+        mobile: '',
+        status: ''
       }
+    }
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doAdd:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.loginName)){
-                this.$message('warning','请输入登录账号',3000);
-                return;
-            }
+    doAdd: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.loginName)) {
+        this.$message('warning', '请输入登录账号', 3000)
+        return
+      }
 
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.realName)){
-              this.$message('warning','请输入真实姓名',3000);
-              return;
-            }
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.realName)) {
+        this.$message('warning', '请输入真实姓名', 3000)
+        return
+      }
 
-            if(!Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.email)){
-              if(!Vue.$isEmail(this.addModel.email)){
-                this.$message('warning','请输入正确的邮箱',3000);
-                return;
-              }
-            }
-
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.type)){
-              this.$message('warning','请选择用户类型',3000);
-              return;
-            }
-
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/UserController/create',
-              data:this.addModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.$message('sucess','操作成功',3000);
-                this.closePopover();
-              }
-            })
+      if (!Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.email)) {
+        if (!Vue.$isEmail(this.addModel.email)) {
+          this.$message('warning', '请输入正确的邮箱', 3000)
+          return
         }
+      }
+
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.type)) {
+        this.$message('warning', '请选择用户类型', 3000)
+        return
+      }
+
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/UserController/create',
+        data: this.addModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.$message('sucess', '操作成功', 3000)
+          this.closePopover()
+        }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

@@ -59,67 +59,67 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import DataPrivilegeRulesUpdate from "./data-privilege-rules-update";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import DataPrivilegeRulesUpdate from './data-privilege-rules-update'
 
-  export default {
-    name: 'DataPrivilegeRulesList',
-    components: {
-      DataPrivilegeRulesUpdate,
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          businessName:''
-        },
-        baseDto:{page:{totalResult:0}},
-        showAddPopover:false,
-        showUpdatePopover:false,
-        selectedModel:{}
+export default {
+  name: 'DataPrivilegeRulesList',
+  components: {
+    DataPrivilegeRulesUpdate,
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        businessName: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      showAddPopover: false,
+      showUpdatePopover: false,
+      selectedModel: {}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataPrivilegeRulesController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    update: function (data) {
+      this.selectedModel = data
+      if (this.showUpdatePopover) {
+        this.showUpdatePopover = false
+      } else {
+        this.showUpdatePopover = true
       }
     },
-    created:function () {
-      this.listPage();
-    },
-    methods: {
-        listPage:function () {
-          Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/DataPrivilegeRulesController/listPage',
-            data:this.searchModel
-          }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
-            }
-          })
-        },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        update:function (data) {
-          this.selectedModel = data;
-          if(this.showUpdatePopover){
-            this.showUpdatePopover = false;
-          }else{
-            this.showUpdatePopover = true;
-          }
-        },
-        closePopover:function (type) {
-            if(type == 'create'){
-              this.showAddPopover = false;
-            }else{
-              this.showUpdatePopover = false;
-            }
-            this.listPage();
-        }
+    closePopover: function (type) {
+      if (type === 'create') {
+        this.showAddPopover = false
+      } else {
+        this.showUpdatePopover = false
+      }
+      this.listPage()
     }
   }
+}
 </script>

@@ -62,52 +62,51 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'DepartmentUpdate',
-    props: ['selectedModel'],
-    data(){
-      return {
-        updateModel:{
-            id:'',
-            code:'',
-            pcode:'',
-            name:'',
-            pname:'',
-            leader:'',
-            description:''
-        }
+export default {
+  name: 'DepartmentUpdate',
+  props: ['selectedModel'],
+  data () {
+    return {
+      updateModel: {
+        id: '',
+        code: '',
+        pcode: '',
+        name: '',
+        pname: '',
+        leader: '',
+        description: ''
       }
+    }
+  },
+  created: function () {
+    this.updateModel = this.selectedModel
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopover', false)
     },
-    created:function () {
-      this.updateModel = this.selectedModel;
-    },
-    methods:{
-        closePopover:function () {
-          this.$emit('closePopover', false);
-        },
-        doUpdate:function () {
-            if(Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.name)){
-              this.$message('warning','请输入部门名',3000);
-              return;
-            }
+    doUpdate: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.name)) {
+        this.$message('warning', '请输入部门名', 3000)
+        return
+      }
 
-
-            Vue.$ajax({
-              method: 'post',
-              url:Vue.$adminServerURL + '/DepartmentController/update',
-              data:this.updateModel
-            }).then(res => {
-              if(res.data.flag != 'SUCCESS') {
-                this.$message('warning',res.data.message,3000);
-              }else{
-                this.closePopover();
-              }
-            })
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DepartmentController/update',
+        data: this.updateModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
         }
+      })
     }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

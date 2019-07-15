@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/30.
 */
-<template>
+<template xmlns:data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="user-add">
     <div class="my-popover">
       <div class="my-popover-box">
@@ -45,56 +45,55 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
+import Vue from 'vue'
 
-  export default {
-    name: 'LookupCopy',
-    props: ['selectModel'],
-    data(){
-      return {
-        dataModel:{
-          id:'',
-          codd:'',
-          parentCode:'',
-          rootCode:'',
-          name:'',
-          value:'',
-          description:'',
-          lan:'',
-          status:'',
-          visible:'',
-          sort:0
-        }
-      }
-    },
-    created:function () {
-      this.dataModel = this.selectModel;
-    },
-    methods:{
-      closePopover:function () {
-        this.$emit('closePopver', false);
-      },
-      submit:function () {
-        if(Vue.$isNullOrIsBlankOrIsUndefined(this.dataModel.name)){
-          this.$message('warning','请输入属性名',3000);
-          return;
-        }
-
-
-        Vue.$ajax({
-          method: 'post',
-          url:Vue.$adminServerURL + '/DataDictionaryController/copy',
-          data:this.dataModel
-        }).then(res => {
-          if(res.data.flag != 'SUCCESS') {
-            this.$message('warning',res.data.message,3000);
-          }else{
-            this.closePopover();
-          }
-        })
+export default {
+  name: 'LookupCopy',
+  props: ['selectModel'],
+  data () {
+    return {
+      dataModel: {
+        id: '',
+        codd: '',
+        parentCode: '',
+        rootCode: '',
+        name: '',
+        value: '',
+        description: '',
+        lan: '',
+        status: '',
+        visible: '',
+        sort: 0
       }
     }
+  },
+  created: function () {
+    this.dataModel = this.selectModel
+  },
+  methods: {
+    closePopover: function () {
+      this.$emit('closePopver', false)
+    },
+    submit: function () {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.dataModel.name)) {
+        this.$message('warning', '请输入属性名', 3000)
+        return
+      }
+
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/DataDictionaryController/copy',
+        data: this.dataModel
+      }).then(res => {
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message('warning', res.data.message, 3000)
+        } else {
+          this.closePopover()
+        }
+      })
+    }
   }
+}
 </script>
 <style>
   @import "../../../assets/css/my-popover.css";

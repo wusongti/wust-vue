@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="role-list">
     <form>
       <div class="row">
@@ -94,113 +94,113 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import PaginationComponent from '../../../common/component/pagination-component.vue'
-  import RoleCreate from "./role-create";
-  import RoleUpdate from "./role-update";
-  import RoleImport from "./role-import";
+import Vue from 'vue'
+import PaginationComponent from '../../../common/component/pagination-component.vue'
+import RoleCreate from './role-create'
+import RoleUpdate from './role-update'
+import RoleImport from './role-import'
 
-  export default {
-    name: 'RoleList',
-    components: {
-      RoleImport,
-      RoleCreate,
-      RoleUpdate,
-      PaginationComponent},
-    data () {
-      return {
-        searchModel:{
-          pageDto:{showCount:10,currentPage:1},
-          name:'',
-          status:''
-        },
-        baseDto:{page:{totalResult:0}},
-        showAddPopover:false,
-        showUpdatePopover:false,
-        showImportPopover:false,
-        selectedModel:{},
-        exportExcelPar:{
-          excelSuffix: 'xls',
-          xmlName: 'admin_role',
-          moduleName: 'role'}
+export default {
+  name: 'RoleList',
+  components: {
+    RoleImport,
+    RoleCreate,
+    RoleUpdate,
+    PaginationComponent},
+  data () {
+    return {
+      searchModel: {
+        pageDto: {showCount: 10, currentPage: 1},
+        name: '',
+        status: ''
+      },
+      baseDto: {page: {totalResult: 0}},
+      showAddPopover: false,
+      showUpdatePopover: false,
+      showImportPopover: false,
+      selectedModel: {},
+      exportExcelPar: {
+        excelSuffix: 'xls',
+        xmlName: 'admin_role',
+        moduleName: 'role'}
+    }
+  },
+  created: function () {
+    this.listPage()
+  },
+  methods: {
+    listPage: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/RoleController/listPage',
+        data: this.searchModel
+      }).then(res => {
+        if (res.data.messageMap.flag === 'SUCCESS') {
+          this.baseDto = res.data
+        } else {
+          this.$message('info', res.data.message, 3000)
+        }
+      })
+    },
+    pageIndexChange: function (e) {
+      this.searchModel.pageDto.currentPage = e
+    },
+    search: function () {
+      this.searchModel.pageDto.currentPage = 1
+      this.listPage()
+    },
+    create: function () {
+      if (this.showAddPopover) {
+        this.showAddPopover = false
+      } else {
+        this.showAddPopover = true
       }
     },
-    created:function () {
-      this.listPage();
+    update: function (data) {
+      this.selectedModel = data
+      if (this.showUpdatePopover) {
+        this.showUpdatePopover = false
+      } else {
+        this.showUpdatePopover = true
+      }
     },
-    methods: {
-        listPage:function () {
+    deleteById: function (id) {
+      this.$dialog('询问', '您确定删除该记录吗？', true, true,
+        () => { // 点击确定
           Vue.$ajax({
-            method: 'post',
-            url:Vue.$adminServerURL + '/RoleController/listPage',
-            data:this.searchModel
+            method: 'delete',
+            url: Vue.$adminServerURL + '/RoleController/delete/' + id
           }).then(res => {
-            if(res.data.messageMap.flag == 'SUCCESS') {
-              this.baseDto = res.data;
-            }else{
-              this.$message('info',res.data.message,3000);
+            if (res.data.flag != 'SUCCESS') {
+              this.$message('warning', res.data.message, 3000)
+            } else {
+              this.$message('success', '成功', 3000)
+              this.listPage()
             }
           })
         },
-        pageIndexChange:function (e) {
-          this.searchModel.pageDto.currentPage = e;
-        },
-        search:function () {
-          this.searchModel.pageDto.currentPage = 1;
-          this.listPage();
-        },
-        create:function () {
-          if(this.showAddPopover){
-              this.showAddPopover = false;
-          }else{
-            this.showAddPopover = true;
-          }
-        },
-        update:function (data) {
-          this.selectedModel = data;
-          if(this.showUpdatePopover){
-            this.showUpdatePopover = false;
-          }else{
-            this.showUpdatePopover = true;
-          }
-        },
-        deleteById:function (id) {
-          this.$dialog('询问','您确定删除该记录吗？',true,true,
-            () => {// 点击确定
-              Vue.$ajax({
-                method: 'delete',
-                url:Vue.$adminServerURL + '/RoleController/delete/' + id
-              }).then(res => {
-                if(res.data.flag != 'SUCCESS') {
-                  this.$message('warning',res.data.message,3000);
-                }else{
-                  this.$message('success','成功',3000);
-                  this.listPage();
-                }
-              })
-            },
-            () => { // 点击关闭
+        () => { // 点击关闭
 
-            }
-          );
-        },
-        importByExcel:function () {
-          if(this.showImportPopover){
-            this.showImportPopover = false;
-          }else{
-            this.showImportPopover = true;
-          }
-        },
-        closePopover:function (type) {
-          if(type == 'create'){
-            this.showAddPopover = false;
-          }else if(type == 'update'){
-            this.showUpdatePopover = false;
-          }else{
-            this.showImportPopover = false;
-          }
-          this.listPage();
         }
+      )
+    },
+    importByExcel: function () {
+      if (this.showImportPopover) {
+        this.showImportPopover = false
+      } else {
+        this.showImportPopover = true
+      }
+    },
+    closePopover: function (type) {
+      if (type === 'create') {
+        this.showAddPopover = false
+      } else if (type === 'update') {
+        this.showUpdatePopover = false
+      } else {
+        this.showImportPopover = false
+      }
+      this.listPage()
     }
   }
+}
 </script>
