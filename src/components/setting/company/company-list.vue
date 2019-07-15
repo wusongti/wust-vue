@@ -131,7 +131,7 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message('warning', res.data.message, 3000)
         }
       })
     },
