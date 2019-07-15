@@ -31,78 +31,81 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'pagination',
-    props: ['currentPage','showCount','totalResult'],
-    data(){
-      return {
-        totalPage:0
+export default {
+  name: 'pagination',
+  props: ['currentPage', 'showCount', 'totalResult'],
+  data () {
+    return {
+      totalPage: 0
+    }
+  },
+  computed: {
+    indexs: function () {
+      return this.indexMethod()
+    }
+  },
+  methods: {
+    prePage: function () {
+      let currentPageTemp = this.currentPage
+      if (currentPageTemp <= 1) {
+        return
       }
-    },
-    computed: {
-      indexs: function(){
-        if(this.totalResult < 1){
-          this.totalPage = 0;
-        }else{
-          if(this.totalResult % this.showCount == 0){
-              this.totalPage = parseInt(this.totalResult / this.showCount);
-          }else{
-              this.totalPage = parseInt(this.totalResult / this.showCount) + 1;
-          }
-        }
 
-        var currentPageTemp = this.currentPage;
-        var left = 1;
-        var right = this.totalPage;
-        var ar = [];
-        if(this.totalPage >= 5){
-          if(currentPageTemp > 3 && currentPageTemp < this.totalPage - 2){
-            left = currentPageTemp - 2
-            right = currentPageTemp + 2
-          }else{
-            if(currentPageTemp <= 3){
-              left = 1
-              right = 5
-            }else{
-              right = this.totalPage
-              left = this.totalPage -4
-            }
-          }
-        }
-        while (left <= right){
-          ar.push(left)
-          left ++
-        }
-        return ar
+      currentPageTemp--
+      this.$emit('updatePageIndex', currentPageTemp)
+      this.$emit('pageClick')
+    },
+    nextPage: function (data = null) {
+      let currentPageTemp = this.currentPage
+      if (currentPageTemp >= this.totalPage) {
+        return
       }
+
+      currentPageTemp++
+      this.$emit('updatePageIndex', currentPageTemp)
+      this.$emit('pageClick')
     },
-    methods:{
-        prePage:function () {
-          var currentPageTemp = this.currentPage;
-          if(currentPageTemp <= 1){
-            return;
-          }
-
-          currentPageTemp --;
-          this.$emit('updatePageIndex', currentPageTemp);
-          this.$emit('pageClick');
-        },
-        nextPage:function (data = null) {
-          var currentPageTemp = this.currentPage;
-          if(currentPageTemp >= this.totalPage){
-            return;
-          }
-
-          currentPageTemp ++;
-          this.$emit('updatePageIndex', currentPageTemp);
-          this.$emit('pageClick');
-        },
-        pageClick:function (data = null) {
-          var currentPageTemp = this.currentPage;
-          currentPageTemp = data
-            this.$emit('updatePageIndex', currentPageTemp);
-            this.$emit('pageClick');
+    pageClick: function (data = null) {
+      let currentPageTemp = this.currentPage
+      currentPageTemp = data
+      this.$emit('updatePageIndex', currentPageTemp)
+      this.$emit('pageClick')
+    },
+    indexMethod: function () {
+      if (this.totalResult < 1) {
+        this.totalPage = 0
+      } else {
+        if (this.totalResult % this.showCount === 0) {
+          this.totalPage = parseInt(this.totalResult / this.showCount)
+        } else {
+          this.totalPage = parseInt(this.totalResult / this.showCount) + 1
         }
+      }
+
+      let currentPageTemp = this.currentPage
+      let left = 1
+      let right = this.totalPage
+      let ar = []
+      if (this.totalPage >= 5) {
+        if (currentPageTemp > 3 && currentPageTemp < this.totalPage - 2) {
+          left = currentPageTemp - 2
+          right = currentPageTemp + 2
+        } else {
+          if (currentPageTemp <= 3) {
+            left = 1
+            right = 5
+          } else {
+            right = this.totalPage
+            left = this.totalPage - 4
+          }
+        }
+      }
+      while (left <= right) {
+        ar.push(left)
+        left++
+      }
+      return ar
     }
   }
+}
 </script>

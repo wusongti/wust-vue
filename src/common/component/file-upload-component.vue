@@ -29,122 +29,122 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
-  export default {
-      name:'fileUpload',
-      props: {
-        src: {
-          type: String,
-          required: true
-        },
-        fileType: {
-          type: String,
-          required: true
-        },
-        fileSize: {
-          type: Number,
-          required: false
+import Vue from 'vue'
+export default {
+  name: 'fileUpload',
+  props: {
+    src: {
+      type: String,
+      required: true
+    },
+    fileType: {
+      type: String,
+      required: true
+    },
+    fileSize: {
+      type: Number,
+      required: false
+    }
+  },
+  data () {
+    return {
+      status: 'ready',
+      files: [],
+      point: {},
+      uploading: false,
+      percent: 0
+    }
+  },
+  methods: {
+    add () {
+      this.$refs.file.click()
+    },
+    submit () {
+      if (this.files.length === 0) {
+        this.$message('warning', '请先选择文件', 3000)
+        return
+      }
+      const formData = new FormData()
+      this.files.forEach((item) => {
+        formData.append('file', item.file)
+      })
+      const xhr = new XMLHttpRequest()
+      xhr.upload.addEventListener('progress', this.uploadProgress, false)
+      xhr.open('POST', this.src, true)
+      xhr.setRequestHeader('x-auth-token', sessionStorage.getItem('x-auth-token'))
+      this.uploading = true
+      xhr.send(formData)
+      xhr.onload = () => {
+        this.uploading = false
+        if (xhr.status === 200 || xhr.status === 304) {
+          this.status = 'finished'
+          this.$message('success', '上传成功', 3000)
+        } else {
+          this.$message('error', `上传失败，错误码： ${xhr.status}`, 3000)
         }
-      },
-      data() {
-        return {
-          status: 'ready',
-          files: [],
-          point: {},
-          uploading: false,
-          percent: 0
-        }
-      },
-      methods: {
-        add() {
-          this.$refs.file.click()
-        },
-        submit() {
-          if (this.files.length === 0) {
-            this.$message('warning','请先选择文件',3000);
+
+        this.$emit('importCallback', xhr.status)
+      }
+    },
+    finished () {
+      this.files = []
+      this.status = 'ready'
+    },
+    remove (index) {
+      this.files.splice(index, 1)
+    },
+    fileChanged () {
+      const list = this.$refs.file.files
+      for (let i = 0; i < list.length; i++) {
+        if (!this.isContain(list[i])) {
+          if (Vue.$isNullOrIsBlankOrIsUndefined(this.fileType)) {
+            this.$message('warning', '请指定允许上传的文件类型', 3000)
             return
           }
-          const formData = new FormData()
-          this.files.forEach((item) => {
-            formData.append('file', item.file)
-          })
-          const xhr = new XMLHttpRequest()
-          xhr.upload.addEventListener('progress', this.uploadProgress, false)
-          xhr.open('POST', this.src, true)
-          xhr.setRequestHeader("x-auth-token", sessionStorage.getItem("x-auth-token"));
-          this.uploading = true
-          xhr.send(formData)
-          xhr.onload = () => {
-            this.uploading = false
-            if (xhr.status === 200 || xhr.status === 304) {
-              this.status = 'finished'
-              this.$message('success','上传成功',3000);
-            } else {
-              this.$message('error',`上传失败，错误码： ${xhr.status}`,3000);
+
+          let suf = list[i].name.substr(list[i].name.indexOf('.') + 1)
+          if (this.fileType.indexOf(suf) != -1) {
+            if ((list[i].size / 1024 / 1024) > this.fileSize) {
+              this.$message('warning', '只能上传大小为[' + this.fileSize + 'MB]以内的文件', 3000)
+              return
             }
 
-            this.$emit('importCallback', xhr.status);
-          }
-        },
-        finished() {
-          this.files = []
-          this.status = 'ready'
-        },
-        remove(index) {
-          this.files.splice(index, 1)
-        },
-        fileChanged() {
-          const list = this.$refs.file.files
-          for (let i = 0; i < list.length; i++) {
-            if (!this.isContain(list[i])) {
-                if(Vue.$isNullOrIsBlankOrIsUndefined(this.fileType)){
-                  this.$message('warning','请指定允许上传的文件类型',3000);
-                  return;
-                }
-
-                let suf = list[i].name.substr(list[i].name.indexOf('.') + 1);
-                if(this.fileType.indexOf(suf) != -1){
-                    if((list[i].size / 1024 / 1024) > this.fileSize){
-                      this.$message('warning','只能上传大小为['+this.fileSize+'MB]以内的文件',3000);
-                      return;
-                    }
-
-                    const item = {
-                      name: list[i].name,
-                      size: list[i].size,
-                      file: list[i]
-                    }
-                    this.html5Reader(list[i], item)
-                    this.files.push(item)
-                }else{
-                  this.$message('warning','上传的文件类型只能为:[' + this.fileType + ']中的一种',3000);
-                }
+            const item = {
+              name: list[i].name,
+              size: list[i].size,
+              file: list[i]
             }
-          }
-          this.$refs.file.value = ''
-        },
-        // 将图片文件转成BASE64格式
-        html5Reader(file, item){
-          const reader = new FileReader()
-          reader.onload = (e) => {
-            this.$set(item, 'src', e.target.result)
-          }
-          reader.readAsDataURL(file)
-        },
-        isContain(file) {
-          return this.files.find((item) => item.name === file.name && item.size === file.size)
-        },
-        uploadProgress(evt) {
-          const component = this
-          if (evt.lengthComputable) {
-            const percentComplete = Math.round((evt.loaded * 100) / evt.total)
-            component.percent = percentComplete / 100
+            this.html5Reader(list[i], item)
+            this.files.push(item)
           } else {
-            this.$message('warning','上传进程计算失败',3000);
+            this.$message('warning', '上传的文件类型只能为:[' + this.fileType + ']中的一种', 3000)
           }
         }
       }
+      this.$refs.file.value = ''
+    },
+    // 将图片文件转成BASE64格式
+    html5Reader (file, item) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.$set(item, 'src', e.target.result)
+      }
+      reader.readAsDataURL(file)
+    },
+    isContain (file) {
+      return this.files.find((item) => item.name === file.name && item.size === file.size)
+    },
+    uploadProgress (evt) {
+      const component = this
+      if (evt.lengthComputable) {
+        const percentComplete = Math.round((evt.loaded * 100) / evt.total)
+        component.percent = percentComplete / 100
+      } else {
+        this.$message('warning', '上传进程计算失败', 3000)
+      }
+    }
   }
+}
 </script>
 <style>
   .vue-uploader {

@@ -21,34 +21,33 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue';
-  export default {
-    name: 'myDialog',
-    data(){
-      return {
-        title:'',         // 标题
-        message:'',       // 消息内容
-        showDialog:false,
-        showOKButton:false,
-        showCancelButton:true,
-        fnOK:null,       // 确定函数
-        fnCancel:null,   // 取消函数
-      }
+export default {
+  name: 'myDialog',
+  data () {
+    return {
+      title: '', // 标题
+      message: '', // 消息内容
+      showDialog: false,
+      showOKButton: false,
+      showCancelButton: true,
+      fnOK: null, // 确定函数
+      fnCancel: null // 取消函数
+    }
+  },
+  methods: {
+    ok: function () {
+      this.close()
+      this.fnOK()
     },
-    methods:{
-      ok:function () {
-        this.close();
-        this.fnOK();
-      },
-      cancel:function () {
-        this.close();
-        this.fnCancel();
-      },
-      close:function () {
-        this.showDialog = false;
-      }
+    cancel: function () {
+      this.close()
+      this.fnCancel()
+    },
+    close: function () {
+      this.showDialog = false
     }
   }
+}
 </script>
 <style>
   .dialog{

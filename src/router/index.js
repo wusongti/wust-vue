@@ -115,8 +115,7 @@ export default new Router({
       path: '/ResponseError',
       name: 'ResponseError',
       component: ResponseError
-    }
-    ,
+    },
     {
       path: '/ResponseUndone',
       name: 'ResponseUndone',

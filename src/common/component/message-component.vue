@@ -22,20 +22,20 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'message',
-    data(){
-        return {
-            messageType:'',
-            message:""
-        }
-    },
-    methods:{
-        close:function () {
-          this.messageType = '';
-        }
+export default {
+  name: 'message',
+  data () {
+    return {
+      messageType: '',
+      message: ''
+    }
+  },
+  methods: {
+    close: function () {
+      this.messageType = ''
     }
   }
+}
 </script>
 <style>
   .dialog-tips {

@@ -4,22 +4,23 @@ import Vue from 'vue'
 import App from './app'
 import router from './router'
 import './common/interceptor/http-interceptors'
-import LoginContext from  './common/login-context'
-import UniversalPlugin from  './common/plugin/universal-plugin'
-import DirectivePlugin from  './common/plugin/directive-plugin'
+import LoginContext from './common/login-context'
+import UniversalPlugin from './common/plugin/universal-plugin'
+import DirectivePlugin from './common/plugin/directive-plugin'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-Vue.prototype.loginContext = LoginContext;
+Vue.prototype.loginContext = LoginContext
 
-Vue.use(UniversalPlugin);
+Vue.use(UniversalPlugin)
 
-Vue.use(DirectivePlugin);
+Vue.use(DirectivePlugin)
 
-Vue.filter('formatDate', function (date,frm) {
-  return Vue.$formatDate(date,frm);
+Vue.filter('formatDate', function (date, frm) {
+  return Vue.$formatDate(date, frm)
 })
 
+// eslint-disable-next-line no-new
 new Vue({
   el: '#app',
   router,

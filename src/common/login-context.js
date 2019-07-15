@@ -5,31 +5,31 @@
  */
 let loginContext = {
   setLoginContext: function (p) {
-    var obj = p.data.obj;
+    let obj = p.data.obj
 
-    var loginContextModel = {
-      loginName:obj.loginName,
-        oneLevelMenus : obj.oneLevelMenus,
-        permissions : obj.permissions,
-        xAuthToken : obj.xAuthToken
-    };
+    let loginContextModel = {
+      loginName: obj.loginName,
+      oneLevelMenus: obj.oneLevelMenus,
+      permissions: obj.permissions,
+      xAuthToken: obj.xAuthToken
+    }
 
-    sessionStorage.setItem("x-auth-token",obj.xAuthToken);
-    sessionStorage.setItem("loginContextModel",JSON.stringify(loginContextModel));
+    sessionStorage.setItem('x-auth-token', obj.xAuthToken)
+    sessionStorage.setItem('loginContextModel', JSON.stringify(loginContextModel))
   },
   getLoginContext: function () {
-    var loginContextSession = sessionStorage.getItem('loginContextModel');
-    if(loginContextSession == undefined || loginContextSession == null || loginContextSession == ''){
-      this.$router.push({path:'/Login'});
-    }else{
-      return JSON.parse(loginContextSession);
+    let loginContextSession = sessionStorage.getItem('loginContextModel')
+    if (loginContextSession === undefined || loginContextSession == null || loginContextSession === '') {
+      this.$router.push({path: '/Login'})
+    } else {
+      return JSON.parse(loginContextSession)
     }
-    return loginContextSession;
+    return loginContextSession
   },
-  removeLoginContext:function () {
-    sessionStorage.removeItem("x-auth-token");
-    sessionStorage.removeItem("loginContextModel");
+  removeLoginContext: function () {
+    sessionStorage.removeItem('x-auth-token')
+    sessionStorage.removeItem('loginContextModel')
   }
 }
 
-export default loginContext;
+export default loginContext
