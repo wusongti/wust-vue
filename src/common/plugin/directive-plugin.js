@@ -101,7 +101,7 @@ function appendToEL (Vue, el, url) {
     method: 'post',
     url: url
   }).then(res => {
-    if (res.data.messageMap.flag === 'SUCCESS') {
+    if (res.data.flag === 'SUCCESS') {
       el.innerHTML = res.data.t
     } else {
       this.$message('warning', res.data.messageMap.message, 3000)

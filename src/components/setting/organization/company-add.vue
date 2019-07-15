@@ -107,7 +107,7 @@ export default {
         url: Vue.$adminServerURL + '/CompanyController/listPage',
         data: this.searchModel
       }).then(res => {
-        if (res.data.messageMap.flag == 'SUCCESS') {
+        if (res.data.flag == 'SUCCESS') {
           this.baseDto = res.data
         } else {
           this.$message('info', res.data.message, 3000)
