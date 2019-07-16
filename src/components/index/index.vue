@@ -170,7 +170,7 @@ export default {
 
         Vue.$ajax({
           method: 'post',
-          url: Vue.$baseURL + '/api-sso-server/LoginController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId
+          url: Vue.$ssoServerURL + '/LoginController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
             this.twoLevelMenus = res.data.obj
