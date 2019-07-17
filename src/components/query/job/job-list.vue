@@ -123,7 +123,7 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message(res.data.message)
         }
       })
     },
@@ -142,56 +142,68 @@ export default {
       }
     },
     pause: function (data) {
-      this.$dialog('询问', '您确定要暂停该作业吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'post',
-            url: Vue.$autotaskServerURL + '/JobController/pause',
-            data: {
-              jobName: data.qrtzJobDetails.jobName,
-              jobClassName: data.qrtzJobDetails.jobClassName,
-              jobGroupName: data.qrtzJobDetails.jobGroup,
-              cronExpression: data.qrtzCronTriggers.cronExpression
-            }
-          }).then(res => {
-            if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
-            } else {
-              this.search()
-              this.$message('success', '操作成功', 3000)
-            }
-          })
-        },
-        () => { // 点击关闭
-
-        }
-      )
+      this.$confirm('您确定要恢复该作业吗？', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'post',
+          url: Vue.$autotaskServerURL + '/JobController/pause',
+          data: {
+            jobName: data.qrtzJobDetails.jobName,
+            jobClassName: data.qrtzJobDetails.jobClassName,
+            jobGroupName: data.qrtzJobDetails.jobGroup,
+            cronExpression: data.qrtzCronTriggers.cronExpression
+          }
+        }).then(res => {
+          if (res.data.flag !== 'SUCCESS') {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: '成功',
+              type: 'success'
+            })
+            this.search()
+          }
+        })
+      }).catch(() => {
+      })
     },
     resume: function (data) {
-      this.$dialog('询问', '您确定要恢复该作业吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'post',
-            url: Vue.$autotaskServerURL + '/JobController/resume',
-            data: {
-              jobName: data.qrtzJobDetails.jobName,
-              jobClassName: data.qrtzJobDetails.jobClassName,
-              jobGroupName: data.qrtzJobDetails.jobGroup,
-              cronExpression: data.qrtzCronTriggers.cronExpression
-            }
-          }).then(res => {
-            if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
-            } else {
-              this.search()
-              this.$message('success', '操作成功', 3000)
-            }
-          })
-        },
-        () => { // 点击关闭
-
-        }
-      )
+      this.$confirm('您确定要恢复该作业吗？', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'post',
+          url: Vue.$autotaskServerURL + '/JobController/resume',
+          data: {
+            jobName: data.qrtzJobDetails.jobName,
+            jobClassName: data.qrtzJobDetails.jobClassName,
+            jobGroupName: data.qrtzJobDetails.jobGroup,
+            cronExpression: data.qrtzCronTriggers.cronExpression
+          }
+        }).then(res => {
+          if (res.data.flag !== 'SUCCESS') {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: res.data.message,
+              type: 'success'
+            })
+            this.search()
+          }
+        })
+      }).catch(() => {
+      })
     },
     update: function (data) {
       this.selectedModel.jobName = data.qrtzJobDetails.jobName
@@ -205,24 +217,30 @@ export default {
       }
     },
     deleteJob: function (data) {
-      this.$dialog('询问', '您确定删除该记录吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'delete',
-            url: Vue.$autotaskServerURL + '/JobController/delete/' + data.qrtzJobDetails.jobName + '/' + data.qrtzJobDetails.jobGroup
-          }).then(res => {
-            if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
-            } else {
-              this.$message('success', '成功', 3000)
-              this.search()
-            }
-          })
-        },
-        () => { // 点击关闭
-
-        }
-      )
+      this.$confirm('您确定删除该记录吗？', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'delete',
+          url: Vue.$autotaskServerURL + '/JobController/delete/' + data.qrtzJobDetails.jobName + '/' + data.qrtzJobDetails.jobGroup
+        }).then(res => {
+          if (res.data.flag !== 'SUCCESS') {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: res.data.message,
+              type: 'success'
+            })
+            this.search()
+          }
+        })
+      }).catch(() => {
+      })
     },
     closePopover: function (type) {
       if (type === 'create') {

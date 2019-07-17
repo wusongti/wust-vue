@@ -60,21 +60,33 @@ export default {
     },
     doAdd: function () {
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobName)) {
-        this.$message('warning', '请输入作业名称', 3000)
+        this.$message({
+          message: '请输入作业名称',
+          type: 'warning'
+        })
         return
       }
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobClassName)) {
-        this.$message('warning', '请输入作业全限定类名称', 3000)
+        this.$message({
+          message: '请输入作业全限定类名称',
+          type: 'warning'
+        })
         return
       }
 
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.jobGroupName)) {
-        this.$message('warning', '请输入作业分组', 3000)
+        this.$message({
+          message: '请输入作业分组',
+          type: 'warning'
+        })
         return
       }
 
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.cronExpression)) {
-        this.$message('warning', '请输入表达式', 3000)
+        this.$message({
+          message: '请输入表达式',
+          type: 'warning'
+        })
         return
       }
 
@@ -84,7 +96,10 @@ export default {
         data: this.addModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
           this.closePopover()
         }

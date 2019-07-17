@@ -84,7 +84,10 @@ export default {
         data: this.addModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
           this.closePopover()
         }

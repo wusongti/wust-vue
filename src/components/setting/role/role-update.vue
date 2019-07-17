@@ -80,12 +80,18 @@ export default {
     },
     doUpdate: function () {
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.name)) {
-        this.$message('warning', '请输入角色名', 3000)
+        this.$message({
+          message: '请输入角色名',
+          type: 'success'
+        })
         return
       }
 
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.status)) {
-        this.$message('warning', '请选择状态', 3000)
+        this.$message({
+          message: '请输入角色名',
+          type: 'success'
+        })
         return
       }
 
@@ -95,7 +101,10 @@ export default {
         data: this.updateModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
         } else {
           this.closePopover()
         }

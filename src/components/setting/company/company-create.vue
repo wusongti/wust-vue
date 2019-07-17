@@ -74,7 +74,10 @@ export default {
     },
     doAdd: function () {
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.name)) {
-        this.$message('warning', '请输入公司名称', 3000)
+        this.$message({
+          message: '请输入公司名称',
+          type: 'warning'
+        })
         return
       }
 
@@ -84,7 +87,10 @@ export default {
         data: this.addModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
           this.closePopover()
         }

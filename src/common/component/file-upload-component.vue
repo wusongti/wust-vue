@@ -61,7 +61,10 @@ export default {
     },
     submit () {
       if (this.files.length === 0) {
-        this.$message('warning', '请先选择文件', 3000)
+        this.$message({
+          message: '请先选择文件',
+          type: 'warning'
+        })
         return
       }
       const formData = new FormData()
@@ -78,9 +81,12 @@ export default {
         this.uploading = false
         if (xhr.status === 200 || xhr.status === 304) {
           this.status = 'finished'
-          this.$message('success', '上传成功', 3000)
+          this.$message({
+            message: '上传成功',
+            type: 'success'
+          })
         } else {
-          this.$message('error', `上传失败，错误码： ${xhr.status}`, 3000)
+          this.$message.error(`上传失败，错误码： ${xhr.status}`)
         }
 
         this.$emit('importCallback', xhr.status)
@@ -98,14 +104,20 @@ export default {
       for (let i = 0; i < list.length; i++) {
         if (!this.isContain(list[i])) {
           if (Vue.$isNullOrIsBlankOrIsUndefined(this.fileType)) {
-            this.$message('warning', '请指定允许上传的文件类型', 3000)
+            this.$message({
+              message: '请指定允许上传的文件类型',
+              type: 'warning'
+            })
             return
           }
 
           let suf = list[i].name.substr(list[i].name.indexOf('.') + 1)
-          if (this.fileType.indexOf(suf) != -1) {
+          if (this.fileType.indexOf(suf) !== -1) {
             if ((list[i].size / 1024 / 1024) > this.fileSize) {
-              this.$message('warning', '只能上传大小为[' + this.fileSize + 'MB]以内的文件', 3000)
+              this.$message({
+                message: '只能上传大小为[' + this.fileSize + 'MB]以内的文件',
+                type: 'warning'
+              })
               return
             }
 
@@ -117,7 +129,10 @@ export default {
             this.html5Reader(list[i], item)
             this.files.push(item)
           } else {
-            this.$message('warning', '上传的文件类型只能为:[' + this.fileType + ']中的一种', 3000)
+            this.$message({
+              message: '上传的文件类型只能为:[' + this.fileType + ']中的一种',
+              type: 'warning'
+            })
           }
         }
       }
@@ -140,7 +155,10 @@ export default {
         const percentComplete = Math.round((evt.loaded * 100) / evt.total)
         component.percent = percentComplete / 100
       } else {
-        this.$message('warning', '上传进程计算失败', 3000)
+        this.$message({
+          message: '上传进程计算失败',
+          type: 'warning'
+        })
       }
     }
   }

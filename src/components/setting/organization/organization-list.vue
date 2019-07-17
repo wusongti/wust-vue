@@ -362,7 +362,7 @@ export default {
         url: Vue.$adminServerURL + '/OrganizationController/buildTree',
         data: this.searchModel
       }).then(res => {
-        if (res.data.flag == 'SUCCESS') {
+        if (res.data.flag === 'SUCCESS') {
           let zNodes = JSON.parse(res.data.obj)
           var treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
@@ -378,7 +378,10 @@ export default {
             }
           }
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -399,7 +402,10 @@ export default {
           this.roleList = res.data.obj.roleList
           this.userList = res.data.obj.userList
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -442,6 +448,7 @@ export default {
 
     // 更新命中节点样式
     updateHitZNodesStyle: function (highlight) {
+      // eslint-disable-next-line no-undef
       let treeObj = $.fn.zTree.getZTreeObj('tree')
       let nodeLength = this.searchHitZNodes.length
       for (let i = 0; i < nodeLength; i++) {
@@ -523,9 +530,15 @@ export default {
             url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId + '/' + type
           }).then(res => {
             if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
             } else {
-              this.$message('success', '成功', 3000)
+              this.$message({
+                message: res.data.message,
+                type: 'success'
+              })
               this.listPage()
             }
           })

@@ -203,6 +203,7 @@ export default {
   },
   methods: {
     showLookupTableTreePage: function () {
+      // eslint-disable-next-line no-undef
       $('#myTabs li:eq(1) a').tab('show')
       this.getLookupTableTreeData()
     },
@@ -215,7 +216,10 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -233,7 +237,10 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto1 = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -250,9 +257,15 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
-          this.$message('success', '操作成功', 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
           this.getIndividuationLookupTableTreeData()
         }
       })
@@ -264,9 +277,15 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
-          this.$message('success', '操作成功', 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
           this.getIndividuationLookupTableTreeData()
         }
       })
@@ -278,31 +297,34 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$dialog('询问', res.data.message + ',您需要覆盖原来的数据吗？', true, true,
-            () => { // 点击确定
-              Vue.$ajax({
-                method: 'post',
-                url: Vue.$adminServerURL + '/DataDictionaryController/create',
-                data: data
-              }).then(res => {
-                if (res.data.flag !== 'SUCCESS') {
-                  this.$message('warning', res.data.message, 3000)
-                } else {
-                  this.$dialog('询问', '添加到个性化成功，是否转到个性化页面？', true, true,
-                    () => { // 点击确定
-                      this.showIndividuationLookupTableTreePage()
-                    },
-                    () => {
-                      // 点击关闭
-                    }
-                  )
-                }
-              })
-            },
-            () => {
-              // 点击关闭
-            }
-          )
+          this.$confirm(res.data.message + ',您需要覆盖原来的数据吗？', '询问', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            Vue.$ajax({
+              method: 'post',
+              url: Vue.$adminServerURL + '/DataDictionaryController/create',
+              data: data
+            }).then(res => {
+              if (res.data.flag !== 'SUCCESS') {
+                this.$message({
+                  message: res.data.message,
+                  type: 'warning'
+                })
+              } else {
+                this.$confirm('添加到个性化成功，是否转到个性化页面？', '询问', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.showIndividuationLookupTableTreePage()
+                }).catch(() => {
+                })
+              }
+            })
+          }).catch(() => {
+          })
         } else {
           Vue.$ajax({
             method: 'post',
@@ -310,16 +332,19 @@ export default {
             data: data
           }).then(res => {
             if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
             } else {
-              this.$dialog('询问', '添加到个性化成功，是否转到个性化页面？', true, true,
-                () => { // 点击确定
-                  this.showIndividuationLookupTableTreePage()
-                },
-                () => {
-                  // 点击关闭
-                }
-              )
+              this.$confirm('添加到个性化成功，是否转到个性化页面？', '询问', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.showIndividuationLookupTableTreePage()
+              }).catch(() => {
+              })
             }
           })
         }

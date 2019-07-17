@@ -89,24 +89,36 @@ export default {
     },
     doAdd: function () {
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.loginName)) {
-        this.$message('warning', '请输入登录账号', 3000)
+        this.$message({
+          message: '请输入登录账号',
+          type: 'warning'
+        })
         return
       }
 
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.realName)) {
-        this.$message('warning', '请输入真实姓名', 3000)
+        this.$message({
+          message: '请输入真实姓名',
+          type: 'warning'
+        })
         return
       }
 
       if (!Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.email)) {
         if (!Vue.$isEmail(this.addModel.email)) {
-          this.$message('warning', '请输入正确的邮箱', 3000)
+          this.$message({
+            message: '请输入正确的邮箱',
+            type: 'warning'
+          })
           return
         }
       }
 
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.type)) {
-        this.$message('warning', '请选择用户类型', 3000)
+        this.$message({
+          message: '请选择用户类型',
+          type: 'warning'
+        })
         return
       }
 
@@ -116,9 +128,15 @@ export default {
         data: this.addModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
-          this.$message('sucess', '操作成功', 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
           this.closePopover()
         }
       })

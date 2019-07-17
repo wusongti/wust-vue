@@ -95,7 +95,10 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -113,9 +116,15 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
-          this.$message('success', '操作成功', 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
           this.search()
         }
       })

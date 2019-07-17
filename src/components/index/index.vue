@@ -179,7 +179,7 @@ export default {
             event.target.parentElement.parentElement.lastElementChild.style.display = 'block'
           } else {
             if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
-              this.$message('info', res.data.message, 3000)
+              this.$message(res.data.message)
             }
           }
         })
@@ -190,23 +190,23 @@ export default {
       }
     },
     logOut: function () {
-      this.$dialog('询问', '您确定要退出登录吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'post',
-            url: Vue.$baseURL + '/api-sso-server/LoginController/logout/' + this.loginContext.getLoginContext().loginName
-          }).then(res => {
-            if (res.data.flag === 'SUCCESS') {
-              this.$router.push({path: '/Login'})
-            } else {
-              this.$message('info', res.data.message, 3000)
-            }
-          })
-        },
-        () => {
-          // 点击关闭
-        }
-      )
+      this.$confirm('您确定要退出登录吗, 是否继续?', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'post',
+          url: Vue.$baseURL + '/api-sso-server/LoginController/logout/' + this.loginContext.getLoginContext().loginName
+        }).then(res => {
+          if (res.data.flag === 'SUCCESS') {
+            this.$router.push({path: '/Login'})
+          } else {
+            this.$message(res.data.message)
+          }
+        })
+      }).catch(() => {
+      })
     },
     toRight: function (link) {
       this.$router.push({path: link})

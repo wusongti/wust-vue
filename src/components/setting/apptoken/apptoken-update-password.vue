@@ -71,12 +71,18 @@ export default {
     },
     doUpdate: function () {
       if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.password)) {
-        this.$message('warning', '请输入密码', 3000)
+        this.$message({
+          message: '请输入密码',
+          type: 'warning'
+        })
         return
       }
 
       if (!Vue.$isPassword(this.updateModel.password)) {
-        this.$message('warning', '合法的密码格式为：字母、数字、下划线或三者组成的字符', 3000)
+        this.$message({
+          message: '合法的密码格式为：字母、数字、下划线或三者组成的字符',
+          type: 'warning'
+        })
         return
       }
 
@@ -85,8 +91,11 @@ export default {
         url: Vue.$adminServerURL + '/AppTokenController/update',
         data: this.updateModel
       }).then(res => {
-        if (res.data.flag != 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+        if (res.data.flag !== 'SUCCESS') {
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
           this.closePopover()
         }

@@ -73,7 +73,10 @@ export default {
           // eslint-disable-next-line no-undef
           $.fn.zTree.init($('#functionTree'), this.setting, zNodes)
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -85,7 +88,10 @@ export default {
       let treeObj = $.fn.zTree.getZTreeObj('functionTree')
       let nodes = treeObj.getCheckedNodes(true)
       if (nodes == null || nodes.length === 0) {
-        this.$message('warning', '请选择功能权限数据', 3000)
+        this.$message({
+          message: '请选择功能权限数据',
+          type: 'warning'
+        })
         return
       }
 
@@ -104,9 +110,15 @@ export default {
           data: sysRoleResourceAdd
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
-            this.$message('success', '操作成功', 3000)
+            this.$message({
+              message: res.data.message,
+              type: 'success'
+            })
           } else {
-            this.$message('info', res.data.message, 3000)
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
           }
         })
       }

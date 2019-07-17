@@ -94,7 +94,10 @@ export default {
         url: Vue.$adminServerURL + '/DataPrivilegeRulesController/update/' + that.selectedModel.dataPrivilegeId + '/' + typeStr
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
           this.closePopover()
         }

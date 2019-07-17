@@ -63,7 +63,10 @@ export default {
           this.loginContext.setLoginContext(res)
           this.$router.push({path: '/Index'})
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     }

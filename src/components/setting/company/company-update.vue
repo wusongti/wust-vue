@@ -99,7 +99,10 @@ export default {
         data: this.updateModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
         } else {
           this.closePopover()
         }

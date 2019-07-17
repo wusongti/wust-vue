@@ -129,7 +129,10 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('info', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -162,32 +165,44 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         } else {
-          this.$message('success', '操作成功', 3000)
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
           this.listPage()
         }
       })
     },
     deleteById: function (id) {
-      this.$dialog('询问', '您确定删除该记录吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'delete',
-            url: Vue.$adminServerURL + '/AppTokenController/delete/' + id
-          }).then(res => {
-            if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
-            } else {
-              this.$message('success', '成功', 3000)
-              this.listPage()
-            }
-          })
-        },
-        () => { // 点击关闭
-
-        }
-      )
+      this.$confirm('您确定删除该记录吗？', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'delete',
+          url: Vue.$adminServerURL + '/AppTokenController/delete/' + id
+        }).then(res => {
+          if (res.data.flag !== 'SUCCESS') {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: '成功',
+              type: 'success'
+            })
+            this.listPage()
+          }
+        })
+      }).catch(() => {
+      })
     },
     closePopver: function (type) {
       if (type === 'create') {

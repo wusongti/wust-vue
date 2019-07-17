@@ -131,7 +131,10 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message('warning', res.data.message, 3000)
+          this.$message({
+            message: res.data.message,
+            type: 'warning'
+          })
         }
       })
     },
@@ -165,9 +168,15 @@ export default {
             url: Vue.$adminServerURL + '/CompanyController/delete/' + id
           }).then(res => {
             if (res.data.flag !== 'SUCCESS') {
-              this.$message('warning', res.data.message, 3000)
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
             } else {
-              this.$message('success', '成功', 3000)
+              this.$message({
+                message: '成功',
+                type: 'success'
+              })
               this.listPage()
             }
           })
