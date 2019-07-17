@@ -1,13 +1,15 @@
 // eslint-disable-next-line camelcase
-const en_US = {
+const enUS = {
+  // 规则：目录名.页面名.标签
   components: {
     login: {
       login: {
         label1: 'Login Name',
-        label2: 'Password'
+        label2: 'Password',
+        label3: 'Login'
       }
     }
   }
 }
 // eslint-disable-next-line camelcase
-export default en_US
+export default enUS

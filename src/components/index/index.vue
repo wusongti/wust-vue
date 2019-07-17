@@ -36,6 +36,9 @@
               <li>
                 <a href="javascript:;"><i class="icon_mail_alt"></i>我的消息</a>
               </li>
+              <li v-on:click="dialogFormVisible = true">
+                <a href="javascript:;"><i class="icon_cursor_alt"></i>切换语言</a>
+              </li>
               <li v-on:click="logOut">
                 <a href="javascript:;"><i class="icon_key_alt"></i>登出</a>
               </li>
@@ -98,11 +101,25 @@
           ©2019 本系统所有权限归系统开发者WUST解释
         </div>
       </div>
+
+      <el-dialog title="切换语言" :visible.sync="dialogFormVisible" width="25%">
+        <el-form >
+          <el-form-item label="语言选择">
+            <el-select  v-model="langValue" placeholder="请选择语言">
+              <el-option label="中文（简体）" value="zh-CN"></el-option>
+              <el-option label="英文（美国）" value="en-US"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="changeLang">确 定</el-button>
+        </div>
+      </el-dialog>
     </section>
     <!--main content end-->
   </section>
 </template>
-
 <script>
 import Vue from 'vue'
 
@@ -112,7 +129,9 @@ export default {
     return {
       isCloseSidebar: false,
       personalPanelIsOpen: false,
-      twoLevelMenus: []
+      twoLevelMenus: [],
+      dialogFormVisible: false,
+      langValue: this.$i18n.locale
     }
   },
   methods: {
@@ -210,6 +229,18 @@ export default {
     },
     toRight: function (link) {
       this.$router.push({path: link})
+    },
+    changeLang: function () {
+      this.langValue = localStorage.getItem('locale') || 'zh-CN'
+      if (this.langValue === 'zh-CN') {
+        this.langValue = 'en-US'
+        this.$i18n.locale = this.langValue
+      } else {
+        this.langValue = 'zh-CN'
+        this.$i18n.locale = this.langValue
+      }
+      localStorage.setItem('locale', this.langValue)
+      this.dialogFormVisible = false
     }
   }
 }

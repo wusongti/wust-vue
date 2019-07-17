@@ -13,8 +13,7 @@
               <span class="input-group-addon"><i class="icon_key_alt"></i></span>
               <input type="password" class="form-control" placeholder="Password" v-model="password">
             </div>
-
-            <button class="btn btn-primary btn-lg btn-block" type="button" @click="login">Login</button>
+            <button class="btn btn-primary btn-lg btn-block" type="button" @click="login" v-text="$t('components.login.login.label3')"></button>
             <!--
                 <button class="btn btn-info btn-lg btn-block" type="submit">Signup</button>
                 -->
