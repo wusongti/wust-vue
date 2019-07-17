@@ -104,7 +104,7 @@
 
       <el-dialog title="切换语言" :visible.sync="dialogFormVisible" width="25%">
         <el-form >
-          <el-form-item label="语言选择">
+          <el-form-item label="当前语言">
             <el-select  v-model="langValue" placeholder="请选择语言">
               <el-option label="中文（简体）" value="zh-CN"></el-option>
               <el-option label="英文（美国）" value="en-US"></el-option>
