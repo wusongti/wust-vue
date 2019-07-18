@@ -161,30 +161,30 @@ export default {
       }
     },
     deleteById: function (id) {
-      this.$dialog('询问', '您确定删除该记录吗？', true, true,
-        () => { // 点击确定
-          Vue.$ajax({
-            method: 'delete',
-            url: Vue.$adminServerURL + '/CompanyController/delete/' + id
-          }).then(res => {
-            if (res.data.flag !== 'SUCCESS') {
-              this.$message({
-                message: res.data.message,
-                type: 'warning'
-              })
-            } else {
-              this.$message({
-                message: '成功',
-                type: 'success'
-              })
-              this.listPage()
-            }
-          })
-        },
-        () => { // 点击关闭
-
-        }
-      )
+      this.$confirm('您确定删除该记录吗', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Vue.$ajax({
+          method: 'delete',
+          url: Vue.$adminServerURL + '/CompanyController/delete/' + id
+        }).then(res => {
+          if (res.data.flag !== 'SUCCESS') {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: '成功',
+              type: 'success'
+            })
+            this.listPage()
+          }
+        })
+      }).catch(() => {
+      })
     },
     closePopover: function (type) {
       if (type === 'create') {
