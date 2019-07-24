@@ -189,7 +189,7 @@ export default {
 
         Vue.$ajax({
           method: 'post',
-          url: Vue.$ssoServerURL + '/LoginController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId
+          url: Vue.$ssoServerURL + '/ResourcesController/loadSubMenuById/' + this.loginContext.getLoginContext().loginName + '/' + menuId
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
             this.twoLevelMenus = res.data.obj
@@ -216,7 +216,7 @@ export default {
       }).then(() => {
         Vue.$ajax({
           method: 'post',
-          url: Vue.$baseURL + '/api-sso-server/LoginController/logout/' + this.loginContext.getLoginContext().loginName
+          url: Vue.$ssoServerURL + '/LogoutController/logout/' + this.loginContext.getLoginContext().loginName
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
             this.$router.push({path: '/Login'})
