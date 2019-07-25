@@ -9,19 +9,6 @@
       <!--logo start-->
       <a href="index.html" class="logo">基于微服务架构下的企业<span class="lite">基础平台</span></a>
       <!--logo end-->
-
-      <div class="nav search-row" id="top_menu">
-        <!--  search form start -->
-        <ul class="nav top-menu">
-          <li>
-            <form class="navbar-form">
-              <input class="form-control" placeholder="Search" type="text">
-            </form>
-          </li>
-        </ul>
-        <!--  search form end -->
-      </div>
-
       <div class="top-nav notification-row">
         <!-- notificatoin dropdown start-->
         <ul class="nav pull-right top-menu">
@@ -96,11 +83,6 @@
         <router-view/>
         <!-- 内容 end -->
       </section>
-      <div class="text-right">
-        <div class="credits">
-          ©2019 本系统所有权限归系统开发者WUST解释
-        </div>
-      </div>
 
       <el-dialog title="切换语言" :visible.sync="dialogFormVisible" width="25%">
         <el-form >
