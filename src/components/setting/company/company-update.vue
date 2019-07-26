@@ -56,7 +56,7 @@ export default {
           Vue.$ajax({
             method: 'post',
             url: Vue.$adminServerURL + '/CompanyController/update',
-            data: this.addModel
+            data: this.updateModel
           }).then(res => {
             if (res.data.flag !== 'SUCCESS') {
               this.$message({

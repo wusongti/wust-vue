@@ -1,7 +1,7 @@
 <template>
   <div id="company-list">
-    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab">
-      <el-tab-pane name="公司列表" title="公司列表" label="公司列表">
+    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+      <el-tab-pane :name="defaultActiveName" label="公司列表">
         <form>
             <div class="col-xs-2 form-group">
               <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
@@ -83,7 +83,7 @@
       <el-tab-pane
         v-for="(item, index) in editableTabs"
         :key="item.name"
-        :label="item.title"
+        :label="item.label"
         :name="item.name"
         closable>
         <company-create v-if="item.key == 'create'"></company-create>
@@ -117,7 +117,8 @@ export default {
         xmlName: 'admin_company',
         moduleName: 'company'
       },
-      editableTabsValue: '公司列表',
+      defaultActiveName: 'CompanyList',
+      editableTabsValue: 'CompanyList',
       editableTabs: [],
       tabIndex: 2
     }
@@ -150,11 +151,11 @@ export default {
       this.listPage()
     },
     create: function () {
-      this.addTab('新建公司', '新建公司', 'create')
+      this.addTab('新建公司', 'CreateCompany', 'create')
     },
     update: function (data) {
       this.selectedModel = data
-      this.addTab('编辑公司信息', '编辑公司信息', 'update')
+      this.addTab('编辑公司信息', 'UpdateCompany', 'update')
     },
     deleteById: function (id) {
       this.$confirm('您确定删除该记录吗', '询问', {
@@ -182,8 +183,8 @@ export default {
       }).catch(() => {
       })
     },
-    addTab: function (title, name, key) {
-      let ele = {title: title, name: name, key: key}
+    addTab: function (label, name, key) {
+      let ele = {label: label, name: name, key: key}
       let flag = false
       this.editableTabs.every((val, idx, array) => {
         if (val.key === ele.key) {
@@ -205,7 +206,7 @@ export default {
             if (nextTab) {
               activeName = nextTab.name
             } else {
-              activeName = '公司列表'
+              activeName = this.defaultActiveName
               this.listPage()
             }
           }
@@ -214,6 +215,11 @@ export default {
 
       this.editableTabsValue = activeName
       this.editableTabs = tabs.filter(tab => tab.name !== targetName)
+    },
+    clickTab: function (tab) {
+      if (tab.name === this.defaultActiveName) {
+        this.listPage()
+      }
     }
   }
 }
