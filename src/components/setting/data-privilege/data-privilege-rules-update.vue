@@ -2,54 +2,31 @@
 * Created by WST on 2019/6/11.
 */
 <template>
-  <div id="data-privilege-rules-update">
-    <div class="my-popover">
-      <div class="my-popover-box" style="width: 18%;height: 55%">
-        <div class="my-popover-title">
-          <label>更新数据权限规则</label>
-          <a class="my-popover-close" @click="closePopover"><span class="glyphicon glyphicon-remove-circle"></span></a>
-        </div>
-        <div class="scroll-box">
-          <form>
-            <div class="radio">
-              <label>
-                <input type="radio" value="100905" name="typeRadio"  checked>
-                本人可见
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" value="100910" name="typeRadio">
-                岗位可见
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" value="100915" name="typeRadio">
-                部门可见
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" value="100920" name="typeRadio">
-                公司可见
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" value="100925" name="typeCheckbox">
-                领导可见
-              </label>
-            </div>
-          </form>
-        </div>
-        <div class="submit-group">
-          <button class="btn btn-danger btn-sm" @click="closePopover">取消</button>
-          <button class="btn btn-primary btn-sm" @click="doUpdate">提交</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <el-form ref="updateModel" :model="updateModel"  label-width="100px">
+    <el-form-item label="">
+      <el-radio-group v-model="updateModel.type">
+        <el-radio label="100905">只有本人可见</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="">
+      <el-radio-group v-model="updateModel.type">
+        <el-radio label="100910">同一岗位可见</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="">
+      <el-radio-group v-model="updateModel.type">
+        <el-radio label="100915">同一部门可见</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="">
+      <el-radio-group v-model="updateModel.type">
+        <el-radio label="100920">同一公司可见</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit('updateModel')">提交</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import Vue from 'vue'
@@ -60,38 +37,17 @@ export default {
   data () {
     return {
       typeRadio: '',
-      typeCheckbox: ''
+      updateModel: {dataPrivilegeId: ''}
     }
   },
   created: function () {
-
+    this.updateModel = this.selectedModel
   },
   methods: {
-    closePopover: function () {
-      this.$emit('closePopover', false)
-    },
-    doUpdate: function () {
-      let that = this
-      let typeStr = ''
-      let typeRadios = document.getElementsByName('typeRadio')
-      for (let k in typeRadios) {
-        if (typeRadios[k].checked) {
-          typeStr += typeRadios[k].value
-          break
-        }
-      }
-
-      let typeCheckboxs = document.getElementsByName('typeCheckbox')
-      for (let k in typeCheckboxs) {
-        if (typeCheckboxs[k].checked) {
-          typeStr += ',' + typeCheckboxs[k].value
-          break
-        }
-      }
-
+    onSubmit: function (formData) {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/DataPrivilegeRulesController/update/' + that.selectedModel.dataPrivilegeId + '/' + typeStr
+        url: Vue.$adminServerURL + '/DataPrivilegeRulesController/update/' + this.updateModel.dataPrivilegeId + '/' + this.updateModel.type
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
           this.$message({
@@ -99,13 +55,13 @@ export default {
             type: 'warning'
           })
         } else {
-          this.closePopover()
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
         }
       })
     }
   }
 }
 </script>
-<style>
-  @import "../../../assets/css/my-popover.css";
-</style>

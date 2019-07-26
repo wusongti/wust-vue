@@ -101,7 +101,6 @@
           </tr>
         </tfoot>
       </table>
-
     </el-tab-pane>
     <el-tab-pane
       v-for="(item, index) in editableTabs"
