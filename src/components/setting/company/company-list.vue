@@ -1,5 +1,4 @@
 <template>
-  <div id="company-list">
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
         <form>
@@ -24,7 +23,6 @@
           <tr>
             <th>编码</th>
             <th>公司名称</th>
-            <th>父级公司名称</th>
             <th>公司负责人</th>
             <th>描述</th>
             <th>创建人</th>
@@ -39,9 +37,6 @@
             <td>{{data.code}}</td>
             <td>
               {{data.name}}
-            </td>
-            <td>
-              {{data.pname}}
             </td>
             <td>
               {{data.leaderName}}
@@ -90,7 +85,6 @@
         <company-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></company-update>
       </el-tab-pane>
     </el-tabs>
-  </div>
 </template>
 <script>
 import Vue from 'vue'

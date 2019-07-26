@@ -2,42 +2,24 @@
 * Created by WST on 2019/6/13.
 */
 <template>
-  <div id="job-update">
-    <div class="my-popover">
-      <div class="my-popover-box" style="width: 40%">
-        <div class="my-popover-title">
-          <label>更新作业</label>
-          <a class="my-popover-close" @click="closePopover"><span class="glyphicon glyphicon-remove-circle"></span></a>
-        </div>
-        <div class="scroll-box">
-          <form>
-            <div class="row">
-              <div class="form-group col-xs-10">
-                <label>作业名</label>
-                <input type="text" class="form-control"  v-model="updateModel.jobName" readonly/>
-              </div>
-              <div class="form-group col-xs-10">
-                <label>作业全限定类名称</label>
-                <input type="text" class="form-control"  v-model="updateModel.jobClassName" readonly/>
-              </div>
-              <div class="form-group col-xs-10">
-                <label>作业分组</label>
-                <input type="text" class="form-control"  v-model="updateModel.jobGroupName" readonly/>
-              </div>
-              <div class="form-group col-xs-10">
-                <label class="required">Cron表达式</label>
-                <input type="text" class="form-control" placeholder="表达式" v-model="updateModel.cronExpression"/>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="submit-group">
-          <button class="btn btn-danger btn-sm" @click="closePopover">取消</button>
-          <button class="btn btn-primary btn-sm" @click="doUpdate">提交</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="200px">
+    <el-form-item label="作业名" prop="jobName">
+      <el-input v-model="updateModel.jobName" :disabled="true">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="作业全限定类名称" prop="jobClassName">
+      <el-input v-model="updateModel.jobClassName" :disabled="true"></el-input>
+    </el-form-item>
+    <el-form-item label="作业分组" prop="jobGroupName">
+      <el-input v-model="updateModel.jobGroupName" :disabled="true"></el-input>
+    </el-form-item>
+    <el-form-item label="Cron表达式" prop="cronExpression">
+      <el-input v-model="updateModel.cronExpression"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit('updateModel')">提交</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import Vue from 'vue'
@@ -52,6 +34,12 @@ export default {
         jobClassName: '',
         jobGroupName: '',
         cronExpression: ''
+      },
+      rules: {
+        jobName: [{required: true, message: '请输入作业名', trigger: 'blur'}],
+        jobClassName: [{required: true, message: '请输入作业全限定类名称', trigger: 'blur'}],
+        jobGroupName: [{required: true, message: '请输入作业分组', trigger: 'blur'}],
+        cronExpression: [{required: true, message: '请输入Cron表达式', trigger: 'blur'}]
       }
     }
   },
@@ -62,33 +50,30 @@ export default {
     closePopover: function () {
       this.$emit('closePopover', false)
     },
-    doUpdate: function () {
-      if (Vue.$isNullOrIsBlankOrIsUndefined(this.updateModel.cronExpression)) {
-        this.$message({
-          message: '请输入表达式',
-          type: 'warning'
-        })
-        return
-      }
-
-      Vue.$ajax({
-        method: 'post',
-        url: Vue.$autotaskServerURL + '/JobController/update',
-        data: this.updateModel
-      }).then(res => {
-        if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+    onSubmit: function (formData) {
+      this.$refs[formData].validate((valid) => {
+        if (!valid) {
         } else {
-          this.closePopover()
+          Vue.$ajax({
+            method: 'post',
+            url: Vue.$adminServerURL + '/JobController/update',
+            data: this.updateModel
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            } else {
+              this.$message({
+                message: res.data.message,
+                type: 'success'
+              })
+            }
+          })
         }
       })
     }
   }
 }
 </script>
-<style>
-  @import "../../../assets/css/my-popover.css";
-</style>
