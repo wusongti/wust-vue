@@ -68,14 +68,10 @@ export default {
                 message: res.data.message,
                 type: 'success'
               })
-              this.resetForm('updateModel')
             }
           })
         }
       })
-    },
-    resetForm (formData) {
-      this.$refs[formData].resetFields()
     }
   }
 }

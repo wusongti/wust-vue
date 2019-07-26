@@ -4,9 +4,7 @@
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="100px">
     <el-form-item label="编码">
-      <el-input
-        v-model="updateModel.code"
-        :disabled="true">
+      <el-input  v-model="updateModel.code" :disabled="true">
       </el-input>
     </el-form-item>
     <el-form-item label="名称" prop="name">
@@ -67,7 +65,6 @@ export default {
                 message: res.data.message,
                 type: 'success'
               })
-              this.resetForm('updateModel')
             }
           })
         }
