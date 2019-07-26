@@ -2,40 +2,17 @@
 * Created by WST on 2019/5/14.
 */
 <template>
-  <div id="role-create">
-    <div class="my-popover">
-      <div class="my-popover-box">
-        <div class="my-popover-title">
-          <label>新建角色</label>
-          <a class="my-popover-close" @click="closePopover"><span class="glyphicon glyphicon-remove-circle"></span></a>
-        </div>
-        <div class="scroll-box">
-          <form>
-            <div class="row">
-              <div class="col-xs-2 text-right">
-                <label for="inputName" class="required">角色名</label>
-              </div>
-              <div class="form-group col-xs-6">
-                <input type="text" class="form-control" id="inputName" placeholder="角色名" v-model="addModel.name"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-2 text-right">
-                <label for="inputDescription">描述</label>
-              </div>
-              <div class="form-group col-xs-6">
-                <textarea class="form-control" rows="3" id="inputDescription" v-model="addModel.description"></textarea>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="submit-group">
-          <button class="btn btn-danger btn-sm" @click="closePopover">取消</button>
-          <button class="btn btn-primary btn-sm" @click="doAdd">提交</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <el-form ref="addModel" :model="addModel" :rules="rules" label-width="100px">
+    <el-form-item label="角色名" prop="name">
+      <el-input v-model="addModel.name"></el-input>
+    </el-form-item>
+    <el-form-item label="描述">
+      <el-input v-model="addModel.description"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit('addModel')">提交</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import Vue from 'vue'
@@ -48,40 +25,41 @@ export default {
         code: '',
         name: '',
         description: ''
+      },
+      rules: {
+        name: [{required: true, message: '请输入角色名称', trigger: 'blur'}]
       }
     }
   },
   methods: {
-    closePopover: function () {
-      this.$emit('closePopover', false)
-    },
-    doAdd: function () {
-      if (Vue.$isNullOrIsBlankOrIsUndefined(this.addModel.name)) {
-        this.$message({
-          message: '请输入角色名称',
-          type: 'warning'
-        })
-        return
-      }
-
-      Vue.$ajax({
-        method: 'post',
-        url: Vue.$adminServerURL + '/RoleController/create',
-        data: this.addModel
-      }).then(res => {
-        if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+    onSubmit: function (formData) {
+      this.$refs[formData].validate((valid) => {
+        if (!valid) {
         } else {
-          this.closePopover()
+          Vue.$ajax({
+            method: 'post',
+            url: Vue.$adminServerURL + '/RoleController/create',
+            data: this.addModel
+          }).then(res => {
+            if (res.data.flag !== 'SUCCESS') {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            } else {
+              this.$message({
+                message: res.data.message,
+                type: 'success'
+              })
+              this.resetForm('addModel')
+            }
+          })
         }
       })
+    },
+    resetForm (formData) {
+      this.$refs[formData].resetFields()
     }
   }
 }
 </script>
-<style>
-  @import "../../../assets/css/my-popover.css";
-</style>
