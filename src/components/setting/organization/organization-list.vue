@@ -105,7 +105,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="data in departmentList">
+            <tr :key="data.id" v-for="data in departmentList">
               <td>{{data.code}}</td>
               <td>
                 {{data.name}}
@@ -159,7 +159,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="data in roleList">
+            <tr :key="data.id" v-for="data in roleList">
               <td>{{data.code}}</td>
               <td>
                 {{data.name}}
@@ -217,7 +217,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="data in userList">
+            <tr :key="data.id" v-for="data in userList">
               <td>
                 {{data.loginName}}
               </td>
@@ -359,19 +359,20 @@ export default {
     buildTree: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/OrganizationController/buildTree',
+        url: Vue.$adminServerURL + '/LookupController/buildTree',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
           let zNodes = JSON.parse(res.data.obj)
-          var treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
+          // eslint-disable-next-line no-undef
+          let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
           if (this.selectedNode != null && this.selectedNode.id !== '') {
             this.expandParentNodes(this.selectedNode.children[0], treeObj)
             // eslint-disable-next-line no-undef
             $('#' + this.selectedNode.tId + '_a').click()
           } else {
-            var nodes = treeObj.getNodes()
+            let nodes = treeObj.getNodes()
             if (nodes.length > 0) {
               // eslint-disable-next-line no-undef
               $('#tree_1_a').click()
