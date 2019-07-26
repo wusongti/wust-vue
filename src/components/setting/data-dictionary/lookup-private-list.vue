@@ -135,6 +135,7 @@ export default {
             message: res.data.message,
             type: 'success'
           })
+          this.listPage()
         }
       })
     },
@@ -154,6 +155,7 @@ export default {
             message: res.data.message,
             type: 'success'
           })
+          this.listPage()
         }
       })
     },

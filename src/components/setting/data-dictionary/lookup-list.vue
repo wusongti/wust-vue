@@ -176,12 +176,9 @@ export default {
                 type: 'warning'
               })
             } else {
-              this.$confirm('添加到个性化成功，是否转到个性化页面？', '询问', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
-              }).catch(() => {
+              this.$message({
+                message: res.data.message,
+                type: 'success'
               })
             }
           })
