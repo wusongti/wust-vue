@@ -130,44 +130,6 @@ export default {
   methods: {
     search: function () {
     },
-    updateStatus: function (data) {
-      Vue.$ajax({
-        method: 'post',
-        url: Vue.$adminServerURL + '/DataDictionaryController/updateStatus',
-        data: data
-      }).then(res => {
-        if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
-        } else {
-          this.$message({
-            message: res.data.message,
-            type: 'success'
-          })
-        }
-      })
-    },
-    updateVisible: function (data) {
-      Vue.$ajax({
-        method: 'post',
-        url: Vue.$adminServerURL + '/DataDictionaryController/updateVisible',
-        data: data
-      }).then(res => {
-        if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
-        } else {
-          this.$message({
-            message: res.data.message,
-            type: 'success'
-          })
-        }
-      })
-    },
     create: function (data) {
       Vue.$ajax({
         method: 'post',
@@ -225,22 +187,6 @@ export default {
           })
         }
       })
-    },
-    copy: function (data) {
-      if (this.showCopyIndividuationPopover) {
-        this.showCopyIndividuationPopover = false
-      } else {
-        this.selectModel = data
-        this.showCopyIndividuationPopover = true
-      }
-    },
-    update: function (data) {
-      if (this.showUpdateIndividuationPopover) {
-        this.showUpdateIndividuationPopover = false
-      } else {
-        this.selectModel = data
-        this.showUpdateIndividuationPopover = true
-      }
     },
     initTree: function () {
       Vue.$ajax({
@@ -332,7 +278,6 @@ export default {
     },
     clickTab: function (tab) {
       if (tab.name === 'LookupList') {
-        this.initTree()
         this.showLookupPrivateList = false
       } else {
         this.showLookupPrivateList = true

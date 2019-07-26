@@ -40,7 +40,10 @@
             {{data.sort}}
           </td>
           <td>
-            <button type="button" class="btn btn-link btn-xs" @click="create(data)" v-if="data.rootCode == '0000'">添加到性化</button>
+            <button type="button" class="btn btn-link btn-xs" @click="updateStatus(data)"><span v-if="data.status=='100201'">禁用</span><span v-if="data.status=='100202'">启用</span></button>
+            <button type="button" class="btn btn-link btn-xs" @click="updateVisible(data)"><span v-if="data.visible=='100701'">隐藏</span><span v-if="data.visible=='100702'">展示</span></button>
+            <!--<button type="button" class="btn btn-link btn-xs" @click="copy(data)" v-if="data.rootCode == '0000'">复制</button>-->
+            <button type="button" class="btn btn-link btn-xs" @click="update(data)">修改</button>
           </td>
         </tr>
         </tbody>
@@ -247,7 +250,7 @@ export default {
             let nodes = treeObj.getNodes()
             if (nodes.length > 0) {
               // eslint-disable-next-line no-undef
-              $('#tree_1_a').click()
+              $('#tree1_1_a').click()
             }
           }
         } else {
