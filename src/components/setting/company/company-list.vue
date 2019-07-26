@@ -35,7 +35,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="data in baseDto.lstDto">
+          <tr :key="data.id" v-for="data in baseDto.lstDto">
             <td>{{data.code}}</td>
             <td>
               {{data.name}}
