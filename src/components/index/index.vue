@@ -116,6 +116,9 @@ export default {
       langValue: this.$i18n.locale
     }
   },
+  created: function () {
+    this.langValue = localStorage.getItem('locale') || 'zh-CN'
+  },
   methods: {
     closeSidebar: function () {
       if (this.isCloseSidebar) {
@@ -213,14 +216,7 @@ export default {
       this.$router.push({path: link})
     },
     changeLang: function () {
-      this.langValue = localStorage.getItem('locale') || 'zh-CN'
-      if (this.langValue === 'zh-CN') {
-        this.langValue = 'en-US'
-        this.$i18n.locale = this.langValue
-      } else {
-        this.langValue = 'zh-CN'
-        this.$i18n.locale = this.langValue
-      }
+      this.$i18n.locale = this.langValue // 如果不设置这个值，则需要刷新页面才看见效果
       localStorage.setItem('locale', this.langValue)
       this.dialogFormVisible = false
     }

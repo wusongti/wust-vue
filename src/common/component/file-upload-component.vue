@@ -75,6 +75,7 @@ export default {
       xhr.upload.addEventListener('progress', this.uploadProgress, false)
       xhr.open('POST', this.src, true)
       xhr.setRequestHeader('x-auth-token', sessionStorage.getItem('x-auth-token'))
+      xhr.setRequestHeader('x-locale', localStorage.getItem('locale'))
       this.uploading = true
       xhr.send(formData)
       xhr.onload = () => {

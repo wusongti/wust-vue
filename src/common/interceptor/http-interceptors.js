@@ -8,6 +8,7 @@ import LoginContext from '../login-context'
 
 axios.interceptors.request.use(config => {
   config.headers['x-auth-token'] = sessionStorage.getItem('x-auth-token')
+  config.headers['x-locale'] = localStorage.getItem('locale')
   return config
 }, function (error) {
   return Promise.reject(error)
