@@ -38,12 +38,13 @@
           <!-- 一级菜单，有子菜单 start -->
           <el-submenu :key="menu.id" :index="(index+3)" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i :class="menu.img"></i>
               <span>{{menu.description}}</span>
             </template>
 
             <!-- 二级菜单，有子菜单 start -->
             <el-submenu :key="child.id" :index="(index+3) + seq" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children != null && child.children.length > 0">
+              <i :class="child.img"></i>
               <template slot="title">{{child.description}}</template>
               <!-- TODO -->
             </el-submenu>
@@ -51,7 +52,8 @@
 
             <!-- 二级菜单，无子菜单 start -->
             <el-menu-item :key="child.id" :index="(index+3) + (seq + 2)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0">
-              {{child.description}}
+              <i :class="menu.img"></i>
+              <span slot="title">{{child.description}} </span>
             </el-menu-item>
             <!-- 二级菜单，无子菜单 end -->
           </el-submenu>
@@ -59,7 +61,8 @@
 
           <!-- 一级菜单，无子菜单 start -->
           <el-menu-item :key="menu.id" :index="(index+3) + (index + 2)" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0">
-            {{menu.description}}
+            <i :class="menu.img"></i>
+            <span slot="title">{{menu.description}} </span>
           </el-menu-item>
           <!-- 一级菜单，无子菜单 end -->
         </el-menu>
