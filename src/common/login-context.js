@@ -10,7 +10,7 @@ let loginContext = {
     let loginContextModel = {
       loginName: obj.loginName,
       realName: obj.realName,
-      oneLevelMenus: obj.oneLevelMenus,
+      menus: obj.menus,
       permissions: obj.permissions,
       xAuthToken: obj.xAuthToken
     }
