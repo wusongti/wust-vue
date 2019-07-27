@@ -4,6 +4,11 @@
 <template>
   <el-container>
     <el-aside width="200px" style="min-height: 400px; border: 1px solid #eee">
+      <el-form @submit.native.prevent>
+        <el-input size="mini" v-model="searchModel.name" @keyup.enter.native="onSearch">
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+      </el-form>
       <ul id="tree" class="ztree"></ul>
     </el-aside>
     <el-main style="min-height: 400px;border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
@@ -101,7 +106,6 @@ export default {
       },
       selectedNode: {id: '', pid: '-1', rootCode: '', name: ''},
       searchHitZNodes: [],
-      selectModel: {},
       searchModel: {
         pageDto: {showCount: 10, currentPage: 1},
         code: '',
@@ -148,7 +152,7 @@ export default {
     },
     // 树搜索
     onSearch: function ($even) {
-      let searchKeyWord = $even.currentTarget.value
+      let searchKeyWord = $even.target.value
       if (!Vue.$isNullOrIsBlankOrIsUndefined(searchKeyWord)) {
         this.updateHitZNodesStyle(false)
         // eslint-disable-next-line no-undef

@@ -359,7 +359,7 @@ export default {
     buildTree: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/LookupController/buildTree',
+        url: Vue.$adminServerURL + '/OrganizationController/buildTree',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
