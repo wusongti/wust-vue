@@ -13,7 +13,7 @@ import DepartmentList from '@/components/setting/department/department-list.vue'
 import RoleList from '@/components/setting/role/role-list.vue'
 import UserList from '@/components/setting/user/user-list.vue'
 import OrganizationList from '@/components/setting/organization/organization-list.vue'
-import LookupList from '@/components/setting/data-dictionary/lookup-list.vue'
+import LookupIndex from '@/components/setting/data-dictionary/lookup-index.vue'
 import MyImportExportList from '@/components/query/my-import-export/my-import-export-list.vue'
 import OperationLogList from '@/components/query/operation-log/operation-log-list.vue'
 import JobList from '@/components/query/job/job-list.vue'
@@ -67,8 +67,8 @@ export default new Router({
           component: OrganizationList
         },
         {
-          path: '/LookupList',
-          component: LookupList
+          path: '/LookupIndex',
+          component: LookupIndex
         },
         {
           path: '/MyImportExportList',
