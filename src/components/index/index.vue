@@ -77,7 +77,7 @@
           </el-menu-item>
           <!-- 一级菜单，无子菜单 end -->
 
-          <el-menu-item :index="(index + 2) + ''">
+          <el-menu-item index="100">
             <i class="el-icon-s-help"></i>
             <span slot="title">系统帮助</span>
           </el-menu-item>

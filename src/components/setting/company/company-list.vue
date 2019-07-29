@@ -81,8 +81,8 @@
         </table>
       </el-tab-pane>
       <el-tab-pane
-        v-for="(item, index) in editableTabs"
-        :key="item.name"
+        v-for="(item) in editableTabs"
+        :key="item.key"
         :label="item.label"
         :name="item.name"
         closable>

@@ -5,7 +5,7 @@
   <el-container>
     <el-aside width="200px" style="min-height: 400px; border: 1px solid #eee">
       <el-form @submit.native.prevent>
-        <el-input size="mini" v-model="searchModel.name" @keyup.enter.native="onSearch">
+        <el-input size="mini" @keyup.enter.native="onSearch">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-form>
