@@ -7,7 +7,7 @@
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="190px" style="height: 70vh;background-color: #f8f8f8">
+          <el-aside width="190px" style="height: 70vh;border: 1px solid #eee">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -15,7 +15,7 @@
             </el-form>
             <ul id="tree" class="ztree"></ul>
           </el-aside>
-          <el-main>
+          <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
             <el-form  @submit.native.prevent :inline="true" :model="searchModel" class="demo-form-inline text-left">
               <el-form-item label="编码">
                 <el-input size="small" v-model="searchModel.code"></el-input>
