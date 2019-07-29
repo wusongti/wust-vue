@@ -100,10 +100,12 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -121,10 +123,12 @@ export default {
         data: data
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         } else {
           this.$message({
             message: res.data.message,

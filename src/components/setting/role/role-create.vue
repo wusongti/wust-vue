@@ -42,10 +42,12 @@ export default {
             data: this.addModel
           }).then(res => {
             if (res.data.flag !== 'SUCCESS') {
-              this.$message({
-                message: res.data.message,
-                type: 'warning'
-              })
+              if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+                this.$message({
+                  message: res.data.message,
+                  type: 'warning'
+                })
+              }
             } else {
               this.$message({
                 message: res.data.message,

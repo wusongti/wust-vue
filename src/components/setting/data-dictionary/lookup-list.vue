@@ -143,10 +143,12 @@ export default {
             }
           }
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -199,10 +201,12 @@ export default {
         data: this.searchModel
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         } else {
           this.baseDto = res.data
         }
