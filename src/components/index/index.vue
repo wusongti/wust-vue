@@ -91,22 +91,6 @@
       <!--右边主体窗口 end-->
     </el-container>
     <!--下部分容器 end-->
-    <!--切换语言弹出框 start-->
-    <el-dialog title="切换语言" :visible.sync="dialogFormVisible" width="25%">
-      <el-form >
-        <el-form-item label="当前语言">
-          <el-select  v-model="langValue" placeholder="请选择语言">
-            <el-option label="中文（简体）" value="zh-CN"></el-option>
-            <el-option label="英文（美国）" value="en-US"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeLang">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!--切换语言弹出框 end-->
   </el-container>
   <!--最外层容器 end-->
   </div>
@@ -119,7 +103,6 @@ export default {
   data () {
     return {
       defaultActive: '-1',
-      dialogFormVisible: false,
       langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English'
     }
   },
