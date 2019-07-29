@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <el-breadcrumb separator="/" style="margin-bottom: 5px">
+      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
+      <el-breadcrumb-item>公司管理</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
         <form>
@@ -85,6 +90,7 @@
         <company-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></company-update>
       </el-tab-pane>
     </el-tabs>
+  </div>
 </template>
 <script>
 import Vue from 'vue'

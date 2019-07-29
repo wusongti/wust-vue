@@ -1,85 +1,91 @@
 <template>
-  <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
-    <el-tab-pane :name="defaultActiveName" label="作业列表">
-    <form>
-      <div class="row">
-        <div class="col-xs-2 form-group">
-          <input type="text" class="form-control" placeholder="作业名" v-model="searchModel.name"/>
+  <div>
+    <el-breadcrumb separator="/" style="margin-bottom: 5px">
+      <el-breadcrumb-item>查询管理</el-breadcrumb-item>
+      <el-breadcrumb-item>作业管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+      <el-tab-pane :name="defaultActiveName" label="作业列表">
+      <form>
+        <div class="row">
+          <div class="col-xs-2 form-group">
+            <input type="text" class="form-control" placeholder="作业名" v-model="searchModel.name"/>
+          </div>
+          <div>
+            <button class="btn btn-danger btn-sm" type="reset">重置</button>
+            <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+          </div>
         </div>
-        <div>
-          <button class="btn btn-danger btn-sm" type="reset">重置</button>
-          <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+      </form>
+      <div class="panel-body progress-panel">
+        <div class="row">
+          <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
+          </div>
         </div>
       </div>
-    </form>
-    <div class="panel-body progress-panel">
-      <div class="row">
-        <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-        </div>
-      </div>
-    </div>
-    <table class="table table-hover table-bordered">
-      <thead>
-        <tr>
-          <th width="200">作业名称</th>
-          <th>作业类名称</th>
-          <th width="50">组</th>
-          <th width="100">表达式</th>
-          <th width="50">时区</th>
-          <th width="50">状态</th>
-          <th width="200">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="data in baseDto.lstDto">
-          <td>
-            {{data.qrtzJobDetails.jobName}}
-          </td>
-          <td>
-            {{data.qrtzJobDetails.jobClassName}}
-          </td>
-          <td>
-            {{data.qrtzJobDetails.jobGroup}}
-          </td>
-          <td>
-            {{data.qrtzCronTriggers.cronExpression}}
-          </td>
-          <td>
-            {{data.qrtzCronTriggers.timeZoneId}}
-          </td>
-          <td>
-            {{data.qrtzTriggers.triggerState}}
-          </td>
-          <td>
-            <button type="button" class="btn btn-link btn-xs" @click="pause(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'WAITING'">暂停</button>
-            <button type="button" class="btn btn-link btn-xs" @click="resume(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'PAUSED'">恢复</button>
-            <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'JobList.update'">修改</button>
-            <button type="button" class="btn btn-link btn-xs" @click="deleteJob(data)" v-has-permission="'JobList.delete'">删除</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="13">
-              <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                          v-bind:showCount="searchModel.pageDto.showCount"
-                          v-bind:totalResult="baseDto.page.totalResult"
-                          v-on:updatePageIndex="pageIndexChange"
-                          @pageClick="listPage"></pagination-component>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-    </el-tab-pane>
-    <el-tab-pane
-      v-for="(item, index) in editableTabs"
-      :key="item.name"
-      :label="item.label"
-      :name="item.name"
-      closable>
-      <job-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></job-update>
-    </el-tab-pane>
-  </el-tabs>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th width="200">作业名称</th>
+            <th>作业类名称</th>
+            <th width="50">组</th>
+            <th width="100">表达式</th>
+            <th width="50">时区</th>
+            <th width="50">状态</th>
+            <th width="200">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="data in baseDto.lstDto">
+            <td>
+              {{data.qrtzJobDetails.jobName}}
+            </td>
+            <td>
+              {{data.qrtzJobDetails.jobClassName}}
+            </td>
+            <td>
+              {{data.qrtzJobDetails.jobGroup}}
+            </td>
+            <td>
+              {{data.qrtzCronTriggers.cronExpression}}
+            </td>
+            <td>
+              {{data.qrtzCronTriggers.timeZoneId}}
+            </td>
+            <td>
+              {{data.qrtzTriggers.triggerState}}
+            </td>
+            <td>
+              <button type="button" class="btn btn-link btn-xs" @click="pause(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'WAITING'">暂停</button>
+              <button type="button" class="btn btn-link btn-xs" @click="resume(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'PAUSED'">恢复</button>
+              <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'JobList.update'">修改</button>
+              <button type="button" class="btn btn-link btn-xs" @click="deleteJob(data)" v-has-permission="'JobList.delete'">删除</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="13">
+                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                            v-bind:showCount="searchModel.pageDto.showCount"
+                            v-bind:totalResult="baseDto.page.totalResult"
+                            v-on:updatePageIndex="pageIndexChange"
+                            @pageClick="listPage"></pagination-component>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      </el-tab-pane>
+      <el-tab-pane
+        v-for="(item) in editableTabs"
+        :key="item.name"
+        :label="item.label"
+        :name="item.name"
+        closable>
+        <job-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></job-update>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
 <script>
 import Vue from 'vue'

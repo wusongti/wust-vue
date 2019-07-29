@@ -1,6 +1,7 @@
 <template>
-  <div id="dashboard">
-  </div>
+  <el-breadcrumb separator="/" style="margin-bottom: 5px">
+    <el-breadcrumb-item>系统首页</el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 <script>
 

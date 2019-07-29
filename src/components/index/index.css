@@ -1,4 +1,4 @@
-.el-header {
+#div_index #el-header {
   background: rgba(54,66,74,1);
   border-bottom: 1px solid #f1f2f7;
   text-color: #fff;
@@ -6,15 +6,19 @@
   line-height: 60px;
 }
 
-.el-aside {
+#div_index #el-aside {
   background-color: #394a59;
   text-color: #fff;
-  min-height: 500px;
+  height: 85vh;
 }
 
-.el-main {
+.el-submenu .el-menu-item {
+  min-width: 150px;
+}
+
+#div_index #el-main {
   text-align: center;
-  min-height: 500px;
+  height: 85vh;
 }
 
 body > .el-container {

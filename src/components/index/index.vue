@@ -1,8 +1,9 @@
 <template>
+  <div id="div_index">
   <!--最外层容器 start-->
   <el-container>
     <!--头部 start-->
-    <el-header>
+    <el-header id="el-header">
       <!--logo start-->
       <a href="index.html" class="logo">基于微服务架构下的企业<span class="lite">基础平台</span></a>
       <!--logo end-->
@@ -22,54 +23,60 @@
     <!--下部分容器 start-->
     <el-container>
       <!--左侧菜单栏 start-->
-      <el-aside width="190px">
+      <el-aside id="el-aside" width="190px">
         <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
+          :default-active="defaultActive"
           @open="handleOpen"
           @close="handleClose"
           background-color="#394a59"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
-            <span slot="title">首页 </span>
+          <el-menu-item index="-1" @click="toRight('/Dashboard')">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">系统首页 </span>
           </el-menu-item>
           <!-- 一级菜单，有子菜单 start -->
-          <el-submenu :key="menu.id" :index="(index+3)" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
+          <el-submenu :key="menu.id" :index="index + ''" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
             <template slot="title">
               <i :class="menu.img"></i>
               <span>{{menu.description}}</span>
             </template>
 
             <!-- 二级菜单，有子菜单 start -->
-            <el-submenu :key="child.id" :index="(index+3) + seq" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children != null && child.children.length > 0">
-              <i :class="child.img"></i>
+            <el-submenu :key="child.id" :index="index + '-' + seq" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children != null && child.children.length > 0">
+              <i></i>
               <template slot="title">{{child.description}}</template>
               <!-- TODO -->
             </el-submenu>
             <!-- 二级菜单，有子菜单 end -->
 
             <!-- 二级菜单，无子菜单 start -->
-            <el-menu-item :key="child.id" :index="(index+3) + (seq + 2)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0">
-              <i :class="menu.img"></i>
-              <span slot="title">{{child.description}} </span>
+            <el-menu-item :key="child.id" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0" @click="toRight(child.url)">
+              <i></i>
+              <span slot="title">{{child.description}}</span>
             </el-menu-item>
             <!-- 二级菜单，无子菜单 end -->
           </el-submenu>
           <!-- 一级菜单，无子菜单 end -->
 
           <!-- 一级菜单，无子菜单 start -->
-          <el-menu-item :key="menu.id" :index="(index+3) + (index + 2)" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0">
+          <el-menu-item :key="menu.id" :index="(index + 1) + ''" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0" @click="toRight(menu.url)">
             <i :class="menu.img"></i>
             <span slot="title">{{menu.description}} </span>
           </el-menu-item>
           <!-- 一级菜单，无子菜单 end -->
+
+          <el-menu-item :index="(index + 2) + ''">
+            <i class="el-icon-s-help"></i>
+            <span slot="title">系统帮助</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <!--左侧菜单栏 end-->
       <!--右边主体窗口 start-->
-      <el-main>Main</el-main>
+      <el-main id="el-main">
+        <router-view/>
+      </el-main>
       <!--右边主体窗口 end-->
     </el-container>
     <!--下部分容器 end-->
@@ -91,6 +98,7 @@
     <!--切换语言弹出框 end-->
   </el-container>
   <!--最外层容器 end-->
+  </div>
 </template>
 <script>
 import Vue from 'vue'
@@ -99,7 +107,7 @@ export default {
   name: 'Index',
   data () {
     return {
-      isCollapse: true,
+      defaultActive: '-1',
       dialogFormVisible: false,
       langValue: this.$i18n.locale
     }

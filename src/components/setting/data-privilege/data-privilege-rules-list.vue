@@ -1,64 +1,70 @@
 <template>
-  <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
-    <el-tab-pane :name="defaultActiveName" label="数据权限列表">
-      <form>
-        <div class="row">
-          <div class="col-xs-2 form-group">
-            <input type="text" class="form-control" placeholder="业务" v-model="searchModel.businessName"/>
+  <div>
+    <el-breadcrumb separator="/" style="margin-bottom: 5px">
+      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
+      <el-breadcrumb-item>数据权限</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+      <el-tab-pane :name="defaultActiveName" label="数据权限列表">
+        <form>
+          <div class="row">
+            <div class="col-xs-2 form-group">
+              <input type="text" class="form-control" placeholder="业务" v-model="searchModel.businessName"/>
+            </div>
+            <div>
+              <button class="btn btn-danger btn-sm" type="reset">重置</button>
+              <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+            </div>
           </div>
-          <div>
-            <button class="btn btn-danger btn-sm" type="reset">重置</button>
-            <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+        </form>
+        <div class="panel-body progress-panel">
+          <div class="row">
+            <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
+            </div>
           </div>
         </div>
-      </form>
-      <div class="panel-body progress-panel">
-        <div class="row">
-          <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-          </div>
-        </div>
-      </div>
-      <table class="table table-hover table-bordered">
-        <thead>
-          <tr>
-            <th width="350">业务</th>
-            <th>规则</th>
-            <th width="80">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="data in baseDto.lstDto">
-            <td>{{data.businessName}}</td>
-            <td>
-              {{data.typeName}}
-            </td>
-            <td>
-              <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'DataPrivilegeRulesList.update'">修改</button>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="13">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                            v-bind:showCount="searchModel.pageDto.showCount"
-                            v-bind:totalResult="baseDto.page.totalResult"
-                            v-on:updatePageIndex="pageIndexChange"
-                            @pageClick="listPage"></pagination-component>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </el-tab-pane>
-    <el-tab-pane
-      v-for="(item, index) in editableTabs"
-      :key="item.name"
-      :label="item.label"
-      :name="item.name"
-      closable>
-      <data-privilege-rules-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></data-privilege-rules-update>
-    </el-tab-pane>
-  </el-tabs>
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th width="350">业务</th>
+              <th>规则</th>
+              <th width="80">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="data in baseDto.lstDto">
+              <td>{{data.businessName}}</td>
+              <td>
+                {{data.typeName}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'DataPrivilegeRulesList.update'">修改</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="13">
+                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                              v-bind:showCount="searchModel.pageDto.showCount"
+                              v-bind:totalResult="baseDto.page.totalResult"
+                              v-on:updatePageIndex="pageIndexChange"
+                              @pageClick="listPage"></pagination-component>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </el-tab-pane>
+      <el-tab-pane
+        v-for="(item) in editableTabs"
+        :key="item.name"
+        :label="item.label"
+        :name="item.name"
+        closable>
+        <data-privilege-rules-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></data-privilege-rules-update>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
 <script>
 import Vue from 'vue'
