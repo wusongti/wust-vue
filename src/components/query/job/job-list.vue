@@ -36,7 +36,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="data in baseDto.lstDto">
+          <tr :key="data.id" v-for="data in baseDto.lstDto">
             <td>
               {{data.qrtzJobDetails.jobName}}
             </td>
@@ -104,8 +104,6 @@ export default {
         name: ''
       },
       baseDto: {page: {totalResult: 0}},
-      showAddPopover: false,
-      showUpdatePopover: false,
       selectedModel: {
         jobName: '',
         jobClassName: '',

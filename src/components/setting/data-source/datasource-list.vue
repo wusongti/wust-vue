@@ -1,23 +1,24 @@
 <template>
-  <div id="datasource-list">
-    <form>
-      <div class="row">
-        <div class="col-xs-2 form-group">
-          <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
-        </div>
-        <div>
-          <button class="btn btn-danger btn-sm" type="reset">重置</button>
-          <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-        </div>
-      </div>
-    </form>
-    <div class="row">
-      <section class="panel">
+  <div>
+    <el-breadcrumb separator="/" style="margin-bottom: 5px">
+      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+      <el-tab-pane :name="defaultActiveName" label="数据源列表">
+        <form>
+          <div class="row">
+            <div class="col-xs-2 form-group">
+              <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
+            </div>
+            <div>
+              <button class="btn btn-danger btn-sm" type="reset">重置</button>
+              <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+            </div>
+          </div>
+        </form>
         <div class="panel-body progress-panel">
           <div class="row">
-            <div class="col-lg-8 task-progress pull-left">
-              <h1>数据源列表</h1>
-            </div>
             <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
             </div>
           </div>
@@ -33,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="data in baseDto.lstDto">
+            <tr :key="data.id" v-for="data in baseDto.lstDto">
               <td>{{data.companyName}}</td>
               <td>
                 {{data.jdbcUrl}}
@@ -61,8 +62,8 @@
             </tr>
           </tfoot>
         </table>
-      </section>
-    </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -79,7 +80,11 @@ export default {
         pageDto: {showCount: 10, currentPage: 1},
         companyName: ''
       },
-      baseDto: {page: {totalResult: 0}}
+      baseDto: {page: {totalResult: 0}},
+      defaultActiveName: 'DataSourceList',
+      editableTabsValue: 'DataSourceList',
+      editableTabs: [],
+      tabIndex: 1
     }
   },
   created: function () {

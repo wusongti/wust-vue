@@ -7,13 +7,24 @@
       <!--logo start-->
       <a href="index.html" class="logo">基于微服务架构下的企业<span class="lite">基础平台</span></a>
       <!--logo end-->
-      <el-col :span="12" class="pull-right">
+      <el-col :span="5" class="pull-right">
+        <div class="pull-left" style="margin-right: 32px;">
+          <span style="color: #fed189">
+            {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})
+          </span>
+        </div>
+        <el-dropdown trigger="click" class="pull-left">
+          <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item><a href="javascript:;" @click="changeLang('zh-CN')">中文</a></el-dropdown-item>
+            <el-dropdown-item><a href="javascript:;" @click="changeLang('en-US')">English</a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-dropdown trigger="click" class="pull-right">
           <span class="el-dropdown-link" style="color: #fed189">
-            {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})<i class="el-icon-arrow-down el-icon--right"></i>
+            更多<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="javascript:;" v-on:click="dialogFormVisible = true">切换语言</a></el-dropdown-item>
             <el-dropdown-item><a href="javascript:;" v-on:click="logOut">注销</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -29,7 +40,7 @@
           @open="handleOpen"
           @close="handleClose"
           background-color="#394a59"
-          text-color="#fff"
+          text-color="#ececec"
           active-text-color="#ffd04b">
           <el-menu-item index="-1" @click="toRight('/Dashboard')">
             <i class="el-icon-s-home"></i>
@@ -44,7 +55,7 @@
 
             <!-- 二级菜单，有子菜单 start -->
             <el-submenu :key="child.id" :index="index + '-' + seq" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children != null && child.children.length > 0">
-              <i></i>
+              <i :class="child.img"></i>
               <template slot="title">{{child.description}}</template>
               <!-- TODO -->
             </el-submenu>
@@ -52,7 +63,7 @@
 
             <!-- 二级菜单，无子菜单 start -->
             <el-menu-item :key="child.id" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0" @click="toRight(child.url)">
-              <i></i>
+              <i :class="child.img"></i>
               <span slot="title">{{child.description}}</span>
             </el-menu-item>
             <!-- 二级菜单，无子菜单 end -->
@@ -109,11 +120,10 @@ export default {
     return {
       defaultActive: '-1',
       dialogFormVisible: false,
-      langValue: this.$i18n.locale
+      langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English'
     }
   },
   created: function () {
-    this.langValue = localStorage.getItem('locale') || 'zh-CN'
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -144,10 +154,10 @@ export default {
     toRight: function (link) {
       this.$router.push({path: link})
     },
-    changeLang: function () {
-      this.$i18n.locale = this.langValue // 如果不设置这个值，则需要刷新页面才看见效果
-      localStorage.setItem('locale', this.langValue)
-      this.dialogFormVisible = false
+    changeLang: function (value) {
+      this.langValue = value === 'zh-CN' ? '中文' : 'English'
+      this.$i18n.locale = value // 如果不设置这个值，则需要刷新页面才看见效果
+      localStorage.setItem('locale', value)
     }
   }
 }

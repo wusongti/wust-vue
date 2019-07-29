@@ -1,272 +1,279 @@
 <template>
-  <div id="organization-list">
-    <div class="myTab-body">
-      <div class="tree-box">
-        <input class="form-control" placeholder="Search" type="text" v-on:keyup.13="onSearch">
-        <ul id="tree" class="ztree"></ul>
-      </div>
-      <div class="myTab-view">
-        <form>
-          <div class="row">
-            <div class="col-xs-4 form-group">
-              <input type="text" class="form-control" placeholder="名称" v-model="searchModel.name"/>
-            </div>
-            <div>
-              <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-            </div>
+  <div>
+    <el-breadcrumb separator="/" style="margin-bottom: 5px">
+      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
+      <el-breadcrumb-item>组织架构</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+      <el-tab-pane :name="defaultActiveName" label="组织架构">
+        <div class="myTab-body">
+          <div class="tree-box">
+            <input class="form-control" placeholder="Search" type="text" v-on:keyup.13="onSearch">
+            <ul id="tree" class="ztree"></ul>
           </div>
-        </form>
-        <section class="panel">
-          <div class="row">
-            <div class="col-lg-8 task-progress pull-left" style="color: red">
-              当前位置：{{selectedNode.name}}
-            </div>
-          </div>
-          <div class="panel-body progress-panel">
-            <div class="row">
-              <div class="col-lg-8 task-progress left">
-                <h1>组织架构列表</h1>
+          <div class="myTab-view">
+            <form>
+              <div class="row">
+                <div class="col-xs-4 form-group">
+                  <input type="text" class="form-control" placeholder="名称" v-model="searchModel.name"/>
+                </div>
+                <div>
+                  <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
+                </div>
               </div>
-              <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" v-bind:disabled="disableAddCompanyButtom" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加公司</span></button>
-                <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButtom" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
-                <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButtom" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
-                <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButtom" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
-                <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
+            </form>
+            <section class="panel">
+              <div class="panel-body progress-panel">
+                <div class="row">
+                  <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" v-bind:disabled="disableAddCompanyButtom" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加公司</span></button>
+                    <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButtom" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
+                    <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButtom" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
+                    <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButtom" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
+                    <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <!-- 公司列表 -->
+              <table class="table table-hover table-bordered" v-if="companyList != null && companyList.length > 0">
+                <thead>
+                <tr>
+                  <th>公司编码</th>
+                  <th>公司名称</th>
+                  <th>公司描述</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th>最后更新时间</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="data in companyList">
+                  <td>{{data.code}}</td>
+                  <td>
+                    {{data.name}}
+                  </td>
+                  <td>
+                    {{data.description}}
+                  </td>
+                  <td>
+                    {{data.createrName}}
+                  </td>
+                  <td>
+                    {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    {{data.modifyName}}
+                  </td>
+                  <td>
+                    {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                          v-bind:showCount="searchModel.pageDto.showCount"
+                                          v-bind:totalResult="baseDto.page.totalResult"
+                                          v-on:updatePageIndex="pageIndexChange"
+                                          @pageClick="listPage"></pagination-component>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+
+              <!-- 部门列表 -->
+              <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
+                <thead>
+                <tr>
+                  <th>部门编码</th>
+                  <th>部门名称</th>
+                  <th>部门描述</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th>最后更新时间</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr :key="data.id" v-for="data in departmentList">
+                  <td>{{data.code}}</td>
+                  <td>
+                    {{data.name}}
+                  </td>
+                  <td>
+                    {{data.description}}
+                  </td>
+                  <td>
+                    {{data.createrName}}
+                  </td>
+                  <td>
+                    {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    {{data.modifyName}}
+                  </td>
+                  <td>
+                    {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_department')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                          v-bind:showCount="searchModel.pageDto.showCount"
+                                          v-bind:totalResult="baseDto.page.totalResult"
+                                          v-on:updatePageIndex="pageIndexChange"
+                                          @pageClick="listPage"></pagination-component>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+
+              <!-- 角色列表 -->
+              <table class="table table-hover table-bordered" v-if="roleList != null && roleList.length > 0">
+                <thead>
+                <tr>
+                  <th>角色编码</th>
+                  <th>角色名称</th>
+                  <th>角色描述</th>
+                  <th>角色状态</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th>最后更新时间</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr :key="data.id" v-for="data in roleList">
+                  <td>{{data.code}}</td>
+                  <td>
+                    {{data.name}}
+                  </td>
+                  <td>
+                    {{data.description}}
+                  </td>
+                  <td>
+                    {{data.statusLabel}}
+                  </td>
+                  <td>
+                    {{data.createrName}}
+                  </td>
+                  <td>
+                    {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    {{data.modifyName}}
+                  </td>
+                  <td>
+                    {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
+                    <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_role')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="9">
+                    <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                          v-bind:showCount="searchModel.pageDto.showCount"
+                                          v-bind:totalResult="baseDto.page.totalResult"
+                                          v-on:updatePageIndex="pageIndexChange"
+                                          @pageClick="listPage"></pagination-component>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+
+              <!-- 用户列表 -->
+              <table class="table table-hover table-bordered" v-if="userList != null && userList.length > 0">
+                <thead>
+                <tr>
+                  <th>用户账号</th>
+                  <th>真实姓名</th>
+                  <th>用户描述</th>
+                  <th>用户状态</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th>最后更新时间</th>
+                  <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr :key="data.id" v-for="data in userList">
+                  <td>
+                    {{data.loginName}}
+                  </td>
+                  <td>
+                    {{data.realName}}
+                  </td>
+                  <td>
+                    {{data.description}}
+                  </td>
+                  <td>
+                    {{data.statusLabel}}
+                  </td>
+                  <td>
+                    {{data.createrName}}
+                  </td>
+                  <td>
+                    {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    {{data.modifyName}}
+                  </td>
+                  <td>
+                    {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_user')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="9">
+                    <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                          v-bind:showCount="searchModel.pageDto.showCount"
+                                          v-bind:totalResult="baseDto.page.totalResult"
+                                          v-on:updatePageIndex="pageIndexChange"
+                                          @pageClick="listPage"></pagination-component>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+            </section>
           </div>
-
-          <!-- 公司列表 -->
-          <table class="table table-hover table-bordered" v-if="companyList != null && companyList.length > 0">
-            <thead>
-              <tr>
-                <th>公司编码</th>
-                <th>公司名称</th>
-                <th>公司描述</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="data in companyList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</button>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <td colspan="8">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                      v-bind:showCount="searchModel.pageDto.showCount"
-                                      v-bind:totalResult="baseDto.page.totalResult"
-                                      v-on:updatePageIndex="pageIndexChange"
-                                      @pageClick="listPage"></pagination-component>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
-
-          <!-- 部门列表 -->
-          <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
-            <thead>
-            <tr>
-              <th>部门编码</th>
-              <th>部门名称</th>
-              <th>部门描述</th>
-              <th>创建人</th>
-              <th>创建时间</th>
-              <th>更新人</th>
-              <th>最后更新时间</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr :key="data.id" v-for="data in departmentList">
-              <td>{{data.code}}</td>
-              <td>
-                {{data.name}}
-              </td>
-              <td>
-                {{data.description}}
-              </td>
-              <td>
-                {{data.createrName}}
-              </td>
-              <td>
-                {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                {{data.modifyName}}
-              </td>
-              <td>
-                {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_department')" v-has-permission="'OrganizationList.delete'">移除</button>
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <td colspan="8">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                      v-bind:showCount="searchModel.pageDto.showCount"
-                                      v-bind:totalResult="baseDto.page.totalResult"
-                                      v-on:updatePageIndex="pageIndexChange"
-                                      @pageClick="listPage"></pagination-component>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
-
-          <!-- 角色列表 -->
-          <table class="table table-hover table-bordered" v-if="roleList != null && roleList.length > 0">
-            <thead>
-            <tr>
-              <th>角色编码</th>
-              <th>角色名称</th>
-              <th>角色描述</th>
-              <th>角色状态</th>
-              <th>创建人</th>
-              <th>创建时间</th>
-              <th>更新人</th>
-              <th>最后更新时间</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr :key="data.id" v-for="data in roleList">
-              <td>{{data.code}}</td>
-              <td>
-                {{data.name}}
-              </td>
-              <td>
-                {{data.description}}
-              </td>
-              <td>
-                {{data.statusLabel}}
-              </td>
-              <td>
-                {{data.createrName}}
-              </td>
-              <td>
-                {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                {{data.modifyName}}
-              </td>
-              <td>
-                {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
-                <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_role')" v-has-permission="'OrganizationList.delete'">移除</button>
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <td colspan="9">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                      v-bind:showCount="searchModel.pageDto.showCount"
-                                      v-bind:totalResult="baseDto.page.totalResult"
-                                      v-on:updatePageIndex="pageIndexChange"
-                                      @pageClick="listPage"></pagination-component>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
-
-          <!-- 用户列表 -->
-          <table class="table table-hover table-bordered" v-if="userList != null && userList.length > 0">
-            <thead>
-            <tr>
-              <th>用户账号</th>
-              <th>真实姓名</th>
-              <th>用户描述</th>
-              <th>用户状态</th>
-              <th>创建人</th>
-              <th>创建时间</th>
-              <th>更新人</th>
-              <th>最后更新时间</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr :key="data.id" v-for="data in userList">
-              <td>
-                {{data.loginName}}
-              </td>
-              <td>
-                {{data.realName}}
-              </td>
-              <td>
-                {{data.description}}
-              </td>
-              <td>
-                {{data.statusLabel}}
-              </td>
-              <td>
-                {{data.createrName}}
-              </td>
-              <td>
-                {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                {{data.modifyName}}
-              </td>
-              <td>
-                {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_user')" v-has-permission="'OrganizationList.delete'">移除</button>
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <td colspan="9">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                      v-bind:showCount="searchModel.pageDto.showCount"
-                                      v-bind:totalResult="baseDto.page.totalResult"
-                                      v-on:updatePageIndex="pageIndexChange"
-                                      @pageClick="listPage"></pagination-component>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
-        </section>
-      </div>
-    </div>
-    <company-add v-if="showAddCompanyPopover" v-on:closePopver="closePopver('sys_company')" v-bind:selectedNode="selectedNode"></company-add>
-    <department-add v-if="showAddDepartmentPopover" v-on:closePopver="closePopver('sys_department')" v-bind:selectedNode="selectedNode"></department-add>
-    <role-add v-if="showAddRolePopover" v-on:closePopver="closePopver('sys_role')" v-bind:selectedNode="selectedNode"></role-add>
-    <user-add v-if="showAddUserPopover" v-on:closePopver="closePopver('sys_user')" v-bind:selectedNode="selectedNode"></user-add>
-    <function-tree v-if="showFunctionTreePopover" v-on:closePopver="closePopver('function_tree')" v-bind:selectedModel="selectedModel" v-bind:selectedNode="selectedNode"></function-tree>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane
+        v-for="(item) in editableTabs"
+        :key="item.name"
+        :label="item.label"
+        :name="item.name"
+        closable>
+        <company-add v-if="showAddCompanyPopover" v-on:closePopver="closePopver('sys_company')" v-bind:selectedNode="selectedNode"></company-add>
+        <department-add v-if="showAddDepartmentPopover" v-on:closePopver="closePopver('sys_department')" v-bind:selectedNode="selectedNode"></department-add>
+        <role-add v-if="showAddRolePopover" v-on:closePopver="closePopver('sys_role')" v-bind:selectedNode="selectedNode"></role-add>
+        <user-add v-if="showAddUserPopover" v-on:closePopver="closePopver('sys_user')" v-bind:selectedNode="selectedNode"></user-add>
+        <function-tree v-if="showFunctionTreePopover" v-on:closePopver="closePopver('function_tree')" v-bind:selectedModel="selectedModel" v-bind:selectedNode="selectedNode"></function-tree>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -349,7 +356,12 @@ export default {
       exportExcelPar: {
         excelSuffix: 'xls',
         xmlName: 'admin_organization',
-        moduleName: 'organization'}
+        moduleName: 'organization'
+      },
+      defaultActiveName: 'OrganizationList',
+      editableTabsValue: 'OrganizationList',
+      editableTabs: [],
+      tabIndex: 2
     }
   },
   created: function () {
