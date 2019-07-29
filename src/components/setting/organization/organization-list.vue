@@ -67,13 +67,6 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-footer>
-              <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                    v-bind:showCount="searchModel.pageDto.showCount"
-                                    v-bind:totalResult="baseDto.page.totalResult"
-                                    v-on:updatePageIndex="pageIndexChange"
-                                    @pageClick="listPage"></pagination-component>
-            </el-footer>
             <!-- 部门列表 -->
             <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
               <thead>
@@ -243,6 +236,13 @@
               </tr>
               </tfoot>
             </table>
+            <el-footer>
+              <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                    v-bind:showCount="searchModel.pageDto.showCount"
+                                    v-bind:totalResult="baseDto.page.totalResult"
+                                    v-on:updatePageIndex="pageIndexChange"
+                                    @pageClick="listPage"></pagination-component>
+            </el-footer>
           </el-main>
         </el-container>
       </el-tab-pane>
@@ -272,10 +272,12 @@ import DepartmentAdd from './department-add'
 import RoleAdd from './role-add'
 import UserAdd from './user-add'
 import FunctionTree from './function-tree'
+import ElPager from "element-ui/packages/pagination/src/pager";
 
 export default {
   name: 'OrganizationList',
   components: {
+    ElPager,
     FunctionTree,
     UserAdd,
     RoleAdd,

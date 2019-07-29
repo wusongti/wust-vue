@@ -2,7 +2,7 @@
   "name": "wust-vue",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "GitHub4Peter <wusongti@163.com>",
+  "author": "wusongti <wusongti@163.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
