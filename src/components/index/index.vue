@@ -5,7 +5,7 @@
     <!--头部 start-->
     <el-header id="el-header">
       <!--logo start-->
-      <a href="index.html" class="logo">基于微服务架构下的企业<span class="lite">基础平台</span></a>
+      <a href="index.html" class="logo">智慧社区<span class="lite">云平台</span></a>
       <!--logo end-->
       <el-col :span="5" class="pull-right">
         <div class="pull-left">
