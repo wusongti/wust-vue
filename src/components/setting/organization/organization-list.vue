@@ -16,16 +16,17 @@
             <ul id="tree" class="ztree"></ul>
           </el-aside>
           <el-main>
-            <form>
-              <div class="row">
-                <div class="col-xs-4 form-group">
-                  <el-input size="mini"  placeholder="名称" v-model="searchModel.name"></el-input>
-                </div>
-                <div>
-                  <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-                </div>
-              </div>
-            </form>
+            <el-form  @submit.native.prevent :inline="true" :model="searchModel" class="demo-form-inline text-left">
+              <el-form-item label="编码">
+                <el-input size="small" v-model="searchModel.code"></el-input>
+              </el-form-item>
+              <el-form-item label="名称">
+                <el-input size="small" v-model="searchModel.name"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button size="small" type="primary" @click="search">查询</el-button>
+              </el-form-item>
+            </el-form>
             <div class="panel-body progress-panel">
               <div class="row">
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
@@ -38,58 +39,41 @@
               </div>
             </div>
             <!-- 公司列表 -->
-            <table class="table table-hover table-bordered" v-if="companyList != null && companyList.length > 0">
-              <thead>
-              <tr>
-                <th>公司编码</th>
-                <th>公司名称</th>
-                <th>公司描述</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr :key="data.id" v-for="data in companyList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</button>
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="8">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-
+            <el-table
+              :data="companyList"
+              v-if="companyList != null && companyList.length > 0"
+              height="250"
+              size="small "
+              border
+              style="width: 100%">
+              <el-table-column
+                prop="code"
+                label="公司编码">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="公司名称"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="description"
+                label="描述">
+              </el-table-column>
+              <el-table-column
+                label="操作"
+                width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="deleteById(companyList[scope.$index].id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-footer>
+              <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                    v-bind:showCount="searchModel.pageDto.showCount"
+                                    v-bind:totalResult="baseDto.page.totalResult"
+                                    v-on:updatePageIndex="pageIndexChange"
+                                    @pageClick="listPage"></pagination-component>
+            </el-footer>
             <!-- 部门列表 -->
             <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
               <thead>
