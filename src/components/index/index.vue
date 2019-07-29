@@ -8,19 +8,19 @@
       <a href="index.html" class="logo">基于微服务架构下的企业<span class="lite">基础平台</span></a>
       <!--logo end-->
       <el-col :span="5" class="pull-right">
-        <div class="pull-left" style="margin-right: 32px;">
+        <div class="pull-left">
           <span style="color: #fed189">
             {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})
           </span>
         </div>
-        <el-dropdown trigger="click" class="pull-left">
+        <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
           <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="javascript:;" @click="changeLang('zh-CN')">中文</a></el-dropdown-item>
             <el-dropdown-item><a href="javascript:;" @click="changeLang('en-US')">English</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown trigger="click" class="pull-right">
+        <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
           <span class="el-dropdown-link" style="color: #fed189">
             更多<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
