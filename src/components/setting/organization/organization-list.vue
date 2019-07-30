@@ -34,10 +34,6 @@
                 <th>公司编码</th>
                 <th>公司名称</th>
                 <th>公司描述</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -49,18 +45,6 @@
                 </td>
                 <td>
                   {{data.description}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</button>
@@ -86,10 +70,6 @@
                 <th>部门编码</th>
                 <th>部门名称</th>
                 <th>部门描述</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -101,18 +81,6 @@
                 </td>
                 <td>
                   {{data.description}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_department')" v-has-permission="'OrganizationList.delete'">移除</button>
@@ -140,10 +108,6 @@
                 <th>角色名称</th>
                 <th>角色描述</th>
                 <th>角色状态</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -158,18 +122,6 @@
                 </td>
                 <td>
                   {{data.statusLabel}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
@@ -198,10 +150,6 @@
                 <th>真实姓名</th>
                 <th>用户描述</th>
                 <th>用户状态</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>更新人</th>
-                <th>最后更新时间</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -218,18 +166,6 @@
                 </td>
                 <td>
                   {{data.statusLabel}}
-                </td>
-                <td>
-                  {{data.createrName}}
-                </td>
-                <td>
-                  {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-                </td>
-                <td>
-                  {{data.modifyName}}
-                </td>
-                <td>
-                  {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_user')" v-has-permission="'OrganizationList.delete'">移除</button>
@@ -277,12 +213,10 @@ import DepartmentAdd from './department-add'
 import RoleAdd from './role-add'
 import UserAdd from './user-add'
 import FunctionTree from './function-tree'
-import ElPager from "element-ui/packages/pagination/src/pager";
 
 export default {
   name: 'OrganizationList',
   components: {
-    ElPager,
     FunctionTree,
     UserAdd,
     RoleAdd,
@@ -366,7 +300,7 @@ export default {
           // eslint-disable-next-line no-undef
           let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
-          if (this.selectedNode != null && this.selectedNode.id !== '') {
+          if (this.selectedNode != null && this.selectedNode.pid != null && this.selectedNode.id !== '') {
             this.expandParentNodes(this.selectedNode.children[0], treeObj)
             // eslint-disable-next-line no-undef
             $('#' + this.selectedNode.tId + '_a').click()
@@ -378,10 +312,12 @@ export default {
             }
           }
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -402,10 +338,12 @@ export default {
           this.roleList = res.data.obj.roleList
           this.userList = res.data.obj.userList
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -531,7 +469,7 @@ export default {
               message: res.data.message,
               type: 'success'
             })
-            this.listPage()
+            this.buildTree()
           }
         })
       }).catch(() => {
@@ -561,7 +499,7 @@ export default {
               activeName = nextTab.name
             } else {
               activeName = this.defaultActiveName
-              this.listPage()
+              this.buildTree()
             }
           }
         })
@@ -571,7 +509,7 @@ export default {
     },
     clickTab: function (tab) {
       if (tab.name === this.defaultActiveName) {
-        this.listPage()
+        this.buildTree()
       }
     }
   }

@@ -3,79 +3,47 @@
 */
 <template>
   <div id="company-add">
-    <div class="my-popover">
-      <div class="my-popover-box">
-        <div class="my-popover-title">
-          <label>添加公司</label>
-          <a class="my-popover-close" @click="closePopover"><span class="glyphicon glyphicon-remove-circle"></span></a>
+    <el-form label-width="200px">
+      <div class="row">
+        <div class="col-xs-5 form-group">
+          <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
         </div>
-        <div class="scroll-box">
-          <form>
-            <div class="row">
-              <div class="col-xs-5 form-group">
-                <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
-              </div>
-              <div>
-                <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-              </div>
-            </div>
-          </form>
-          <section class="panel">
-            <div class="panel-body progress-panel">
-              <div class="row">
-                <div class="col-lg-8 task-progress pull-left">
-                  <h1>公司列表</h1>
-                </div>
-                <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-                </div>
-              </div>
-            </div>
-            <table class="table table-hover table-bordered">
-              <thead>
-              <tr>
-                <th>编码</th>
-                <th>公司名称</th>
-                <th>父级公司名称</th>
-                <th>描述</th>
-                <th width="140">操作</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in baseDto.lstDto">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.pname}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="doAdd(data)">选择</button>
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="5">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-          </section>
-        </div>
-        <div class="submit-group">
-          <button class="btn btn-danger btn-sm" @click="closePopover">取消</button>
+        <div>
+          <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
         </div>
       </div>
-    </div>
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>编码</th>
+          <th>公司名称</th>
+          <th width="140">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr :key="data.id" v-for="data in baseDto.lstDto">
+          <td>{{data.code}}</td>
+          <td>
+            {{data.name}}
+          </td>
+          <td>
+            <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)">选择</button>
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="5">
+            <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                  v-bind:showCount="searchModel.pageDto.showCount"
+                                  v-bind:totalResult="baseDto.page.totalResult"
+                                  v-on:updatePageIndex="pageIndexChange"
+                                  @pageClick="listPage"></pagination-component>
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+    </el-form>
   </div>
 </template>
 <script>
@@ -110,10 +78,12 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -124,10 +94,7 @@ export default {
       this.searchModel.pageDto.currentPage = 1
       this.listPage()
     },
-    closePopover: function () {
-      this.$emit('closePopver', false)
-    },
-    doAdd: function (data) {
+    onSubmit: function (data) {
       let d = {pid: this.selectedNode.id, type: 'sys_company', relationId: data.id}
       Vue.$ajax({
         method: 'post',
@@ -135,18 +102,20 @@ export default {
         data: d
       }).then(res => {
         if (res.data.flag !== 'SUCCESS') {
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
+        } else {
           this.$message({
             message: res.data.message,
-            type: 'warning'
+            type: 'success'
           })
-        } else {
-          this.closePopover()
         }
       })
     }
   }
 }
 </script>
-<style>
-  @import "../../../assets/css/my-popover.css";
-</style>
