@@ -16,6 +16,7 @@
       <tr>
         <th width="100">用户账号</th>
         <th>真实姓名</th>
+        <th>用户类型</th>
         <th width="60">操作</th>
       </tr>
       </thead>
@@ -24,6 +25,9 @@
         <td>{{data.loginName}}</td>
         <td>
           {{data.realName}}
+        </td>
+        <td>
+          {{data.typeLabel}}
         </td>
         <td>
           <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)" v-if="data.type != '100401'">选择</button>

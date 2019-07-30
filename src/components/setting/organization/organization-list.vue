@@ -182,6 +182,7 @@
               <tr>
                 <th>用户账号</th>
                 <th>真实姓名</th>
+                <th>用户类型</th>
                 <th>用户描述</th>
                 <th>用户状态</th>
                 <th>操作</th>
@@ -194,6 +195,9 @@
                 </td>
                 <td>
                   {{data.realName}}
+                </td>
+                <td>
+                  {{data.typeLabel}}
                 </td>
                 <td>
                   {{data.description}}
@@ -267,7 +271,7 @@ export default {
           showLine: true,
           fontCss: function (treeId, treeNode) {
             return (treeNode.highlight) ? {color: '#A60000', 'font-weight': 'bold'} : {
-              color: '#333',
+              color: '#337ab7',
               'font-weight': 'normal'
             }
           }
@@ -281,7 +285,7 @@ export default {
           beforeClick: (treeId, treeNode, clickFlag) => {
             this.switchButtonAvailableStatus(treeNode.type)
 
-            if (treeNode.type === 'sys_user') {
+            if (treeNode.type === '101115') {
               return
             }
             this.selectedNode = treeNode
@@ -440,11 +444,11 @@ export default {
          * @param type
          */
     switchButtonAvailableStatus: function (type) {
-      if (type === '') { // 选中树的[根]节点，则启用添加公司按钮
+      if (type === '') { // 选中树的[根]节点，则启用添加公司和添加部门按钮
         this.disableAddCompanyButton = false
+        this.disableAddDepartmentButton = false
 
         this.disableAddProjectButton = true
-        this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
       } else if (type === '101101' || type === '101104') { // 选中树的[代理商、总公司]节点，则启用添加公司和部门按钮

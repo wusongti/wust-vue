@@ -4,7 +4,7 @@
       <el-breadcrumb-item>系统配置</el-breadcrumb-item>
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+    <el-tabs  type="card" v-model="editableTabsValue">
       <el-tab-pane :name="defaultActiveName" label="数据源列表">
         <form>
           <div class="row">
