@@ -128,7 +128,12 @@ export default {
           if (res.data.flag === 'SUCCESS') {
             this.$router.push({path: '/Login'})
           } else {
-            this.$message(res.data.message)
+            if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            }
           }
         })
       }).catch(() => {

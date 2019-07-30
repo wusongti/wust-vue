@@ -10,6 +10,7 @@ import ResponseError from '@/components/response/response-error.vue'
 import ResponseUndone from '@/components/response/response-undone.vue'
 import CompanyList from '@/components/setting/company/company-list.vue'
 import DepartmentList from '@/components/setting/department/department-list.vue'
+import ProjectList from '@/components/setting/project/project-list.vue'
 import RoleList from '@/components/setting/role/role-list.vue'
 import UserList from '@/components/setting/user/user-list.vue'
 import OrganizationList from '@/components/setting/organization/organization-list.vue'
@@ -53,6 +54,10 @@ export default new Router({
         {
           path: '/DepartmentList',
           component: DepartmentList
+        },
+        {
+          path: '/ProjectList',
+          component: ProjectList
         },
         {
           path: '/RoleList',
