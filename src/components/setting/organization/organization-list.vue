@@ -7,7 +7,7 @@
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="190px" style="height: 70vh;border: 1px solid #eee">
+          <el-aside width="220px" style="height: 75vh;border: 1px solid #eee">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -441,6 +441,7 @@ export default {
         this.disableAddUserButton = false
 
         this.disableAddCompanyButton = true
+        this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
       } else if (type === '101115') { // 选中树的用户节点，则禁用所有按钮
@@ -455,13 +456,16 @@ export default {
       this.addTab('添加公司', 'AddCompany', 'AddCompany')
     },
     addDepartment: function () {
-      this.addTab('添加部门', 'addDepartment', 'addDepartment')
+      this.addTab('添加部门', 'AddDepartment', 'AddDepartment')
+    },
+    addProject: function () {
+      this.addTab('添加项目', 'AddProject', 'AddProject')
     },
     addRole: function () {
-      this.addTab('添加角色', 'addRole', 'addRole')
+      this.addTab('添加角色', 'AddRole', 'AddRole')
     },
     addUser: function () {
-      this.addTab('添加用户', 'addUser', 'addUser')
+      this.addTab('添加用户', 'AddUser', 'AddUser')
     },
     setResource: function (data) {
       this.addTab('设置功能权限', 'SetFunctionPermissions', 'SetFunctionPermissions')
