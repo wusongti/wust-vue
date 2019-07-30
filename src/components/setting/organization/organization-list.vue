@@ -101,7 +101,6 @@
               </tfoot>
             </table>
 
-
             <!-- 项目列表 -->
             <table class="table table-hover table-bordered" v-if="projectList != null && projectList.length > 0">
               <thead>
@@ -230,6 +229,7 @@
         closable>
         <company-add v-if="item.key == 'AddCompany'"  v-bind:selectedNode="selectedNode"></company-add>
         <department-add v-if="item.key == 'AddDepartment'"  v-bind:selectedNode="selectedNode"></department-add>
+        <project-add v-if="item.key == 'AddProject'"  v-bind:selectedNode="selectedNode"></project-add>
         <role-add v-if="item.key == 'AddRole'" v-bind:selectedNode="selectedNode"></role-add>
         <user-add v-if="item.key == 'AddUser'" v-bind:selectedNode="selectedNode"></user-add>
         <function-tree v-if="item.key == 'SetFunctionPermissions'"  v-bind:selectedModel="selectedModel" v-bind:selectedNode="selectedNode"></function-tree>
@@ -248,10 +248,12 @@ import DepartmentAdd from './department-add'
 import RoleAdd from './role-add'
 import UserAdd from './user-add'
 import FunctionTree from './function-tree'
+import ProjectAdd from './project-add'
 
 export default {
   name: 'OrganizationList',
   components: {
+    ProjectAdd,
     FunctionTree,
     UserAdd,
     RoleAdd,
