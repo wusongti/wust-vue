@@ -3,22 +3,15 @@
 */
 <template>
   <div id="function-tree">
-    <div class="my-popover">
-      <div class="my-popover-box" style="width: 25%">
-        <div class="my-popover-title">
-          <label>功能权限树</label>
-          <a class="my-popover-close" @click="closePopover"><span class="glyphicon glyphicon-remove-circle"></span></a>
-        </div>
-        <div class="scroll-box">
-          <label style="color: red;font-size: small;margin-left: 8px;">当前角色：{{selectedModel.name}}</label>
-          <ul id="functionTree" class="ztree"></ul>
-        </div>
-        <div class="submit-group">
-          <button class="btn btn-danger btn-sm" @click="closePopover">关闭</button>
-          <button class="btn btn-primary btn-sm" @click="doAdd">提交</button>
-        </div>
+    <el-form label-width="100px">
+      <div class="text-left">
+        <label style="color: red;font-size: small;margin-left: 8px;">当前角色：{{selectedModel.name}}</label>
+        <ul id="functionTree" class="ztree"></ul>
       </div>
-    </div>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit()" size="mini">提交</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
@@ -83,7 +76,7 @@ export default {
     closePopover: function () {
       this.$emit('closePopver', false)
     },
-    doAdd: function (data) {
+    onSubmit: function () {
       // eslint-disable-next-line no-undef
       let treeObj = $.fn.zTree.getZTreeObj('functionTree')
       let nodes = treeObj.getCheckedNodes(true)
@@ -127,12 +120,11 @@ export default {
 }
 </script>
 <style>
-  @import "../../../assets/css/my-popover.css";
   @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
 
   #functionTree{
     width:100%;
-    height:320px;
+    height:100%;
   }
 
 </style>

@@ -25,7 +25,6 @@ export default {
   data () {
     return {
       addModel: {
-        pname: '',
         name: '',
         leader: '',
         description: ''
