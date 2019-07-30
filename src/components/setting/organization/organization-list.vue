@@ -21,7 +21,7 @@
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加公司</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addProject" v-has-permission="'OrganizationList.addProject'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButton" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
                   <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
@@ -39,7 +39,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="data in companyList">
+              <tr :key="data.id" v-for="data in companyList">
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
@@ -85,6 +85,40 @@
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101111')" v-has-permission="'OrganizationList.delete'">移除</button>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="8">
+                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                        v-bind:showCount="searchModel.pageDto.showCount"
+                                        v-bind:totalResult="baseDto.page.totalResult"
+                                        v-on:updatePageIndex="pageIndexChange"
+                                        @pageClick="listPage"></pagination-component>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+
+
+            <!-- 项目列表 -->
+            <table class="table table-hover table-bordered" v-if="projectList != null && projectList.length > 0">
+              <thead>
+              <tr>
+                <th>项目编码</th>
+                <th>项目名称</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr :key="data.id" v-for="data in projectList">
+                <td>{{data.code}}</td>
+                <td>
+                  {{data.name}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101109')" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -266,6 +300,7 @@ export default {
       baseDto: {page: {totalResult: 0}},
       companyList: {},
       departmentList: {},
+      projectList: {},
       roleList: {},
       userList: {},
       disableAddCompanyButton: true,
@@ -337,6 +372,7 @@ export default {
           this.baseDto = res.data
           this.companyList = res.data.obj.companyList
           this.departmentList = res.data.obj.departmentList
+          this.projectList = res.data.obj.projectList
           this.roleList = res.data.obj.roleList
           this.userList = res.data.obj.userList
         } else {
