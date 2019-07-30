@@ -25,7 +25,7 @@
             <span aria-hidden="true">尾页</span>
           </a>
         </li>
-        <li><span aria-hidden="true"><a href="javascript:;">每页{{showCount}}条记录，共{{totalResult}}条记录，共{{totalPage}}页</a></span></li>
+        <li><span aria-hidden="true">每页{{showCount}}条记录，共{{totalResult}}条记录，共{{totalPage}}页</span></li>
       </ul>
     </nav>
   </div>

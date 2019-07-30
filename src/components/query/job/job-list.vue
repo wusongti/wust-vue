@@ -129,7 +129,12 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           this.baseDto = res.data
         } else {
-          this.$message(res.data.message)
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -157,10 +162,12 @@ export default {
           }
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
-            this.$message({
-              message: res.data.message,
-              type: 'warning'
-            })
+            if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            }
           } else {
             this.$message({
               message: '成功',
@@ -189,10 +196,14 @@ export default {
           }
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
-            this.$message({
-              message: res.data.message,
-              type: 'warning'
-            })
+            if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+              if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+                this.$message({
+                  message: res.data.message,
+                  type: 'warning'
+                })
+              }
+            }
           } else {
             this.$message({
               message: res.data.message,
@@ -222,10 +233,12 @@ export default {
           url: Vue.$autotaskServerURL + '/JobController/delete/' + data.qrtzJobDetails.jobName + '/' + data.qrtzJobDetails.jobGroup
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
-            this.$message({
-              message: res.data.message,
-              type: 'warning'
-            })
+            if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            }
           } else {
             this.$message({
               message: res.data.message,
