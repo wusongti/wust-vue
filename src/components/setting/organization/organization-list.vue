@@ -21,6 +21,7 @@
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加公司</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButton" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
                   <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
@@ -47,7 +48,7 @@
                   {{data.description}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_company')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101107')" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -83,7 +84,7 @@
                   {{data.description}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_department')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101111')" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -125,7 +126,7 @@
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_role')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101113')" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -168,7 +169,7 @@
                   {{data.statusLabel}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'sys_user')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101115')" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -269,6 +270,7 @@ export default {
       userList: {},
       disableAddCompanyButton: true,
       disableAddDepartmentButton: true,
+      disableAddProjectButton: true,
       disableAddRoleButton: true,
       disableAddUserButton: true,
       selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
@@ -400,32 +402,50 @@ export default {
          * @param type
          */
     switchButtonAvailableStatus: function (type) {
-      if (type === '') {
+      if (type === '') { // 选中树的[根]节点，则启用添加公司按钮
         this.disableAddCompanyButton = false
 
+        this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
-      } else if (type === 'sys_company') {
+      } else if (type === '101101' || type === '101104') { // 选中树的[代理商、总公司]节点，则启用添加公司和部门按钮
+        this.disableAddCompanyButton = false
+        this.disableAddDepartmentButton = false
+
+        this.disableAddProjectButton = true
+        this.disableAddRoleButton = true
+        this.disableAddUserButton = true
+      } else if (type === '101107') { // 选中树的[分公司]节点，则启用添加部门和添加项目按钮
+        this.disableAddDepartmentButton = false
+        this.disableAddProjectButton = false
+
+        this.disableAddCompanyButton = true
+        this.disableAddRoleButton = true
+        this.disableAddUserButton = true
+      } else if (type === '101109') { // 选中树的[代理商、总公司、分公司、项目]节点，则启用添加部门按钮
         this.disableAddDepartmentButton = false
 
         this.disableAddCompanyButton = true
+        this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
-      } else if (type === 'sys_department') {
+      } else if (type === '101111') { // 选中树的部门点，则启用添加岗位按钮
         this.disableAddRoleButton = false
 
         this.disableAddCompanyButton = true
+        this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddUserButton = true
-      } else if (type === 'sys_role') {
+      } else if (type === '101113') { // 选中树的岗位节点，则启用添加用户按钮
         this.disableAddUserButton = false
 
         this.disableAddCompanyButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
-      } else if (type === 'sys_user') {
+      } else if (type === '101115') { // 选中树的用户节点，则禁用所有按钮
         this.disableAddCompanyButton = true
+        this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true

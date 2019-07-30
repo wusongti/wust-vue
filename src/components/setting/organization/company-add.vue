@@ -1,49 +1,52 @@
 /**
 * Created by WST on 2019/5/14.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div id="company-add">
-    <el-form label-width="200px">
-      <div class="row">
-        <div class="col-xs-5 form-group">
-          <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
-        </div>
-        <div>
-          <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-        </div>
-      </div>
-      <table class="table table-hover table-bordered">
-        <thead>
-        <tr>
-          <th>编码</th>
-          <th>公司名称</th>
-          <th width="140">操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr :key="data.id" v-for="data in baseDto.lstDto">
-          <td>{{data.code}}</td>
-          <td>
-            {{data.name}}
-          </td>
-          <td>
-            <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)">选择</button>
-          </td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <tr>
-          <td colspan="5">
-            <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                  v-bind:showCount="searchModel.pageDto.showCount"
-                                  v-bind:totalResult="baseDto.page.totalResult"
-                                  v-on:updatePageIndex="pageIndexChange"
-                                  @pageClick="listPage"></pagination-component>
-          </td>
-        </tr>
-        </tfoot>
-      </table>
+    <el-form :inline="true" label-position="right" @submit.native.prevent class="demo-form-inline" label-width="100px" size="mini">
+      <el-form-item label="公司名">
+        <el-input v-model="searchModel.name"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="search">查询</el-button>
+      </el-form-item>
     </el-form>
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th width="60">编码</th>
+        <th>公司名称</th>
+        <th width="200">类别</th>
+        <th width="50">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr :key="data.id" v-for="data in baseDto.lstDto">
+        <td>{{data.code}}</td>
+        <td>
+          {{data.name}}
+        </td>
+        <td>
+          <select class="form-control" v-data-dictionary-directive:1011 v-model="type">
+          </select>
+        </td>
+        <td>
+          <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)">选择</button>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5">
+          <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
+                                v-bind:showCount="searchModel.pageDto.showCount"
+                                v-bind:totalResult="baseDto.page.totalResult"
+                                v-on:updatePageIndex="pageIndexChange"
+                                @pageClick="listPage"></pagination-component>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
   </div>
 </template>
 <script>
@@ -62,7 +65,8 @@ export default {
         pageDto: {showCount: 10, currentPage: 1},
         name: ''
       },
-      baseDto: {page: {totalResult: 0}}
+      baseDto: {page: {totalResult: 0}},
+      type: ''
     }
   },
   created: function () {
@@ -95,7 +99,15 @@ export default {
       this.listPage()
     },
     onSubmit: function (data) {
-      let d = {pid: this.selectedNode.id, type: 'sys_company', relationId: data.id}
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.type)) {
+        this.$message({
+          message: '请选择类别',
+          type: 'warning'
+        })
+        return
+      }
+
+      let d = {pid: this.selectedNode.id, type: this.type, relationId: data.id}
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/OrganizationController/create',
