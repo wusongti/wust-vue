@@ -7,7 +7,7 @@
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="220px" style="height: 75vh;border: 1px solid #eee">
+          <el-aside width="250px" style="height: 75vh;border: 1px solid #eee">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -48,7 +48,7 @@
                   {{data.description}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101107')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -84,7 +84,7 @@
                   {{data.description}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101111')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -117,7 +117,7 @@
                   {{data.name}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101109')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -159,7 +159,7 @@
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101113')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -202,7 +202,7 @@
                   {{data.statusLabel}}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id,'101115')" v-has-permission="'OrganizationList.delete'">移除</button>
+                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -509,7 +509,7 @@ export default {
       this.addTab('设置功能权限', 'SetFunctionPermissions', 'SetFunctionPermissions')
       this.selectedModel = data
     },
-    deleteById: function (relationId, type) {
+    deleteById: function (relationId) {
       let that = this
 
       this.$confirm('您确定删除该记录吗', '询问', {
@@ -519,7 +519,7 @@ export default {
       }).then(() => {
         Vue.$ajax({
           method: 'delete',
-          url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId + '/' + type
+          url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
             this.$message({
