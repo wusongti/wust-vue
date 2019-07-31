@@ -9,6 +9,7 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </el-form>
+            <span style="color: red;font-size: 12px;text-align: left">当前选中：{{this.selectedNode.name}}</span>
             <ul id="tree" class="ztree"></ul>
           </el-aside>
           <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
@@ -20,6 +21,7 @@
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addProject" v-has-permission="'OrganizationList.addProject'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButton" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-plus" aria-hidden="true">移出组织</span></button>
                   <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
                 </div>
               </div>
@@ -31,7 +33,6 @@
                 <th>公司编码</th>
                 <th>公司名称</th>
                 <th>公司描述</th>
-                <th>操作</th>
               </tr>
               </thead>
               <tbody>
@@ -42,9 +43,6 @@
                 </td>
                 <td>
                   {{data.description}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -67,7 +65,6 @@
                 <th>部门编码</th>
                 <th>部门名称</th>
                 <th>部门描述</th>
-                <th>操作</th>
               </tr>
               </thead>
               <tbody>
@@ -78,9 +75,6 @@
                 </td>
                 <td>
                   {{data.description}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -103,7 +97,6 @@
               <tr>
                 <th>项目编码</th>
                 <th>项目名称</th>
-                <th>操作</th>
               </tr>
               </thead>
               <tbody>
@@ -111,9 +104,6 @@
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -155,7 +145,6 @@
                 </td>
                 <td>
                   <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -181,7 +170,6 @@
                 <th>用户类型</th>
                 <th>用户描述</th>
                 <th>用户状态</th>
-                <th>操作</th>
               </tr>
               </thead>
               <tbody>
@@ -200,9 +188,6 @@
                 </td>
                 <td>
                   {{data.statusLabel}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'OrganizationList.delete'">移除</button>
                 </td>
               </tr>
               </tbody>
@@ -267,7 +252,6 @@ export default {
           showLine: true,
           fontCss: function (treeId, treeNode) {
             return (treeNode.highlight) ? {color: '#A60000', 'font-weight': 'bold'} : {
-              color: '#337ab7',
               'font-weight': 'normal'
             }
           }
@@ -281,12 +265,14 @@ export default {
           beforeClick: (treeId, treeNode, clickFlag) => {
             this.switchButtonAvailableStatus(treeNode.type)
 
-            if (treeNode.type === '101115') {
-              return
-            }
             this.selectedNode = treeNode
             this.searchModel.pid = treeNode.id
             this.searchModel.type = treeNode.type
+
+            if (treeNode.type === '101115') { // 用户节点，不需要刷新列表，直接返回，避免列表空白难看
+              return
+            }
+
             this.listPage()
           }
         }
@@ -310,7 +296,8 @@ export default {
       disableAddProjectButton: true,
       disableAddRoleButton: true,
       disableAddUserButton: true,
-      selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
+      disableDeleteButton: true,
+      selectedNode: {id: '', pId: '-1', type: '', relationId: ''},
       searchHitZNodes: [],
       selectedModel: {},
       exportExcelPar: {
@@ -339,7 +326,7 @@ export default {
           // eslint-disable-next-line no-undef
           let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
-          if (this.selectedNode != null && this.selectedNode.pid != null && this.selectedNode.id !== '') {
+          if (this.selectedNode != null && this.selectedNode.pId != null && this.selectedNode.id !== '') {
             this.expandParentNodes(this.selectedNode.children[0], treeObj)
             // eslint-disable-next-line no-undef
             $('#' + this.selectedNode.tId + '_a').click()
@@ -444,12 +431,14 @@ export default {
         this.disableAddCompanyButton = false
         this.disableAddDepartmentButton = false
 
+        this.disableDeleteButton = true
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
       } else if (type === '101101' || type === '101104') { // 选中树的[代理商、总公司]节点，则启用添加公司和部门按钮
         this.disableAddCompanyButton = false
         this.disableAddDepartmentButton = false
+        this.disableDeleteButton = false
 
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
@@ -457,12 +446,14 @@ export default {
       } else if (type === '101107') { // 选中树的[分公司]节点，则启用添加部门和添加项目按钮
         this.disableAddDepartmentButton = false
         this.disableAddProjectButton = false
+        this.disableDeleteButton = false
 
         this.disableAddCompanyButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
       } else if (type === '101109') { // 选中树的[代理商、总公司、分公司、项目]节点，则启用添加部门按钮
         this.disableAddDepartmentButton = false
+        this.disableDeleteButton = false
 
         this.disableAddCompanyButton = true
         this.disableAddProjectButton = true
@@ -470,6 +461,7 @@ export default {
         this.disableAddUserButton = true
       } else if (type === '101111') { // 选中树的部门点，则启用添加岗位按钮
         this.disableAddRoleButton = false
+        this.disableDeleteButton = false
 
         this.disableAddCompanyButton = true
         this.disableAddProjectButton = true
@@ -477,12 +469,15 @@ export default {
         this.disableAddUserButton = true
       } else if (type === '101113') { // 选中树的岗位节点，则启用添加用户按钮
         this.disableAddUserButton = false
+        this.disableDeleteButton = false
 
         this.disableAddCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
       } else if (type === '101115') { // 选中树的用户节点，则禁用所有按钮
+        this.disableDeleteButton = false
+
         this.disableAddCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
@@ -509,8 +504,16 @@ export default {
       this.addTab('设置功能权限', 'SetFunctionPermissions', 'SetFunctionPermissions')
       this.selectedModel = data
     },
-    deleteById: function (relationId) {
+    remove: function () {
       let that = this
+
+      if (Vue.$isNullOrIsBlankOrIsUndefined(this.selectedNode) || Vue.$isNullOrIsBlankOrIsUndefined(this.selectedNode.id)) {
+        this.$message({
+          message: '请选择数据',
+          type: 'warning'
+        })
+        return
+      }
 
       this.$confirm('您确定删除该记录吗', '询问', {
         confirmButtonText: '确定',
@@ -519,7 +522,7 @@ export default {
       }).then(() => {
         Vue.$ajax({
           method: 'delete',
-          url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id + '/' + relationId
+          url: Vue.$adminServerURL + '/OrganizationController/delete/' + that.selectedNode.id
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
             this.$message({
@@ -531,11 +534,17 @@ export default {
               message: res.data.message,
               type: 'success'
             })
-            this.buildTree()
+            this.removeNode()
           }
         })
       }).catch(() => {
       })
+    },
+    removeNode: function () {
+      // eslint-disable-next-line no-undef
+      let treeObj = $.fn.zTree.getZTreeObj('tree')
+
+      treeObj.removeNode(this.selectedNode)
     },
     addTab: function (label, name, key) {
       let ele = {label: label, name: name, key: key}
@@ -579,24 +588,4 @@ export default {
 </script>
 <style>
   @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
-
-  .myTab-body{
-    min-height: 550px;
-    display: flex;
-  }
-  .tree-box,.myTab-view{
-    min-height: 560px;
-    height: 100%;
-  }
-  .tree-box{
-    width: 20%;
-    height:550px;
-    border-right: 1px solid #e7e7e7;
-    overflow-y:scroll;
-    overflow-x:auto;
-  }
-  .myTab-view{
-    flex-grow: 1;
-    margin-left: 3px;
-  }
 </style>
