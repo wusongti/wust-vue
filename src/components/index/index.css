@@ -24,6 +24,22 @@ body > .el-container {
   margin-bottom: 10px;
 }
 
+.top-bar{
+  position: fixed;
+  display: flex;
+  height: 28px;
+  padding-left: 10px;
+  left: 189px;
+  right: 17px;
+  z-index: 8;
+  margin-top: -20px;
+  background-color: #ededed;
+  border-bottom: 1px solid #e4e4e4;
+}
+.div-outer-router-view{
+  padding-top: 30px;
+}
+
 a.logo {
   font-size: 28px;
   font-weight: 300;

@@ -1,9 +1,5 @@
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-    </el-breadcrumb>
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="用户列表">
         <form>

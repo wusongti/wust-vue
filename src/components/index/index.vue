@@ -42,9 +42,9 @@
           background-color="#394a59"
           text-color="#ececec"
           active-text-color="#ffd04b">
-          <el-menu-item index="-1" @click="toRight('/Dashboard')">
+          <el-menu-item index="-1" @click="toRight(activeMenu,'/Dashboard')">
             <i class="el-icon-s-home"></i>
-            <span slot="title">系统首页 </span>
+            <span slot="title">{{activeMenu}}</span>
           </el-menu-item>
           <!-- 一级菜单，有子菜单 start -->
           <el-submenu :key="menu.id" :index="index + ''" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
@@ -62,7 +62,7 @@
             <!-- 二级菜单，有子菜单 end -->
 
             <!-- 二级菜单，无子菜单 start -->
-            <el-menu-item :key="child.id" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0" @click="toRight(child.url)">
+            <el-menu-item :key="child.id" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.id == child.pId && child.children == null || child.children.length == 0" @click="toRight(child.description,child.url)">
               <i :class="child.img"></i>
               <span slot="title">{{child.description}}</span>
             </el-menu-item>
@@ -71,7 +71,7 @@
           <!-- 一级菜单，无子菜单 end -->
 
           <!-- 一级菜单，无子菜单 start -->
-          <el-menu-item :key="menu.id" :index="(index + 1) + ''" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0" @click="toRight(menu.url)">
+          <el-menu-item :key="menu.id" :index="(index + 1) + ''" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0" @click="toRight(menu.description,menu.url)">
             <i :class="menu.img"></i>
             <span slot="title">{{menu.description}} </span>
           </el-menu-item>
@@ -86,7 +86,11 @@
       <!--左侧菜单栏 end-->
       <!--右边主体窗口 start-->
       <el-main id="el-main">
-        <router-view/>
+        <el-page-header  @back="goBack" :content="activeMenu" class="top-bar">
+        </el-page-header>
+        <div class="div-outer-router-view">
+          <router-view/>
+        </div>
       </el-main>
       <!--右边主体窗口 end-->
     </el-container>
@@ -103,17 +107,19 @@ export default {
   data () {
     return {
       defaultActive: '-1',
-      langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English'
+      langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English',
+      activeMenu: '系统首页'
     }
   },
   created: function () {
   },
   methods: {
     handleOpen (key, keyPath) {
-      console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
-      console.log(key, keyPath)
+    },
+    goBack: function () {
+      this.$goBack()
     },
     logOut: function () {
       this.$confirm('您确定要退出登录吗, 是否继续?', '询问', {
@@ -139,7 +145,8 @@ export default {
       }).catch(() => {
       })
     },
-    toRight: function (link) {
+    toRight: function (menuName, link) {
+      this.activeMenu = menuName
       this.$router.push({path: link})
     },
     changeLang: function (value) {

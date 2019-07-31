@@ -104,10 +104,12 @@ function appendToEL (Vue, el, url) {
     if (res.data.flag === 'SUCCESS') {
       el.innerHTML = res.data.t
     } else {
-      this.$message({
-        message: res.data.message,
-        type: 'warning'
-      })
+      if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+        this.$message({
+          message: res.data.message,
+          type: 'warning'
+        })
+      }
     }
   })
 }

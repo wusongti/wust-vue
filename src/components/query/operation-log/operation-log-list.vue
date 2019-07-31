@@ -3,10 +3,6 @@
 */
 <template>
   <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>查询管理</el-breadcrumb-item>
-      <el-breadcrumb-item>操作日志</el-breadcrumb-item>
-    </el-breadcrumb>
     <el-tabs  type="card" >
       <el-tab-pane label="操作日志">
           <form>

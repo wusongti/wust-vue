@@ -1,9 +1,5 @@
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
-      <el-breadcrumb-item>角色管理</el-breadcrumb-item>
-    </el-breadcrumb>
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="角色列表">
       <form>
@@ -89,7 +85,7 @@
       </table>
       </el-tab-pane>
       <el-tab-pane
-        v-for="(item, index) in editableTabs"
+        v-for="(item) in editableTabs"
         :key="item.name"
         :label="item.label"
         :name="item.name"

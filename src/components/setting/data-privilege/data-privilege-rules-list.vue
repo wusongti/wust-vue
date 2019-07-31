@@ -1,9 +1,5 @@
 <template>
   <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>系统配置</el-breadcrumb-item>
-      <el-breadcrumb-item>数据权限</el-breadcrumb-item>
-    </el-breadcrumb>
     <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="数据权限列表">
         <form>

@@ -3,10 +3,6 @@
 */
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>查询管理</el-breadcrumb-item>
-      <el-breadcrumb-item>导入导出</el-breadcrumb-item>
-    </el-breadcrumb>
     <el-tabs  type="card" >
       <el-tab-pane label="操作日志">
         <form>

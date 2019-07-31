@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <el-breadcrumb separator="/" style="margin-bottom: 5px">
-      <el-breadcrumb-item>系统首页</el-breadcrumb-item>
-    </el-breadcrumb>
+  <div>e
     <el-card class="box-card">
       <div  class="text item">
        统计报表1
