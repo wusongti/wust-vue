@@ -11,12 +11,12 @@
           <a href="javascript:">智慧社区<span class="lite">云平台</span></a>
         </el-col>
         <!--logo end-->
-        <el-col :span="3" style="padding-top: 15px">
+        <el-col :span="3">
           <span style="color: #fed189">
             {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})
           </span>
         </el-col>
-        <el-col :span="2" style="padding-top: 15px">
+        <el-col :span="2">
           <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
             <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown">
@@ -25,7 +25,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
-        <el-col :span="2" style="padding-top: 15px">
+        <el-col :span="2">
           <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
             <span class="el-dropdown-link" style="color: #fed189">
               更多<i class="el-icon-arrow-down el-icon--right"></i>

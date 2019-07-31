@@ -42,10 +42,6 @@ body > .el-container {
 
 #logo {
   display: inline-block;
-  font-size: 1.5em;
-  color: #273849;
-  font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 500;
 }
 
 #logo img {
