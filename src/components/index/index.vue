@@ -6,8 +6,9 @@
     <el-header id="el-header">
       <el-row>
         <!--logo start-->
-        <el-col :span="17">
-          <a href="index.html" class="logo">智慧社区<span class="lite">云平台</span></a>
+        <el-col :span="17" id="logo">
+          <img src="../../assets/logo.png" class="pull-left"/>
+          <a href="javascript:">智慧社区<span class="lite">云平台</span></a>
         </el-col>
         <!--logo end-->
         <el-col :span="3" style="padding-top: 15px">

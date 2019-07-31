@@ -40,7 +40,23 @@ body > .el-container {
   padding-top: 30px;
 }
 
-a.logo {
+#logo {
+  display: inline-block;
+  font-size: 1.5em;
+  color: #273849;
+  font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+}
+
+#logo img {
+  margin-top: 15px;
+  margin-right: 6px;
+  width: 40px;
+  height: 40px;
+  border: none;
+}
+
+#logo a {
   font-size: 28px;
   font-weight: 300;
   color: #fed189;
@@ -49,12 +65,12 @@ a.logo {
   text-transform: uppercase;
 }
 
-a.logo:hover, a.logo:focus {
+#logo a:hover, a:focus {
   text-decoration: none;
   outline: none;
 }
 
-a.logo span {
+#logo a span {
   color: #688a7e;
 }
 
