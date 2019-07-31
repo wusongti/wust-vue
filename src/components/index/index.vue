@@ -4,31 +4,37 @@
   <el-container>
     <!--头部 start-->
     <el-header id="el-header">
-      <!--logo start-->
-      <a href="index.html" class="logo">智慧社区<span class="lite">云平台</span></a>
-      <!--logo end-->
-      <el-col :span="5" class="pull-right">
-        <div class="pull-left">
+      <el-row>
+        <!--logo start-->
+        <el-col :span="17">
+          <a href="index.html" class="logo">智慧社区<span class="lite">云平台</span></a>
+        </el-col>
+        <!--logo end-->
+        <el-col :span="3" style="padding-top: 15px">
           <span style="color: #fed189">
             {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})
           </span>
-        </div>
-        <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
-          <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="javascript:;" @click="changeLang('zh-CN')">中文</a></el-dropdown-item>
-            <el-dropdown-item><a href="javascript:;" @click="changeLang('en-US')">English</a></el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
-          <span class="el-dropdown-link" style="color: #fed189">
-            更多<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="javascript:;" v-on:click="logOut">注销</a></el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col>
+        </el-col>
+        <el-col :span="2" style="padding-top: 15px">
+          <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
+            <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><a href="javascript:;" @click="changeLang('zh-CN')">中文</a></el-dropdown-item>
+              <el-dropdown-item><a href="javascript:;" @click="changeLang('en-US')">English</a></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-col>
+        <el-col :span="2" style="padding-top: 15px">
+          <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
+            <span class="el-dropdown-link" style="color: #fed189">
+              更多<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><a href="javascript:;" v-on:click="logOut">注销</a></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-col>
+      </el-row>
     </el-header>
     <!--头部 end-->
     <!--下部分容器 start-->
