@@ -77,7 +77,7 @@
           </table>
       </el-tab-pane>
       <el-tab-pane
-        v-for="(item, index) in editableTabs"
+        v-for="(item) in editableTabs"
         :key="item.name"
         :label="item.label"
         :name="item.name"

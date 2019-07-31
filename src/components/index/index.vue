@@ -167,4 +167,8 @@ export default {
 
 <style>
 @import "index.css";
+.el-page-header__content{
+  font-size: 14px;
+  color: #303133;
+}
 </style>

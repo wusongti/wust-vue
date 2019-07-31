@@ -125,6 +125,10 @@ let universalPlugin = {
 
     // 全局静态方法：格式化日期
     Vue.$formatDate = function (date, fmt) {
+      if (Vue.$isNullOrIsBlankOrIsUndefined(date)) {
+        return null
+      }
+
       let v = date
       if (!(v instanceof Date)) {
         v = new Date(date)
