@@ -36,7 +36,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr :key="data.id" v-for="data in companyList">
+              <tr v-for="data in companyList">
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
@@ -68,7 +68,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr :key="data.id" v-for="data in departmentList">
+              <tr v-for="data in departmentList">
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
@@ -100,7 +100,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr :key="data.id" v-for="data in projectList">
+              <tr v-for="data in projectList">
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
@@ -132,7 +132,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr :key="data.id" v-for="data in roleList">
+              <tr v-for="data in roleList">
                 <td>{{data.code}}</td>
                 <td>
                   {{data.name}}
@@ -173,7 +173,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr :key="data.id" v-for="data in userList">
+              <tr v-for="data in userList">
                 <td>
                   {{data.loginName}}
                 </td>
@@ -212,11 +212,11 @@
         :label="item.label"
         :name="item.name"
         closable>
-        <company-add v-if="item.key == 'AddCompany'"  v-bind:selectedNode="selectedNode"></company-add>
-        <department-add v-if="item.key == 'AddDepartment'"  v-bind:selectedNode="selectedNode"></department-add>
-        <project-add v-if="item.key == 'AddProject'"  v-bind:selectedNode="selectedNode"></project-add>
-        <role-add v-if="item.key == 'AddRole'" v-bind:selectedNode="selectedNode"></role-add>
-        <user-add v-if="item.key == 'AddUser'" v-bind:selectedNode="selectedNode"></user-add>
+        <company-add v-if="item.key == 'AddCompany'"  v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></company-add>
+        <department-add v-if="item.key == 'AddDepartment'"  v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></department-add>
+        <project-add v-if="item.key == 'AddProject'"  v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></project-add>
+        <role-add v-if="item.key == 'AddRole'" v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></role-add>
+        <user-add v-if="item.key == 'AddUser'" v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></user-add>
         <function-tree v-if="item.key == 'SetFunctionPermissions'"  v-bind:selectedModel="selectedModel" v-bind:selectedNode="selectedNode"></function-tree>
       </el-tab-pane>
     </el-tabs>
@@ -546,6 +546,12 @@ export default {
 
       treeObj.removeNode(this.selectedNode)
     },
+    addNode: function (newNode) {
+      console.dir(newNode)
+      // eslint-disable-next-line no-undef
+      let treeObj = $.fn.zTree.getZTreeObj('tree')
+      treeObj.addNodes(this.selectedNode, newNode)
+    },
     addTab: function (label, name, key) {
       let ele = {label: label, name: name, key: key}
       let flag = false
@@ -570,7 +576,7 @@ export default {
               activeName = nextTab.name
             } else {
               activeName = this.defaultActiveName
-              this.buildTree()
+              $('#' + this.selectedNode.tId + '_a').click()
             }
           }
         })
@@ -580,7 +586,8 @@ export default {
     },
     clickTab: function (tab) {
       if (tab.name === this.defaultActiveName) {
-        this.buildTree()
+        // eslint-disable-next-line no-undef
+        $('#' + this.selectedNode.tId + '_a').click()
       }
     }
   }

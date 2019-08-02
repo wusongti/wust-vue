@@ -111,8 +111,15 @@ export default {
             message: res.data.message,
             type: 'success'
           })
+
+          let name = '部门-' + data.name
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.type, relationId: data.id}
+          this.addNode(newNode)
         }
       })
+    },
+    addNode: function (newNode) {
+      this.$emit('addNode', newNode)
     }
   }
 }

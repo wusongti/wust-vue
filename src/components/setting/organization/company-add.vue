@@ -125,8 +125,20 @@ export default {
             message: res.data.message,
             type: 'success'
           })
+
+          let name = '代理商-' + data.name
+          if (this.type === '101104') {
+            name = '总公司-' + data.name
+          } else if (this.type === '101107') {
+            name = '分公司-' + data.name
+          }
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.type, relationId: data.id}
+          this.addNode(newNode)
         }
       })
+    },
+    addNode: function (newNode) {
+      this.$emit('addNode', newNode)
     }
   }
 }

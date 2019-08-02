@@ -119,8 +119,6 @@ export default {
     }
   },
   created: function () {
-    console.dir(this.loginContext.getLoginContext().menus)
-    console.dir(this.loginContext.getLoginContext().menus[0].children.length)
   },
   methods: {
     handleOpen (key, keyPath) {
