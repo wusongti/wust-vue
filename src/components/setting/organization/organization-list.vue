@@ -297,7 +297,7 @@ export default {
       disableAddRoleButton: true,
       disableAddUserButton: true,
       disableDeleteButton: true,
-      selectedNode: {id: '', pId: '-1', type: '', relationId: ''},
+      selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
       searchHitZNodes: [],
       selectedModel: {},
       exportExcelPar: {
@@ -326,7 +326,7 @@ export default {
           // eslint-disable-next-line no-undef
           let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
-          if (this.selectedNode != null && this.selectedNode.pId != null && this.selectedNode.id !== '') {
+          if (this.selectedNode != null && this.selectedNode.pid != null && this.selectedNode.id !== '') {
             this.expandParentNodes(this.selectedNode.children[0], treeObj)
             // eslint-disable-next-line no-undef
             $('#' + this.selectedNode.tId + '_a').click()

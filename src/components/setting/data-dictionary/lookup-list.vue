@@ -26,7 +26,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr :key="data.id" v-for="data in baseDto.lstDto" v-bind:id="data.code" v-bind:pId="data.parentCode">
+        <tr :key="data.id" v-for="data in baseDto.lstDto">
           <td>
             {{data.name}}
           </td>

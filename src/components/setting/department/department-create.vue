@@ -6,9 +6,6 @@
     <el-form-item label="部门名" prop="name">
       <el-input v-model="addModel.name"></el-input>
     </el-form-item>
-    <el-form-item label="部门负责人">
-      <el-input v-model="addModel.leader"></el-input>
-    </el-form-item>
     <el-form-item label="描述">
       <el-input v-model="addModel.description"></el-input>
     </el-form-item>
@@ -25,9 +22,7 @@ export default {
   data () {
     return {
       addModel: {
-        pname: '',
         name: '',
-        leader: '',
         description: ''
       },
       rules: {

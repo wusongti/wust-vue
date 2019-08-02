@@ -12,9 +12,6 @@
     <el-form-item label="部门名" prop="name">
       <el-input v-model="updateModel.name"></el-input>
     </el-form-item>
-    <el-form-item label="部门负责人">
-      <el-input v-model="updateModel.leader"></el-input>
-    </el-form-item>
     <el-form-item label="描述">
       <el-input v-model="updateModel.description"></el-input>
     </el-form-item>
@@ -34,10 +31,7 @@ export default {
       updateModel: {
         id: '',
         code: '',
-        pcode: '',
         name: '',
-        pname: '',
-        leader: '',
         description: ''
       },
       rules: {

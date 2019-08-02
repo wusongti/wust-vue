@@ -88,7 +88,7 @@ export default {
         return
       }
 
-      let sysRoleResourceAdd = {pId: this.selectedNode.id, roleId: this.selectedModel.id, organizationId: '', sysRoleResources: []}
+      let sysRoleResourceAdd = {pid: this.selectedNode.id, roleId: this.selectedModel.id, organizationId: '', sysRoleResources: []}
       let sysRoleResources = []
       if (nodes != null && nodes.length > 0) {
         for (let i = 0; i < nodes.length; i++) {
