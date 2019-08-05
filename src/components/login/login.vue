@@ -19,9 +19,9 @@
                 -->
           </div>
         </form>
-        <div style="margin-top:150px;text-align: right">
+        <div style="margin-top:100px;text-align: center;">
           <div class="credits">
-            Designed by <a href="9080.iteye.com">Wust</a>
+            沈阳富加居科技有限公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X备88888号-1
           </div>
         </div>
       </div>
