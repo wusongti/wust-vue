@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs  type="card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+    <el-tabs  type="border-card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
         <form>
             <div class="col-xs-2 form-group">
@@ -182,11 +182,15 @@ export default {
     addTab: function (label, name, key) {
       let ele = {label: label, name: name, key: key}
       let flag = false
-      this.editableTabs.every((val, idx, array) => {
-        if (val.key === ele.key) {
+
+      for (let i = 0; i < this.editableTabs.length; i++) {
+        let var1 = this.editableTabs[i]
+        if (var1.key === key) {
           flag = true
+          break
         }
-      })
+      }
+
       if (!flag) {
         this.editableTabs.push(ele)
       }
