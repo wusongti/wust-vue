@@ -49,9 +49,9 @@
           background-color="#394a59"
           text-color="#ececec"
           active-text-color="#ffd04b">
-          <el-menu-item index="-1" @click="toRight(activeMenu,'/Dashboard')">
+          <el-menu-item index="-1" @click="toRight(dashboardMenu,'/Dashboard')">
             <i class="el-icon-s-home"></i>
-            <span slot="title">{{activeMenu}}</span>
+            <span slot="title">{{dashboardMenu}}</span>
           </el-menu-item>
           <!-- 一级菜单，有子菜单 start -->
           <el-submenu :key="menu.code" :index="index + ''" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
@@ -115,7 +115,8 @@ export default {
     return {
       defaultActive: '-1',
       langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English',
-      activeMenu: '系统首页'
+      dashboardMenu: '系统首页',
+      activeMenu: this.activeMenu || this.dashboardMenu
     }
   },
   created: function () {
