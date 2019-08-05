@@ -128,7 +128,7 @@ export default {
       baseDto: {page: {totalResult: 0}},
       selectedModel: {},
       exportExcelPar: {
-        excelSuffix: 'xls',
+        fileType: 'xls',
         xmlName: 'admin_user',
         moduleName: 'user'
       },

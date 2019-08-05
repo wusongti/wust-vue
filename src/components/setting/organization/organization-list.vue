@@ -301,7 +301,7 @@ export default {
       searchHitZNodes: [],
       selectedModel: {},
       exportExcelPar: {
-        excelSuffix: 'xls',
+        fileType: 'xls',
         xmlName: 'admin_organization',
         moduleName: 'organization'
       },

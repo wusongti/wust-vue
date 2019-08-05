@@ -111,7 +111,7 @@ export default {
       showUpdatePopover: false,
       selectedModel: {},
       exportExcelPar: {
-        excelSuffix: 'xls',
+        fileType: 'xls',
         xmlName: 'admin_apptoken',
         moduleName: 'apptoken'}
     }
