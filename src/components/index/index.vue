@@ -6,9 +6,13 @@
     <el-header id="el-header">
       <el-row>
         <!--logo start-->
-        <el-col :span="17" id="logo">
+        <el-col :span="15" id="logo">
           <img src="../../assets/logo.png" class="pull-left"/>
           <a href="javascript:">智慧社区<span class="lite">云平台</span></a>
+        </el-col>
+        <el-col :span="2" class="pull-left">
+          <i class="el-icon-caret-left" style="color: #fed189" v-if="!isCollapse" @click="collapseClick"></i>
+          <i class="el-icon-caret-right" style="color: #fed189" v-if="isCollapse" @click="collapseClick"></i>
         </el-col>
         <!--logo end-->
         <el-col :span="3">
@@ -41,14 +45,16 @@
     <!--下部分容器 start-->
     <el-container>
       <!--左侧菜单栏 start-->
-      <el-aside id="el-aside" width="190px">
+      <el-aside id="el-aside" style="width: auto">
         <el-menu
           :default-active="defaultActive"
+          class="el-menu-vertical-index"
           @open="handleOpen"
           @close="handleClose"
           background-color="#394a59"
           text-color="#ececec"
-          active-text-color="#ffd04b">
+          active-text-color="#ffd04b"
+          :collapse="isCollapse">
           <el-menu-item index="-1" @click="toRight(dashboardMenu,'/Dashboard')">
             <i class="el-icon-s-home"></i>
             <span slot="title">{{dashboardMenu}}</span>
@@ -134,7 +140,8 @@ export default {
       defaultActive: '-1',
       langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English',
       dashboardMenu: '系统首页',
-      activeMenu: this.activeMenu || this.dashboardMenu
+      activeMenu: this.activeMenu || this.dashboardMenu,
+      isCollapse: false
     }
   },
   created: function () {
@@ -143,6 +150,9 @@ export default {
     handleOpen (key, keyPath) {
     },
     handleClose (key, keyPath) {
+    },
+    collapseClick: function () {
+      this.isCollapse = !this.isCollapse
     },
     goBack: function () {
       this.$goBack()
@@ -189,5 +199,10 @@ export default {
 .el-page-header__content{
   font-size: 14px;
   color: #303133;
+}
+
+.el-menu-vertical-index:not(.el-menu--collapse) {
+  width: 172px;
+  min-height: 400px;
 }
 </style>

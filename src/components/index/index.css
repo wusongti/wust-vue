@@ -25,14 +25,15 @@ body > #div-index .el-container {
 }
 
 #div-index .top-bar{
-  position: fixed;
+  /*position: fixed;*/
   display: flex;
   height: 28px;
   padding-left: 10px;
-  left: 189px;
+  left: auto;
   right: 17px;
   z-index: 8;
-  margin-top: -20px;
+  margin-left: -15px;
+  margin-top: -19px;
   background-color: #ededed;
   border-bottom: 1px solid #e4e4e4;
 }
