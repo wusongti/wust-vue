@@ -4,7 +4,7 @@
       <el-header style="height: 40px">
         <el-col id="logo">
           <img src="../../assets/logo.png" class="pull-left"/>
-          <a href="javascript:">沈阳富加居科技公司<span class="lite">智慧社区云平台</span></a>
+          <a href="javascript:">XXX<span class="lite">智慧社区云平台</span></a>
         </el-col>
       </el-header>
       <el-main>
@@ -24,7 +24,7 @@
         </el-form>
       </el-main>
       <el-footer style="height: 25px">
-        沈阳富加居科技公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;粤ICP备16083573号-1
+        XXX科技公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备案号
       </el-footer>
     </el-container>
   </div>
