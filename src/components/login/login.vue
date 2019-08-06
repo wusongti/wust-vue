@@ -4,7 +4,7 @@
       <el-header style="height: 40px">
         <el-col id="logo">
           <img src="../../assets/logo.png" class="pull-left"/>
-          <a href="javascript:">XXX<span class="lite">智慧社区云平台</span></a>
+          <a href="javascript:">XXX智慧社区云平台<span class="lite"></span></a>
         </el-col>
       </el-header>
       <el-main>

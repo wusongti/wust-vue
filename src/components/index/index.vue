@@ -78,10 +78,10 @@
               <!-- 三级菜单，有子菜单 end -->
 
               <!-- 三级菜单，无子菜单 start -->
-              <el-submenu :key="third.code" :index="index + '-' + (seq + k + 1)" v-for="(third,k) in child.children"  v-if="child.code == third.pcode && third.isParent == '100702'">
+              <el-menu-item :key="third.code" :index="index + '-' + (seq + k + 1)" v-for="(third,k) in child.children"  v-if="child.code == third.pcode && third.isParent == '100702'" @click="toRight(third.description,third.url)">
                 <i :class="third.img"></i>
                 <span slot="title">{{third.description}}</span>
-              </el-submenu>
+              </el-menu-item>
               <!-- 三级菜单，无子菜单 end -->
             </el-submenu>
             <!-- 二级菜单，有子菜单 end -->
