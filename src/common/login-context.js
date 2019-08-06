@@ -28,8 +28,11 @@ let loginContext = {
     return loginContextSession
   },
   removeLoginContext: function () {
+    console.log('登录信息失效，清空前端sesssion')
     sessionStorage.removeItem('x-auth-token')
     sessionStorage.removeItem('loginContextModel')
+    console.log('登录信息失效，清空前端sesssion后x-auth-token=' + sessionStorage.getItem('x-auth-token'))
+    console.log('登录信息失效，清空前端sesssion后loginContextModel=' + sessionStorage.getItem('loginContextModel'))
   }
 }
 

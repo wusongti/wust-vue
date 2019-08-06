@@ -54,22 +54,40 @@
             <span slot="title">{{dashboardMenu}}</span>
           </el-menu-item>
           <!-- 一级菜单，有子菜单 start -->
-          <el-submenu :key="menu.code" :index="index + ''" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.children != null && menu.children.length > 0">
+          <el-submenu :key="menu.code" :index="index + ''" v-for="(menu,index) in loginContext.getLoginContext().menus" v-if="menu.isParent == '100701'">
             <template slot="title">
               <i :class="menu.img"></i>
               <span>{{menu.description}}</span>
             </template>
 
             <!-- 二级菜单，有子菜单 start -->
-            <el-submenu :key="child.code" :index="index + '-' + seq" v-for="(child,seq) in menu.children"  v-if="menu.code == child.pcode && child.children != null && child.children.length > 0">
-              <i :class="child.img"></i>
-              <template slot="title">{{child.description}}</template>
-              <!-- TODO -->
+            <el-submenu :key="child.code" :index="index + '-' + seq" v-for="(child,seq) in menu.children"  v-if="menu.code == child.pcode && child.isParent == '100701'">
+              <template slot="title">
+                <i :class="child.img"></i>
+                {{child.description}}
+              </template>
+
+              <!-- 三级菜单，有子菜单 start -->
+              <el-submenu :key="third.code" :index="index + '-' + (seq + k)" v-for="(third,k) in child.children"  v-if="child.code == third.pcode && third.isParent == '100701'">
+                <template slot="title">
+                  <i :class="third.img"></i>
+                  {{third.description}}
+                </template>
+                <!-- TODO 四级菜单 -->
+              </el-submenu>
+              <!-- 三级菜单，有子菜单 end -->
+
+              <!-- 三级菜单，无子菜单 start -->
+              <el-submenu :key="third.code" :index="index + '-' + (seq + k + 1)" v-for="(third,k) in child.children"  v-if="child.code == third.pcode && third.isParent == '100702'">
+                <i :class="third.img"></i>
+                <span slot="title">{{third.description}}</span>
+              </el-submenu>
+              <!-- 三级菜单，无子菜单 end -->
             </el-submenu>
             <!-- 二级菜单，有子菜单 end -->
 
             <!-- 二级菜单，无子菜单 start -->
-            <el-menu-item :key="child.code" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.code == child.pcode && child.children == null || child.children.length == 0" @click="toRight(child.description,child.url)">
+            <el-menu-item :key="child.code" :index="index + '-' + (seq + 1)" v-for="(child,seq) in menu.children"  v-if="menu.code == child.pcode && child.isParent == '100702'" @click="toRight(child.description,child.url)">
               <i :class="child.img"></i>
               <span slot="title">{{child.description}}</span>
             </el-menu-item>
@@ -78,7 +96,7 @@
           <!-- 一级菜单，无子菜单 end -->
 
           <!-- 一级菜单，无子菜单 start -->
-          <el-menu-item :key="menu.code" :index="(index + 1) + ''" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.children == null || menu.children.length == 0" @click="toRight(menu.description,menu.url)">
+          <el-menu-item :key="menu.code" :index="(index + 1) + ''" v-for="(menu,index) in loginContext.getLoginContext().menus"  v-if="menu.isParent == '100702'" @click="toRight(menu.description,menu.url)">
             <i :class="menu.img"></i>
             <span slot="title">{{menu.description}} </span>
           </el-menu-item>
