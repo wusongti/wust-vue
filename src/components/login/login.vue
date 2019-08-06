@@ -1,8 +1,14 @@
 <template>
-  <div>
-    <div class="login-img3-body">
-      <div class="container">
-        <form class="login-form">
+  <div id="div-login">
+    <el-container>
+      <el-header style="height: 40px">
+        <el-col id="logo">
+          <img src="../../assets/logo.png" class="pull-left"/>
+          <a href="javascript:">沈阳富加居科技公司<span class="lite">智慧社区云平台</span></a>
+        </el-col>
+      </el-header>
+      <el-main>
+        <el-form class="login-form">
           <div class="login-wrap">
             <p class="login-img"><i class="icon_lock_alt"></i></p>
             <div class="input-group">
@@ -14,18 +20,13 @@
               <input type="password" class="form-control" placeholder="Password" v-model="password">
             </div>
             <button class="btn btn-primary btn-lg btn-block" type="button" @click="login" v-text="$t('components.login.login.label3')"></button>
-            <!--
-                <button class="btn btn-info btn-lg btn-block" type="submit">Signup</button>
-                -->
           </div>
-        </form>
-        <div style="margin-top:100px;text-align: center;">
-          <div class="credits">
-            沈阳富加居科技有限公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X备88888号-1
-          </div>
-        </div>
-      </div>
-    </div>
+        </el-form>
+      </el-main>
+      <el-footer style="height: 25px">
+        沈阳富加居科技公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;粤ICP备16083573号-1
+      </el-footer>
+    </el-container>
   </div>
 </template>
 

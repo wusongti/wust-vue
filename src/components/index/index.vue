@@ -1,5 +1,5 @@
 <template>
-  <div id="div_index">
+  <div id="div-index">
   <!--最外层容器 start-->
   <el-container>
     <!--头部 start-->
