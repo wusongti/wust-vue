@@ -63,7 +63,7 @@
             </td>
             <td>
               <button type="button" class="btn btn-link btn-xs" @click="viewLog(data.msg)" v-has-permission="'MyImportExportList.download'">查看日志</button>
-              <button type="button" class="btn btn-link btn-xs" @click="downloadExcel(data.batchNo)" v-has-permission="'MyImportExportList.download'">下载文件</button>
+              <button type="button" class="btn btn-link btn-xs" @click="downloadExcel(data.batchNo)" v-has-permission="'MyImportExportList.download'" :disabled="data.operationType == '100601'">下载文件</button>
             </td>
           </tr>
           </tbody>

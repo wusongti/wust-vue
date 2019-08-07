@@ -21,7 +21,14 @@ export default {
   },
   methods: {
     importCallback: function (e) { // 回调
-      this.$router.push({path: '/MyImportExportList'})
+      this.$confirm('导入完成，需要跳转到结果页面吗？', '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$router.push({path: '/MyImportExportList'})
+      }).catch(() => {
+      })
     }
   }
 }

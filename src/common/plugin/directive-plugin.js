@@ -44,14 +44,14 @@ let directivePlugin = {
               url: Vue.$adminServerURL + '/ExportExcelController/exportExcel',
               data: binding.value
             }).then(res => {
-              vnode.context.$dialog('询问', '导出成功，是否转到我的导入导出列表查看导出结果？', true, true,
-                () => { // 点击确定
-                  vnode.context.$router.push({path: '/MyImportExportList'})
-                },
-                () => { // 点击关闭
-
-                }
-              )
+              vnode.context.$confirm('导出完成，需要跳转到结果页面吗？', '询问', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                vnode.context.$router.push({path: '/MyImportExportList'})
+              }).catch(() => {
+              })
             })
           }
         }
