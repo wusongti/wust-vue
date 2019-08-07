@@ -4,7 +4,7 @@
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
     <el-tabs  type="border-card" >
-      <el-tab-pane label="操作日志">
+      <el-tab-pane label="我的导入导出">
         <form>
           <div class="row">
             <div class="col-xs-2 form-group">
@@ -31,8 +31,6 @@
             <th>操作类型</th>
             <th>状态</th>
             <th>描述</th>
-            <th>文件大小</th>
-            <th>文件类型</th>
             <th width="200">开始时间</th>
             <th width="200">结束时间</th>
             <th width="80">创建人</th>
@@ -53,12 +51,6 @@
             </td>
             <td>
               {{data.description}}
-            </td>
-            <td>
-              {{data.size}}KB
-            </td>
-            <td>
-              {{data.suffix}}
             </td>
             <td>
               {{data.startTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
