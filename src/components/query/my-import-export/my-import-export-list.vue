@@ -62,7 +62,7 @@
               {{data.createrName}}
             </td>
             <td>
-              <button type="button" class="btn btn-link btn-xs" @click="downloadLog(data.batchNo)" v-has-permission="'MyImportExportList.download'">下载日志</button>
+              <button type="button" class="btn btn-link btn-xs" @click="viewLog(data.msg)" v-has-permission="'MyImportExportList.download'">查看日志</button>
               <button type="button" class="btn btn-link btn-xs" @click="downloadExcel(data.batchNo)" v-has-permission="'MyImportExportList.download'">下载文件</button>
             </td>
           </tr>
@@ -81,6 +81,17 @@
         </table>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <p>{{logText}}</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -98,7 +109,9 @@ export default {
         pageDto: {showCount: 10, currentPage: 1},
         status: ''
       },
-      baseDto: {page: {totalResult: 0}}
+      baseDto: {page: {totalResult: 0}},
+      dialogVisible: false,
+      logText: ''
     }
   },
   created: function () {
@@ -126,8 +139,9 @@ export default {
     downloadExcel: function (id) {
       window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=excel'
     },
-    downloadLog: function (id) {
-      window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=log'
+    viewLog: function (msg) {
+      this.logText = msg
+      this.dialogVisible = true
     },
     pageIndexChange: function (e) {
       this.searchModel.pageDto.currentPage = e
@@ -135,6 +149,13 @@ export default {
     search: function () {
       this.searchModel.pageDto.currentPage = 1
       this.listPage()
+    },
+    handleClose (done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   }
 }
