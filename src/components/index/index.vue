@@ -3,16 +3,16 @@
   <!--最外层容器 start-->
   <el-container>
     <!--头部 start-->
-    <el-header id="el-header">
+    <el-header id="el-header" style="height: 45px">
       <el-row>
         <!--logo start-->
-        <el-col :span="15" id="logo">
+        <el-col :span="6" id="logo">
           <img src="../../assets/logo.png" class="pull-left"/>
           <a href="javascript:">智慧社区<span class="lite">云平台</span></a>
+          <a href="javascript:" style="margin-top: 10px;margin-left:5px;color: #ffffff;font-size: 20px;"><li class="glyphicon glyphicon-menu-hamburger"  @click="collapseClick"></li></a>
         </el-col>
-        <el-col :span="2" class="pull-left">
-          <i class="el-icon-caret-left" style="color: #fed189" v-if="!isCollapse" @click="collapseClick"></i>
-          <i class="el-icon-caret-right" style="color: #fed189" v-if="isCollapse" @click="collapseClick"></i>
+        <el-col :span="10" class="pull-left">
+          &nbsp;
         </el-col>
         <!--logo end-->
         <el-col :span="3">
