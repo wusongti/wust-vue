@@ -5,7 +5,7 @@
 
 #div-login .el-footer {
   background: rgba(54,66,74,1);
-  color: #f8f8f8;
+  color: #b6b6b6;
   text-align: center;
   padding-top: 2px;
   font-size: 12px;
@@ -43,7 +43,7 @@
 #div-login #logo a {
   font-size: 18px;
   font-weight: 200;
-  color: #fed189;
+  color: #b6b6b6;
   float: left;
   margin-top: 6px;
   text-transform: uppercase;
