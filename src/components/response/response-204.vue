@@ -13,21 +13,24 @@ export default {
       timing: 5
     }
   },
+  created: function () {
+    this.init()
+  },
   methods: {
+    init: function () {
+      let that = this
+      let intervalId = setInterval(function () {
+        if (that.timing === 0) {
+          window.clearInterval(intervalId)
+          that.toLogin()
+        }
+        that.timing--
+      }, 1000)
+    },
     toLogin: function () {
       this.loginContext.removeLoginContext()
       this.$router.push({path: '/Login'})
     }
-  },
-  created: function () {
-    let that = this
-    let intervalId = setInterval(function () {
-      if (that.timing === 0) {
-        window.clearInterval(intervalId)
-        that.toLogin()
-      }
-      that.timing--
-    }, 1000)
   }
 }
 </script>

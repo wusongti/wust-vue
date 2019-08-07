@@ -137,7 +137,7 @@ export default {
       })
     },
     downloadExcel: function (id) {
-      window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&&relationId=' + id + '&&relationField=excel'
+      window.location.href = Vue.$adminServerURL + '/MyImportExportController/downloadFile?x-auth-token=' + this.loginContext.getLoginContext().xAuthToken + '&relationId=' + id + '&relationField=excel'
     },
     viewLog: function (msg) {
       this.logText = msg

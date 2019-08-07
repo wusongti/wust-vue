@@ -1,12 +1,10 @@
 #div-login .el-header {
   background: rgba(54,66,74,1);
-  border-bottom: 1px solid #f1f2f7;
   text-align: center;
 }
 
 #div-login .el-footer {
   background: rgba(54,66,74,1);
-  border-top: 1px solid #f1f2f7;
   color: #f8f8f8;
   text-align: center;
   padding-top: 2px;
@@ -69,7 +67,7 @@
   margin: 123px auto 0 40%;
   border: 0;
   background-color: #000;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 
