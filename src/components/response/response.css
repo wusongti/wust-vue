@@ -22,19 +22,11 @@
 
   background: white;
 
-  -webkit-animation: square 3s linear infinite;
-
-  -ms-animation: square 3s linear infinite;
-
-  animation: square 3s linear infinite;
-
   -webkit-background-clip: text;
 
-  color:transparent;
+  color: #00a0df;
 
   text-align:center;
-
-  line-height:200px;
 
   position:relative;
 
@@ -85,19 +77,11 @@
 
   background: white;
 
-  -webkit-animation: square 3s linear infinite;
-
-  -ms-animation: square 3s linear infinite;
-
-  animation: square 3s linear infinite;
-
   -webkit-background-clip: text;
 
-  color:transparent;
+  color: #00a0df;
 
   text-align:center;
-
-  line-height:200px;
 
   position:relative;
 
@@ -151,19 +135,11 @@
 
   background: white;
 
-  -webkit-animation: square 3s linear infinite;
-
-  -ms-animation: square 3s linear infinite;
-
-  animation: square 3s linear infinite;
-
   -webkit-background-clip: text;
 
-  color:transparent;
+  color: #e56b60;
 
   text-align:center;
-
-  line-height:200px;
 
   position:relative;
 
@@ -229,19 +205,11 @@
 
   background: white;
 
-  -webkit-animation: square 3s linear infinite;
-
-  -ms-animation: square 3s linear infinite;
-
-  animation: square 3s linear infinite;
-
   -webkit-background-clip: text;
 
-  color:transparent;
+  color:red;
 
   text-align:center;
-
-  line-height:200px;
 
   position:relative;
 
@@ -299,19 +267,11 @@
 
   background: white;
 
-  -webkit-animation: square 3s linear infinite;
-
-  -ms-animation: square 3s linear infinite;
-
-  animation: square 3s linear infinite;
-
   -webkit-background-clip: text;
 
-  color:transparent;
+  color: #00a0df;
 
   text-align:center;
-
-  line-height:200px;
 
   position:relative;
 

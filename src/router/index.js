@@ -98,6 +98,26 @@ export default new Router({
         {
           path: '/DataSourceList',
           component: DataSourceList
+        },
+        {
+          path: '/ResponseError',
+          name: 'ResponseError',
+          component: ResponseError
+        },
+        {
+          path: '/ResponseUndone',
+          name: 'ResponseUndone',
+          component: ResponseUndone
+        },
+        {
+          path: '/Response401',
+          name: 'Response401',
+          component: Response401
+        },
+        {
+          path: '/Response404',
+          name: 'Response404',
+          component: Response404
         }
       ]
     },
@@ -105,26 +125,6 @@ export default new Router({
       path: '/Response204',
       name: 'Response204',
       component: Response204
-    },
-    {
-      path: '/Response401',
-      name: 'Response401',
-      component: Response401
-    },
-    {
-      path: '/Response404',
-      name: 'Response404',
-      component: Response404
-    },
-    {
-      path: '/ResponseError',
-      name: 'ResponseError',
-      component: ResponseError
-    },
-    {
-      path: '/ResponseUndone',
-      name: 'ResponseUndone',
-      component: ResponseUndone
     }
   ]
 })
