@@ -3,7 +3,7 @@
 */
 <template>
   <div>
-    <el-tabs  type="border-card" v-model="editableTabsValue">
+    <el-tabs v-model="editableTabsValue">
       <el-tab-pane :name="defaultActiveName" label="数据字典">
         <lookup-list></lookup-list>
       </el-tab-pane>

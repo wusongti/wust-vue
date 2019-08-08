@@ -19,8 +19,6 @@ import MyImportExportList from '@/components/query/my-import-export/my-import-ex
 import OperationLogList from '@/components/query/operation-log/operation-log-list.vue'
 import JobList from '@/components/query/job/job-list.vue'
 import DataSourceList from '@/components/setting/data-source/datasource-list.vue'
-import AppTokenList from '@/components/setting/apptoken/apptoken-list.vue'
-import DataPrivilegeRulesList from '@/components/setting/data-privilege/data-privilege-rules-list.vue'
 
 Vue.use(Router)
 
@@ -82,14 +80,6 @@ export default new Router({
         {
           path: '/OperationLogList',
           component: OperationLogList
-        },
-        {
-          path: '/AppTokenList',
-          component: AppTokenList
-        },
-        {
-          path: '/DataPrivilegeRulesList',
-          component: DataPrivilegeRulesList
         },
         {
           path: '/JobList',

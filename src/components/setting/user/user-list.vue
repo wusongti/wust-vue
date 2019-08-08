@@ -1,6 +1,6 @@
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
-    <el-tabs  type="border-card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+    <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="用户列表">
         <form>
           <div class="row">

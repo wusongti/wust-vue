@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs  type="border-card" v-model="editableTabsValue">
+    <el-tabs v-model="editableTabsValue">
       <el-tab-pane :name="defaultActiveName" label="数据源列表">
         <form>
           <div class="row">

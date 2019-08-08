@@ -3,7 +3,7 @@
 */
 <template>
   <div>
-    <el-tabs  type="border-card" >
+    <el-tabs>
       <el-tab-pane label="操作日志">
           <form>
             <div class="row">

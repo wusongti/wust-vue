@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs  type="border-card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+    <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
           <el-aside width="250px" style="height: 75vh;border: 1px solid #eee">

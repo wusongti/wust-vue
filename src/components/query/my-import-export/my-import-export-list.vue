@@ -3,7 +3,7 @@
 */
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <div>
-    <el-tabs  type="border-card" >
+    <el-tabs>
       <el-tab-pane label="我的导入导出">
         <form>
           <div class="row">

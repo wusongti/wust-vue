@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs  type="border-card" v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
+    <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
         <form>
             <div class="col-xs-2 form-group">
