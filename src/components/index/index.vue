@@ -165,7 +165,7 @@ export default {
       }).then(() => {
         Vue.$ajax({
           method: 'post',
-          url: Vue.$ssoServerURL + '/LogoutController/logout/' + this.loginContext.getLoginContext().loginName
+          url: Vue.$ssoServerURL + '/LogoutController/logout/' + this.loginContext.getLoginContext().xAuthToken
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
             this.$router.push({path: '/Login'})
