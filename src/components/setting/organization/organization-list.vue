@@ -473,7 +473,7 @@ export default {
         this.disableAddBranchCompanyButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
-      } else if (type === '101109') { // 选中树的[代理商、总公司、分公司、项目]节点，则启用添加部门按钮
+      } else if (type === '101109') { // 选中树的[项目]节点，则启用添加部门按钮
         this.disableAddDepartmentButton = false
         this.disableDeleteButton = false
 

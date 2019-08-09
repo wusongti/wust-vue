@@ -113,7 +113,7 @@ export default {
           })
 
           let name = '角色-' + data.name
-          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.type, relationId: data.id}
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101113', relationId: data.id}
           this.addNode(newNode)
         }
       })
