@@ -16,12 +16,14 @@
             <div class="panel-body progress-panel">
               <div class="row">
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加公司</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddAgentButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加代理商</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddParentCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加总公司</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddBranchCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加分公司</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addProject" v-has-permission="'OrganizationList.addProject'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButton" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-plus" aria-hidden="true">移出组织</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></button>
                   <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
                 </div>
               </div>
@@ -291,7 +293,9 @@ export default {
       projectList: {},
       roleList: {},
       userList: {},
-      disableAddCompanyButton: true,
+      disableAddAgentButton: true,
+      disableAddParentCompanyButton: true,
+      disableAddBranchCompanyButton: true,
       disableAddDepartmentButton: true,
       disableAddProjectButton: true,
       disableAddRoleButton: true,
@@ -428,18 +432,32 @@ export default {
          */
     switchButtonAvailableStatus: function (type) {
       if (type === '') { // 选中树的[根]节点，则启用添加公司和添加部门按钮
-        this.disableAddCompanyButton = false
+        this.disableAddAgentButton = false
         this.disableAddDepartmentButton = false
 
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableDeleteButton = true
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
-      } else if (type === '101101' || type === '101104') { // 选中树的[代理商、总公司]节点，则启用添加公司和部门按钮
-        this.disableAddCompanyButton = false
+      } else if (type === '101101') { // 选中树的[代理商]节点，则启用添加总公司和部门按钮
+        this.disableAddParentCompanyButton = false
         this.disableAddDepartmentButton = false
         this.disableDeleteButton = false
 
+        this.disableAddAgentButton = true
+        this.disableAddBranchCompanyButton = true
+        this.disableAddProjectButton = true
+        this.disableAddRoleButton = true
+        this.disableAddUserButton = true
+      } else if (type === '101104') { // 选中树的[总公司]节点，则启用添加分公司和部门按钮
+        this.disableAddBranchCompanyButton = false
+        this.disableAddDepartmentButton = false
+        this.disableDeleteButton = false
+
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
@@ -448,14 +466,18 @@ export default {
         this.disableAddProjectButton = false
         this.disableDeleteButton = false
 
-        this.disableAddCompanyButton = true
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
       } else if (type === '101109') { // 选中树的[代理商、总公司、分公司、项目]节点，则启用添加部门按钮
         this.disableAddDepartmentButton = false
         this.disableDeleteButton = false
 
-        this.disableAddCompanyButton = true
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
@@ -463,7 +485,9 @@ export default {
         this.disableAddRoleButton = false
         this.disableDeleteButton = false
 
-        this.disableAddCompanyButton = true
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddUserButton = true
@@ -471,14 +495,18 @@ export default {
         this.disableAddUserButton = false
         this.disableDeleteButton = false
 
-        this.disableAddCompanyButton = true
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
       } else if (type === '101115') { // 选中树的用户节点，则禁用所有按钮
         this.disableDeleteButton = false
 
-        this.disableAddCompanyButton = true
+        this.disableAddAgentButton = true
+        this.disableAddParentCompanyButton = true
+        this.disableAddBranchCompanyButton = true
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
