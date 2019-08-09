@@ -516,15 +516,12 @@ export default {
       }
     },
     addAgent: function () {
-      this.selectedModel.type = '101101'
       this.addTab('添加代理商', 'addAgent', 'AddCompany')
     },
     addParentCompany: function () {
-      this.selectedModel.type = '101104'
       this.addTab('添加总公司', 'addParentCompany', 'AddCompany')
     },
     addBranchCompany: function () {
-      this.selectedModel.type = '101107'
       this.addTab('添加分公司', 'addBranchCompany', 'AddCompany')
     },
     addDepartment: function () {

@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/14.
 */
-<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
+<template>
   <div id="company-add">
     <el-form :inline="true" label-position="right" @submit.native.prevent class="demo-form-inline" label-width="100px" size="mini">
       <el-form-item label="公司名">
@@ -65,12 +65,17 @@ export default {
         name: '',
         type: ''
       },
-      baseDto: {page: {totalResult: 0}},
-      type: ''
+      baseDto: {page: {totalResult: 0}}
     }
   },
   created: function () {
-    this.searchModel.type = this.selectedNode.type
+    if (Vue.$isNullOrIsBlankOrIsUndefined(this.selectedNode.type)) {
+      this.searchModel.type = '101101'
+    } else if (this.selectedNode.type === '101101') {
+      this.searchModel.type = '101104'
+    } else if (this.selectedNode.type === '101104') {
+      this.searchModel.type = '101107'
+    }
     this.search()
   },
   methods: {
@@ -100,15 +105,7 @@ export default {
       this.listPage()
     },
     onSubmit: function (data) {
-      if (Vue.$isNullOrIsBlankOrIsUndefined(this.type)) {
-        this.$message({
-          message: '请选择类别',
-          type: 'warning'
-        })
-        return
-      }
-
-      let d = {pid: this.selectedNode.id, type: this.type, relationId: data.id}
+      let d = {pid: this.selectedNode.id, type: this.searchModel.type, relationId: data.id}
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/OrganizationController/create',
@@ -133,7 +130,7 @@ export default {
           } else if (this.type === '101107') {
             name = '分公司-' + data.name
           }
-          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.type, relationId: data.id}
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.searchModel.type, relationId: data.id}
           this.addNode(newNode)
         }
       })
