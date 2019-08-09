@@ -124,7 +124,7 @@ export default {
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/LookupController/buildLookupTree',
-        data: this.searchModel
+        data: {}
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
           let zNodes = JSON.parse(res.data.obj)
