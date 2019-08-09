@@ -16,9 +16,9 @@
             <div class="panel-body progress-panel">
               <div class="row">
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddAgentButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加代理商</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddParentCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加总公司</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddBranchCompanyButton" @click="addCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加分公司</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddAgentButton" @click="addAgent" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加代理商</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddParentCompanyButton" @click="addParentCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加总公司</span></button>
+                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddBranchCompanyButton" @click="addBranchCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加分公司</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addProject" v-has-permission="'OrganizationList.addProject'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
@@ -303,7 +303,9 @@ export default {
       disableDeleteButton: true,
       selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
       searchHitZNodes: [],
-      selectedModel: {},
+      selectedModel: {
+        type: ''
+      },
       exportExcelPar: {
         fileType: 'xls',
         xmlName: 'admin_organization',
@@ -513,8 +515,17 @@ export default {
         this.disableAddUserButton = true
       }
     },
-    addCompany: function () {
-      this.addTab('添加公司', 'AddCompany', 'AddCompany')
+    addAgent: function () {
+      this.selectedModel.type = '101101'
+      this.addTab('添加代理商', 'addAgent', 'AddCompany')
+    },
+    addParentCompany: function () {
+      this.selectedModel.type = '101104'
+      this.addTab('添加总公司', 'addParentCompany', 'AddCompany')
+    },
+    addBranchCompany: function () {
+      this.selectedModel.type = '101107'
+      this.addTab('添加分公司', 'addBranchCompany', 'AddCompany')
     },
     addDepartment: function () {
       this.addTab('添加部门', 'AddDepartment', 'AddDepartment')
@@ -608,6 +619,7 @@ export default {
               activeName = nextTab.name
             } else {
               activeName = this.defaultActiveName
+              // eslint-disable-next-line no-undef
               $('#' + this.selectedNode.tId + '_a').click()
             }
           }

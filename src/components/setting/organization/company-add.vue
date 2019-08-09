@@ -27,8 +27,7 @@
           {{data.name}}
         </td>
         <td>
-          <select class="form-control" v-data-dictionary-directive:1011 v-model="type">
-          </select>
+          {{data.typeLabel}}
         </td>
         <td>
           <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)">选择</button>
@@ -63,14 +62,16 @@ export default {
     return {
       searchModel: {
         pageDto: {showCount: 10, currentPage: 1},
-        name: ''
+        name: '',
+        type: ''
       },
       baseDto: {page: {totalResult: 0}},
       type: ''
     }
   },
   created: function () {
-    this.listPage()
+    this.searchModel.type = this.selectedNode.type
+    this.search()
   },
   methods: {
     listPage: function () {
