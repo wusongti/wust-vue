@@ -24,6 +24,7 @@
           <tr>
             <th>编码</th>
             <th>公司名称</th>
+            <th>类别</th>
             <th>描述</th>
             <th>创建人</th>
             <th>创建时间</th>
@@ -37,6 +38,9 @@
             <td>{{data.code}}</td>
             <td>
               {{data.name}}
+            </td>
+            <td>
+              {{data.typeLabel}}
             </td>
             <td>
               {{data.description}}

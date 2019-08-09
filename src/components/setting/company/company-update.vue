@@ -1,7 +1,7 @@
 /**
 * Created by WST on 2019/5/16.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="100px">
     <el-form-item label="公司编码">
       <el-input
@@ -11,6 +11,10 @@
     </el-form-item>
     <el-form-item label="公司名" prop="name">
       <el-input v-model="updateModel.name"></el-input>
+    </el-form-item>
+    <el-form-item label="类型" prop="type">
+      <select class="form-control" v-data-dictionary-directive:1011 v-model="updateModel.type">
+      </select>
     </el-form-item>
     <el-form-item label="描述">
       <el-input v-model="updateModel.description"></el-input>
@@ -32,10 +36,12 @@ export default {
         id: '',
         code: '',
         name: '',
+        type: '',
         description: ''
       },
       rules: {
-        name: [{required: true, message: '请输入公司名称', trigger: 'blur'}]
+        name: [{required: true, message: '请输入公司名称', trigger: 'blur'}],
+        type: [{required: true, message: '请选择类型', trigger: 'blur'}]
       }
     }
   },

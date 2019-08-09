@@ -1,10 +1,14 @@
 /**
 * Created by WST on 2019/5/14.
 */
-<template>
+<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
   <el-form ref="addModel" :model="addModel" :rules="rules" label-width="100px">
     <el-form-item label="公司名" prop="name">
       <el-input v-model="addModel.name"></el-input>
+    </el-form-item>
+    <el-form-item label="类型" prop="type">
+      <select class="form-control" v-data-dictionary-directive:1011 v-model="addModel.type">
+      </select>
     </el-form-item>
     <el-form-item label="描述">
       <el-input v-model="addModel.description"></el-input>
@@ -23,10 +27,12 @@ export default {
     return {
       addModel: {
         name: '',
+        type: '',
         description: ''
       },
       rules: {
-        name: [{required: true, message: '请输入公司名称', trigger: 'blur'}]
+        name: [{required: true, message: '请输入公司名称', trigger: 'blur'}],
+        type: [{required: true, message: '请选择类型', trigger: 'blur'}]
       }
     }
   },
