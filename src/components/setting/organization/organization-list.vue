@@ -354,10 +354,6 @@ export default {
       })
     },
     listPage: function () {
-      this.companyList = null
-      this.departmentList = null
-      this.roleList = null
-      this.userList = null
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/OrganizationController/listPage',

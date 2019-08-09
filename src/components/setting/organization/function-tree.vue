@@ -73,9 +73,6 @@ export default {
         }
       })
     },
-    closePopover: function () {
-      this.$emit('closePopver', false)
-    },
     onSubmit: function () {
       // eslint-disable-next-line no-undef
       let treeObj = $.fn.zTree.getZTreeObj('functionTree')
@@ -123,8 +120,7 @@ export default {
   @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
 
   #functionTree{
-    width:100%;
-    height:100%;
+    max-height: 350px;
   }
 
 </style>
