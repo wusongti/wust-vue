@@ -6,21 +6,18 @@
     <el-header id="el-header" style="height: 45px">
       <el-row>
         <!--logo start-->
-        <el-col :span="6" id="logo">
+        <el-col :span="16" id="logo">
           <img src="../../assets/logo.png" class="pull-left"/>
           <a href="javascript:">智慧社区<span class="lite">云平台</span></a>
           <a href="javascript:" style="margin-top: 10px;margin-left:5px;color: #ffffff;font-size: 20px;"><li class="glyphicon glyphicon-menu-hamburger"  @click="collapseClick"></li></a>
         </el-col>
-        <el-col :span="10" class="pull-left">
-          &nbsp;
-        </el-col>
         <!--logo end-->
-        <el-col :span="3">
+        <el-col :span="3" style="margin-top: 8px">
           <span style="color: #fed189">
             {{loginContext.getLoginContext().loginName}}({{loginContext.getLoginContext().realName}})
           </span>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="2" style="margin-top: 8px">
           <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
             <span class="el-dropdown-link" style="color: #fed189">{{langValue}}<i class="el-icon-arrow-down el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown">
@@ -29,7 +26,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="2" style="margin-top: 8px">
           <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
             <span class="el-dropdown-link" style="color: #fed189">
               更多<i class="el-icon-arrow-down el-icon--right"></i>
