@@ -21,6 +21,7 @@ let loginContext = {
   getLoginContext: function () {
     let loginContextSession = sessionStorage.getItem('loginContextModel')
     if (loginContextSession === undefined || loginContextSession == null || loginContextSession === '') {
+      console.log('####################获取到空上下文')
       this.$router.push({path: '/Login'})
     } else {
       return JSON.parse(loginContextSession)

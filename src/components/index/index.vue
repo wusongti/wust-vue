@@ -32,6 +32,7 @@
               更多<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><a href="javascript:;">修改密码</a></el-dropdown-item>
               <el-dropdown-item><a href="javascript:;" v-on:click="logOut">注销</a></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

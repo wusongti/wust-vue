@@ -16,6 +16,7 @@
             <div class="panel-body progress-panel">
               <div class="row">
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
+                  <button type="button" class="btn btn-default" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织关系</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddAgentButton" @click="addAgent" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加代理商</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddParentCompanyButton" @click="addParentCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加总公司</span></button>
                   <button type="button" class="btn btn-default" v-bind:disabled="disableAddBranchCompanyButton" @click="addBranchCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加分公司</span></button>
@@ -510,6 +511,26 @@ export default {
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
       }
+    },
+    initUserOrganizationRelation: function () {
+      Vue.$ajax({
+        method: 'post',
+        url: Vue.$adminServerURL + '/SysUserOrganization/init',
+      }).then(res => {
+        if (res.data.flag === 'SUCCESS') {
+          this.$message({
+            message: res.data.message,
+            type: 'success'
+          })
+        } else {
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
+        }
+      })
     },
     addAgent: function () {
       this.addTab('添加代理商', 'addAgent', 'AddCompany')
