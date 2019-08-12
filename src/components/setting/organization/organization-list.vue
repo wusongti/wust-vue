@@ -395,6 +395,7 @@ export default {
       // eslint-disable-next-line no-undef
       let treeObj = $.fn.zTree.getZTreeObj('tree')
       treeObj.addNodes(this.selectedNode, newNode)
+      this.removeTab(this.editableTabsValue)
     },
     addTab: function (label, name, key) {
       let ele = {label: label, name: name, key: key}
