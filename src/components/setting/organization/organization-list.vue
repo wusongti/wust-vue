@@ -3,7 +3,7 @@
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="250px" style="height: 75vh;border: 1px solid #eee">
+          <el-aside width="25%" style="border: 1px solid #eee">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -11,26 +11,31 @@
             </el-form>
             <ul id="tree" class="ztree"></ul>
           </el-aside>
-          <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
-            <div class="pull-left">
-              <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
-              <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
-              <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
-              <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
-              <el-dropdown size="mini" split-button trigger="click" @command="handleCommand">
-                添加组织
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-bind:disabled="disableAddAgentButton" command="AddAgent" v-has-permission="'OrganizationList.addCompany'">添加代理商</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddParentCompanyButton" command="AddParentCompany" v-has-permission="'OrganizationList.addCompany'">添加总公司</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddBranchCompanyButton" command="AddBranchCompany" v-has-permission="'OrganizationList.addCompany'">添加分公司</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddDepartmentButton" command="AddDepartment" v-has-permission="'OrganizationList.addDepartment'">添加部门</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddProjectButton" command="AddProject" v-has-permission="'OrganizationList.addProject'">添加项目</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddRoleButton" command="AddRole" v-has-permission="'OrganizationList.addRole'">添加角色</el-dropdown-item>
-                  <el-dropdown-item v-bind:disabled="disableAddUserButton" command="AddUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-          </el-main>
+          <el-container>
+            <el-header style="height: 35px;">
+              <div class="text-left">
+                <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
+                <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
+                <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
+                <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+                <el-dropdown size="mini" split-button trigger="click" @command="handleCommand">
+                  添加组织
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-bind:disabled="disableAddAgentButton" command="AddAgent" v-has-permission="'OrganizationList.addCompany'">添加代理商</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddParentCompanyButton" command="AddParentCompany" v-has-permission="'OrganizationList.addCompany'">添加总公司</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddBranchCompanyButton" command="AddBranchCompany" v-has-permission="'OrganizationList.addCompany'">添加分公司</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddDepartmentButton" command="AddDepartment" v-has-permission="'OrganizationList.addDepartment'">添加部门</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddProjectButton" command="AddProject" v-has-permission="'OrganizationList.addProject'">添加项目</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddRoleButton" command="AddRole" v-has-permission="'OrganizationList.addRole'">添加角色</el-dropdown-item>
+                    <el-dropdown-item v-bind:disabled="disableAddUserButton" command="AddUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </el-header>
+            <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
+              <tree-chart :json="data" :class="{landscape: landscape.length}" @click-node="clickNode"></tree-chart>
+            </el-main>
+          </el-container>
         </el-container>
       </el-tab-pane>
       <el-tab-pane
@@ -61,10 +66,12 @@ import RoleAdd from './role-add'
 import UserAdd from './user-add'
 import FunctionTree from './function-tree'
 import ProjectAdd from './project-add'
+import TreeChart from "../../../common/component/tree-chart-component";
 
 export default {
   name: 'OrganizationList',
   components: {
+    TreeChart,
     ProjectAdd,
     FunctionTree,
     UserAdd,
@@ -74,6 +81,39 @@ export default {
     PaginationComponent},
   data () {
     return {
+      landscape: [],
+      data: {
+        name: 'root',
+        image_url: "https://static.refined-x.com/avat.jpg",
+        children: [
+          {
+            name: 'children1',
+            image_url: "https://static.refined-x.com/avat1.jpg"
+          },
+          {
+            name: 'children2',
+            image_url: "https://static.refined-x.com/avat2.jpg",
+            mate: {
+              name: 'mate',
+              image_url: "https://static.refined-x.com/avat3.jpg"
+            },
+            children: [
+              {
+                name: 'grandchild',
+                image_url: "https://static.refined-x.com/avat.jpg"
+              },
+              {
+                name: 'grandchild2',
+                image_url: "https://static.refined-x.com/avat1.jpg"
+              },
+              {
+                name: 'grandchild3',
+                image_url: "https://static.refined-x.com/avat2.jpg"
+              }
+            ]
+          }
+        ]
+      },
       setting: {
         view: {
           showLine: true,
@@ -137,6 +177,10 @@ export default {
     this.buildTree()
   },
   methods: {
+    clickNode: function(node){
+      // eslint-disable-next-line
+      console.log(node)
+    },
     buildTree: function () {
       Vue.$ajax({
         method: 'post',
