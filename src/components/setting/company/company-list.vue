@@ -12,8 +12,8 @@
             </div>
         </form>
         <el-button-group class="pull-right">
-          <el-button size="mini" class="btn btn-default" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
-          <el-button size="mini" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+          <el-button size="mini" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
         <el-table
           border
