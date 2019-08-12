@@ -3,7 +3,7 @@
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="25%" style="border: 1px solid #eee">
+          <el-aside width="25%" style="border: 1px solid #eee;min-height: 450px">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -12,8 +12,8 @@
             <ul id="tree" class="ztree"></ul>
           </el-aside>
           <el-container>
-            <el-header style="height: 35px;">
-              <div class="text-left">
+            <el-header style="height: 35px;border-top:1px solid #eee;border-right:1px solid #eee;">
+              <div class="text-left" style="margin-top: 2px">
                 <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
@@ -33,7 +33,7 @@
               </div>
             </el-header>
             <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
-              <tree-chart :json="data" :class="{landscape: landscape.length}" @click-node="clickNode"></tree-chart>
+              <div id="chart-container"></div>
             </el-main>
           </el-container>
         </el-container>
@@ -60,18 +60,17 @@ import PaginationComponent from '../../../common/component/pagination-component.
 import '../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
 import '../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
 import '../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
+import '../../../../static/orgchart/jquery.orgchart'
 import CompanyAdd from './company-add'
 import DepartmentAdd from './department-add'
 import RoleAdd from './role-add'
 import UserAdd from './user-add'
 import FunctionTree from './function-tree'
 import ProjectAdd from './project-add'
-import TreeChart from "../../../common/component/tree-chart-component";
 
 export default {
   name: 'OrganizationList',
   components: {
-    TreeChart,
     ProjectAdd,
     FunctionTree,
     UserAdd,
@@ -81,39 +80,6 @@ export default {
     PaginationComponent},
   data () {
     return {
-      landscape: [],
-      data: {
-        name: 'root',
-        image_url: "https://static.refined-x.com/avat.jpg",
-        children: [
-          {
-            name: 'children1',
-            image_url: "https://static.refined-x.com/avat1.jpg"
-          },
-          {
-            name: 'children2',
-            image_url: "https://static.refined-x.com/avat2.jpg",
-            mate: {
-              name: 'mate',
-              image_url: "https://static.refined-x.com/avat3.jpg"
-            },
-            children: [
-              {
-                name: 'grandchild',
-                image_url: "https://static.refined-x.com/avat.jpg"
-              },
-              {
-                name: 'grandchild2',
-                image_url: "https://static.refined-x.com/avat1.jpg"
-              },
-              {
-                name: 'grandchild3',
-                image_url: "https://static.refined-x.com/avat2.jpg"
-              }
-            ]
-          }
-        ]
-      },
       setting: {
         view: {
           showLine: true,
@@ -177,7 +143,7 @@ export default {
     this.buildTree()
   },
   methods: {
-    clickNode: function(node){
+    clickNode: function (node) {
       // eslint-disable-next-line
       console.log(node)
     },
@@ -188,7 +154,15 @@ export default {
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
-          let zNodes = JSON.parse(res.data.obj)
+          let zNodes = JSON.parse(res.data.obj.leftTree)
+
+          // 初始化右树
+          // eslint-disable-next-line no-undef
+          $('#chart-container').orgchart({
+            'data': JSON.parse(res.data.obj.rightTree),
+            'nodeContent': 'title'
+          })
+
           // eslint-disable-next-line no-undef
           let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
 
@@ -487,4 +461,5 @@ export default {
 </script>
 <style>
   @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
+  @import '../../../../static/orgchart/jquery.orgchart.css';
 </style>
