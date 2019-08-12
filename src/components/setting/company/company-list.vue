@@ -11,19 +11,14 @@
               <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
             </div>
         </form>
-        <div class="panel-body progress-panel">
-          <div class="row">
-            <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-              <button type="button" class="btn btn-default" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></button>
-              <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
-            </div>
-          </div>
-        </div>
+        <el-button-group class="pull-right">
+          <el-button size="mini"  class="btn btn-default" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini"  class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+        </el-button-group>
         <el-table
           :data="baseDto.lstDto">
           style="width: 100%">
           <el-table-column
-            fixed
             prop="code"
             label="编码"
             width="180">
@@ -70,7 +65,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             width="100">
             <template slot-scope="scope">
@@ -83,7 +77,7 @@
           @size-change="pageSizeChange"
           @current-change="pageIndexChange"
           :current-page="searchModel.pageDto.currentPage"
-          :page-sizes="[10, 20, 50, 100]"
+          :page-sizes="searchModel.pageDto.pageSizes"
           :page-size="searchModel.pageDto.showCount"
           layout="total, sizes, prev, pager, next, jumper"
           :total="baseDto.page.totalResult">
@@ -116,7 +110,7 @@ export default {
   data () {
     return {
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
         name: ''
       },
       baseDto: {page: {totalResult: 0}},

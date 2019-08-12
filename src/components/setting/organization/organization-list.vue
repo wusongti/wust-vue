@@ -13,7 +13,7 @@
           </el-aside>
           <el-container>
             <el-header style="height: 35px;border-top:1px solid #eee;border-right:1px solid #eee;">
-              <div class="text-left" style="margin-top: 2px">
+              <el-button-group style="margin-top: 2px" class="pull-left">
                 <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
@@ -30,7 +30,7 @@
                     <el-dropdown-item v-bind:disabled="disableAddUserButton" command="AddUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
-              </div>
+              </el-button-group>
             </el-header>
             <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
               <div id="chart-container"></div>
