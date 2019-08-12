@@ -124,12 +124,7 @@ export default {
             type: 'success'
           })
 
-          let name = '代理商-' + data.name
-          if (this.searchModel.type === '101104') {
-            name = '总公司-' + data.name
-          } else if (this.searchModel.type === '101107') {
-            name = '分公司-' + data.name
-          }
+          let name = data.name
           let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.searchModel.type, relationId: data.id}
           this.addNode(newNode)
         }

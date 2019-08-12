@@ -101,9 +101,6 @@ export default {
             this.selectedNode = treeNode
             this.searchModel.pid = treeNode.id
             this.searchModel.type = treeNode.type
-
-            if (treeNode.type === '101115') { // 用户节点，不需要刷新列表，直接返回，避免列表空白难看
-            }
           }
         }
       },

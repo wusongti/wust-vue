@@ -112,7 +112,7 @@ export default {
             type: 'success'
           })
 
-          let name = '角色-' + data.name
+          let name = data.name
           let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101113', relationId: data.id}
           this.addNode(newNode)
         }

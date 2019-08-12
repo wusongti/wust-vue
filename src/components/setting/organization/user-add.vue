@@ -30,7 +30,7 @@
           {{data.typeLabel}}
         </td>
         <td>
-          <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)" v-if="data.type != '100401'">选择</button>
+          <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)" v-if="data.type != '100401'" :disabled="data.assigned != null && (data.type == '100402' || data.type == '100403' || data.type == '100406' || data.type == '100409')">选择</button>
         </td>
       </tr>
       </tbody>
@@ -68,7 +68,7 @@ export default {
     }
   },
   created: function () {
-    this.listPage()
+    this.search()
   },
   methods: {
     listPage: function () {
@@ -94,6 +94,15 @@ export default {
     },
     search: function () {
       this.searchModel.pageDto.currentPage = 1
+      if (this.selectedNode.type === '101101') { // 代理商，则查询代理商专有账号
+        this.searchModel.type = '100403'
+      } else if (this.selectedNode.type === '101104') { // 总公司，则查询总公司专有账号
+        this.searchModel.type = '100406'
+      } else if (this.selectedNode.type === '101107') { // 分公司，则查询分公司专有账号
+        this.searchModel.type = '100409'
+      } else { // 业务员账号
+        this.searchModel.type = '100411'
+      }
       this.listPage()
     },
     onSubmit: function (data) {
@@ -116,7 +125,7 @@ export default {
             type: 'success'
           })
 
-          let name = '用户-' + data.realName
+          let name = data.realName
           let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101115', relationId: data.id}
           this.addNode(newNode)
         }
