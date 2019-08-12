@@ -16,196 +16,25 @@
             <div class="panel-body progress-panel">
               <div class="row">
                 <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-                  <button type="button" class="btn btn-default" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织关系</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddAgentButton" @click="addAgent" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加代理商</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddParentCompanyButton" @click="addParentCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加总公司</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddBranchCompanyButton" @click="addBranchCompany" v-has-permission="'OrganizationList.addCompany'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加分公司</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddDepartmentButton" @click="addDepartment" v-has-permission="'OrganizationList.addDepartment'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加部门</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddProjectButton" @click="addProject" v-has-permission="'OrganizationList.addProject'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加项目</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddRoleButton" @click="addRole" v-has-permission="'OrganizationList.addRole'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加角色</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableAddUserButton" @click="addUser" v-has-permission="'OrganizationList.addUser'"><span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span></button>
-                  <button type="button" class="btn btn-default" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></button>
-                  <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
+                  <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
+                  <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
+                  <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
+                  <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+                  <el-dropdown size="mini" split-button="true" trigger="click" @command="handleCommand">
+                    添加组织
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-bind:disabled="disableAddAgentButton" command="addAgent" v-has-permission="'OrganizationList.addCompany'">添加代理商</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddParentCompanyButton" command="addParentCompany" v-has-permission="'OrganizationList.addCompany'">添加总公司</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddBranchCompanyButton" command="addBranchCompany" v-has-permission="'OrganizationList.addCompany'">添加分公司</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddDepartmentButton" command="addDepartment" v-has-permission="'OrganizationList.addDepartment'">添加部门</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddProjectButton" command="addProject" v-has-permission="'OrganizationList.addProject'">添加项目</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddRoleButton" command="addRole" v-has-permission="'OrganizationList.addRole'">添加角色</el-dropdown-item>
+                      <el-dropdown-item v-bind:disabled="disableAddUserButton" command="addUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
               </div>
             </div>
-            <!-- 公司列表 -->
-            <table class="table table-hover table-bordered" v-if="companyList != null && companyList.length > 0">
-              <thead>
-              <tr>
-                <th>公司编码</th>
-                <th>公司名称</th>
-                <th>公司描述</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in companyList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="8">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-            <!-- 部门列表 -->
-            <table class="table table-hover table-bordered" v-if="departmentList != null && departmentList.length > 0">
-              <thead>
-              <tr>
-                <th>部门编码</th>
-                <th>部门名称</th>
-                <th>部门描述</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in departmentList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="8">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-
-            <!-- 项目列表 -->
-            <table class="table table-hover table-bordered" v-if="projectList != null && projectList.length > 0">
-              <thead>
-              <tr>
-                <th>项目编码</th>
-                <th>项目名称</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in projectList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="8">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-
-            <!-- 角色列表 -->
-            <table class="table table-hover table-bordered" v-if="roleList != null && roleList.length > 0">
-              <thead>
-              <tr>
-                <th>角色编码</th>
-                <th>角色名称</th>
-                <th>角色描述</th>
-                <th>角色状态</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in roleList">
-                <td>{{data.code}}</td>
-                <td>
-                  {{data.name}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-                <td>
-                  {{data.statusLabel}}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-link btn-xs" @click="setResource(data)">设置功能权限</button>
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="9">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-
-            <!-- 用户列表 -->
-            <table class="table table-hover table-bordered" v-if="userList != null && userList.length > 0">
-              <thead>
-              <tr>
-                <th>用户账号</th>
-                <th>真实姓名</th>
-                <th>用户类型</th>
-                <th>用户描述</th>
-                <th>用户状态</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="data in userList">
-                <td>
-                  {{data.loginName}}
-                </td>
-                <td>
-                  {{data.realName}}
-                </td>
-                <td>
-                  {{data.typeLabel}}
-                </td>
-                <td>
-                  {{data.description}}
-                </td>
-                <td>
-                  {{data.statusLabel}}
-                </td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <td colspan="9">
-                  <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                        v-bind:showCount="searchModel.pageDto.showCount"
-                                        v-bind:totalResult="baseDto.page.totalResult"
-                                        v-on:updatePageIndex="pageIndexChange"
-                                        @pageClick="listPage"></pagination-component>
-                </td>
-              </tr>
-              </tfoot>
-            </table>
           </el-main>
         </el-container>
       </el-tab-pane>
@@ -275,25 +104,16 @@ export default {
             if (treeNode.type === '101115') { // 用户节点，不需要刷新列表，直接返回，避免列表空白难看
               return
             }
-
-            this.listPage()
           }
         }
       },
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
         id: '',
         pid: '-1',
         type: '',
         relationId: '',
         name: ''
       },
-      baseDto: {page: {totalResult: 0}},
-      companyList: {},
-      departmentList: {},
-      projectList: {},
-      roleList: {},
-      userList: {},
       disableAddAgentButton: true,
       disableAddParentCompanyButton: true,
       disableAddBranchCompanyButton: true,
@@ -302,6 +122,7 @@ export default {
       disableAddRoleButton: true,
       disableAddUserButton: true,
       disableDeleteButton: true,
+      disableSetFunctionPermissionsButton: true,
       selectedNode: {id: '', pid: '-1', type: '', relationId: ''},
       searchHitZNodes: [],
       selectedModel: {
@@ -353,36 +174,6 @@ export default {
           }
         }
       })
-    },
-    listPage: function () {
-      Vue.$ajax({
-        method: 'post',
-        url: Vue.$adminServerURL + '/OrganizationController/listPage',
-        data: this.searchModel
-      }).then(res => {
-        if (res.data.flag === 'SUCCESS') {
-          this.baseDto = res.data
-          this.companyList = res.data.obj.companyList
-          this.departmentList = res.data.obj.departmentList
-          this.projectList = res.data.obj.projectList
-          this.roleList = res.data.obj.roleList
-          this.userList = res.data.obj.userList
-        } else {
-          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
-            this.$message({
-              message: res.data.message,
-              type: 'warning'
-            })
-          }
-        }
-      })
-    },
-    pageIndexChange: function (e) {
-      this.searchModel.pageDto.currentPage = e
-    },
-    search: function () {
-      this.searchModel.pageDto.currentPage = 1
-      this.listPage()
     },
 
     // 树搜索
@@ -440,6 +231,7 @@ export default {
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101101') { // 选中树的[代理商]节点，则启用添加总公司和部门按钮
         this.disableAddParentCompanyButton = false
         this.disableAddDepartmentButton = false
@@ -450,6 +242,7 @@ export default {
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101104') { // 选中树的[总公司]节点，则启用添加分公司和部门按钮
         this.disableAddBranchCompanyButton = false
         this.disableAddDepartmentButton = false
@@ -460,6 +253,7 @@ export default {
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101107') { // 选中树的[分公司]节点，则启用添加部门和添加项目按钮
         this.disableAddDepartmentButton = false
         this.disableAddProjectButton = false
@@ -470,6 +264,7 @@ export default {
         this.disableAddBranchCompanyButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101109') { // 选中树的[项目]节点，则启用添加部门按钮
         this.disableAddDepartmentButton = false
         this.disableDeleteButton = false
@@ -480,6 +275,7 @@ export default {
         this.disableAddProjectButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101111') { // 选中树的部门点，则启用添加岗位按钮
         this.disableAddRoleButton = false
         this.disableDeleteButton = false
@@ -490,9 +286,11 @@ export default {
         this.disableAddProjectButton = true
         this.disableAddDepartmentButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       } else if (type === '101113') { // 选中树的岗位节点，则启用添加用户按钮
         this.disableAddUserButton = false
         this.disableDeleteButton = false
+        this.disableSetFunctionPermissionsButton = false
 
         this.disableAddAgentButton = true
         this.disableAddParentCompanyButton = true
@@ -510,6 +308,7 @@ export default {
         this.disableAddDepartmentButton = true
         this.disableAddRoleButton = true
         this.disableAddUserButton = true
+        this.disableSetFunctionPermissionsButton = true
       }
     },
     initUserOrganizationRelation: function () {
@@ -532,30 +331,26 @@ export default {
         }
       })
     },
-    addAgent: function () {
-      this.addTab('添加代理商', 'addAgent', 'AddCompany')
+    handleCommand (command) {
+      if (command === 'addAgent') {
+        this.addTab('添加代理商', 'addAgent', 'AddCompany')
+      } else if (command === 'addParentCompany') {
+        this.addTab('添加总公司', 'addParentCompany', 'AddCompany')
+      } else if (command === 'addBranchCompany') {
+        this.addTab('添加分公司', 'addBranchCompany', 'AddCompany')
+      } else if (command === 'addDepartment') {
+        this.addTab('添加部门', 'AddDepartment', 'AddDepartment')
+      } else if (command === 'AddProject') {
+        this.addTab('添加项目', 'AddProject', 'AddProject')
+      } else if (command === 'AddRole') {
+        this.addTab('添加角色', 'AddRole', 'AddRole')
+      } else if (command === 'AddUser') {
+        this.addTab('添加用户', 'AddUser', 'AddUser')
+      }
     },
-    addParentCompany: function () {
-      this.addTab('添加总公司', 'addParentCompany', 'AddCompany')
-    },
-    addBranchCompany: function () {
-      this.addTab('添加分公司', 'addBranchCompany', 'AddCompany')
-    },
-    addDepartment: function () {
-      this.addTab('添加部门', 'AddDepartment', 'AddDepartment')
-    },
-    addProject: function () {
-      this.addTab('添加项目', 'AddProject', 'AddProject')
-    },
-    addRole: function () {
-      this.addTab('添加角色', 'AddRole', 'AddRole')
-    },
-    addUser: function () {
-      this.addTab('添加用户', 'AddUser', 'AddUser')
-    },
-    setResource: function (data) {
+    setFunctionPermissions: function () {
       this.addTab('设置功能权限', 'SetFunctionPermissions', 'SetFunctionPermissions')
-      this.selectedModel = data
+      this.selectedModel = this.selectedNode
     },
     remove: function () {
       let that = this
