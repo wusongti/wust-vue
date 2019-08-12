@@ -3,7 +3,7 @@
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="25%" style="border: 1px solid #eee;min-height: 450px">
+          <el-aside width="30%" style="border: 1px solid #eee;min-height: 450px">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
