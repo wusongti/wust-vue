@@ -9,28 +9,27 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </el-form>
-            <span style="color: red;font-size: 12px;text-align: left">当前选中：{{this.selectedNode.name}}</span>
             <ul id="tree" class="ztree"></ul>
           </el-aside>
           <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
-              <div class="pull-left">
-                <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
-                <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
-                <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
-                <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
-                <el-dropdown size="mini" split-button trigger="click" @command="handleCommand">
-                  添加组织
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-bind:disabled="disableAddAgentButton" command="addAgent" v-has-permission="'OrganizationList.addCompany'">添加代理商</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddParentCompanyButton" command="addParentCompany" v-has-permission="'OrganizationList.addCompany'">添加总公司</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddBranchCompanyButton" command="addBranchCompany" v-has-permission="'OrganizationList.addCompany'">添加分公司</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddDepartmentButton" command="addDepartment" v-has-permission="'OrganizationList.addDepartment'">添加部门</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddProjectButton" command="addProject" v-has-permission="'OrganizationList.addProject'">添加项目</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddRoleButton" command="addRole" v-has-permission="'OrganizationList.addRole'">添加角色</el-dropdown-item>
-                    <el-dropdown-item v-bind:disabled="disableAddUserButton" command="addUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
+            <div class="pull-left">
+              <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
+              <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
+              <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
+              <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'OrganizationList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+              <el-dropdown size="mini" split-button trigger="click" @command="handleCommand">
+                添加组织
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-bind:disabled="disableAddAgentButton" command="AddAgent" v-has-permission="'OrganizationList.addCompany'">添加代理商</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddParentCompanyButton" command="AddParentCompany" v-has-permission="'OrganizationList.addCompany'">添加总公司</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddBranchCompanyButton" command="AddBranchCompany" v-has-permission="'OrganizationList.addCompany'">添加分公司</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddDepartmentButton" command="AddDepartment" v-has-permission="'OrganizationList.addDepartment'">添加部门</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddProjectButton" command="AddProject" v-has-permission="'OrganizationList.addProject'">添加项目</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddRoleButton" command="AddRole" v-has-permission="'OrganizationList.addRole'">添加角色</el-dropdown-item>
+                  <el-dropdown-item v-bind:disabled="disableAddUserButton" command="AddUser" v-has-permission="'OrganizationList.addUser'">添加用户</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
           </el-main>
         </el-container>
       </el-tab-pane>
@@ -45,7 +44,7 @@
         <project-add v-if="item.key == 'AddProject'"  v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></project-add>
         <role-add v-if="item.key == 'AddRole'" v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></role-add>
         <user-add v-if="item.key == 'AddUser'" v-bind:selectedNode="selectedNode" v-on:addNode="addNode"></user-add>
-        <function-tree v-if="item.key == 'SetFunctionPermissions'"  v-bind:selectedModel="selectedModel" v-bind:selectedNode="selectedNode"></function-tree>
+        <function-tree v-if="item.key == 'SetFunctionPermissions'"  v-bind:selectedNode="selectedNode"></function-tree>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -98,7 +97,6 @@ export default {
             this.searchModel.type = treeNode.type
 
             if (treeNode.type === '101115') { // 用户节点，不需要刷新列表，直接返回，避免列表空白难看
-              return
             }
           }
         }
@@ -310,7 +308,7 @@ export default {
     initUserOrganizationRelation: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/SysUserOrganization/init',
+        url: Vue.$adminServerURL + '/SysUserOrganization/init'
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
           this.$message({
@@ -328,13 +326,13 @@ export default {
       })
     },
     handleCommand (command) {
-      if (command === 'addAgent') {
-        this.addTab('添加代理商', 'addAgent', 'AddCompany')
-      } else if (command === 'addParentCompany') {
+      if (command === 'AddAgent') {
+        this.addTab('添加代理商', 'AddAgent', 'AddCompany')
+      } else if (command === 'AddParentCompany') {
         this.addTab('添加总公司', 'addParentCompany', 'AddCompany')
-      } else if (command === 'addBranchCompany') {
-        this.addTab('添加分公司', 'addBranchCompany', 'AddCompany')
-      } else if (command === 'addDepartment') {
+      } else if (command === 'AddBranchCompany') {
+        this.addTab('添加分公司', 'AddBranchCompany', 'AddCompany')
+      } else if (command === 'AddDepartment') {
         this.addTab('添加部门', 'AddDepartment', 'AddDepartment')
       } else if (command === 'AddProject') {
         this.addTab('添加项目', 'AddProject', 'AddProject')

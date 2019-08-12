@@ -27,13 +27,13 @@
           </el-dropdown>
         </el-col>
         <el-col :span="2" style="margin-top: 8px">
-          <el-dropdown trigger="click" class="pull-left" style="margin-left: 20px;">
+          <el-dropdown @command="handleCommand" trigger="click" class="pull-left" style="margin-left: 20px;">
             <span class="el-dropdown-link" style="color: #fed189">
               更多<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><a href="javascript:;">修改密码</a></el-dropdown-item>
-              <el-dropdown-item><a href="javascript:;" v-on:click="logOut">注销</a></el-dropdown-item>
+              <el-dropdown-item command="UpdatePassword">修改密码</el-dropdown-item>
+              <el-dropdown-item command="Logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -155,7 +155,13 @@ export default {
     goBack: function () {
       this.$goBack()
     },
-    logOut: function () {
+    handleCommand (command) {
+      if (command === 'Logout') {
+        this.logout()
+      } else if (command === 'UpdatePassword') {
+      }
+    },
+    logout: function () {
       this.$confirm('您确定要退出登录吗, 是否继续?', '询问', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

@@ -5,7 +5,7 @@
   <div id="function-tree">
     <el-form label-width="100px">
       <div class="text-left">
-        <label style="color: red;font-size: small;margin-left: 8px;">当前角色：{{selectedModel.name}}</label>
+        <label style="color: red;font-size: small;margin-left: 8px;">当前角色：{{this.selectedNode.name}}</label>
         <ul id="functionTree" class="ztree"></ul>
       </div>
       <el-form-item>
@@ -26,7 +26,7 @@ export default {
   components: {
     PaginationComponent
   },
-  props: ['selectedModel', 'selectedNode'],
+  props: ['selectedNode'],
   data () {
     return {
       setting: {
@@ -59,17 +59,19 @@ export default {
     initData: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/OrganizationController/findFunctionTreeByRoleId/' + this.selectedNode.id + '/' + this.selectedModel.id
+        url: Vue.$adminServerURL + '/OrganizationController/findFunctionTreeByRoleId/' + this.selectedNode.id
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
           let zNodes = JSON.parse(res.data.obj)
           // eslint-disable-next-line no-undef
           $.fn.zTree.init($('#functionTree'), this.setting, zNodes)
         } else {
-          this.$message({
-            message: res.data.message,
-            type: 'warning'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
+          }
         }
       })
     },
@@ -85,7 +87,7 @@ export default {
         return
       }
 
-      let sysRoleResourceAdd = {pid: this.selectedNode.id, roleId: this.selectedModel.id, organizationId: '', sysRoleResources: []}
+      let data = {organizationId: this.selectedNode.id, sysRoleResources: []}
       let sysRoleResources = []
       if (nodes != null && nodes.length > 0) {
         for (let i = 0; i < nodes.length; i++) {
@@ -93,11 +95,11 @@ export default {
           sysRoleResources[i] = rr
         }
 
-        sysRoleResourceAdd.sysRoleResources = sysRoleResources
+        data.sysRoleResources = sysRoleResources
         Vue.$ajax({
           method: 'post',
           url: Vue.$adminServerURL + '/OrganizationController/setFunctionPermissions',
-          data: sysRoleResourceAdd
+          data: data
         }).then(res => {
           if (res.data.flag === 'SUCCESS') {
             this.$message({
