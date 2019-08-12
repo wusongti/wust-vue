@@ -94,15 +94,6 @@ export default {
     },
     search: function () {
       this.searchModel.pageDto.currentPage = 1
-      if (this.selectedNode.type === '101101') { // 代理商，则查询代理商专有账号
-        this.searchModel.type = '100403'
-      } else if (this.selectedNode.type === '101104') { // 总公司，则查询总公司专有账号
-        this.searchModel.type = '100406'
-      } else if (this.selectedNode.type === '101107') { // 分公司，则查询分公司专有账号
-        this.searchModel.type = '100409'
-      } else { // 业务员账号
-        this.searchModel.type = '100411'
-      }
       this.listPage()
     },
     onSubmit: function (data) {
