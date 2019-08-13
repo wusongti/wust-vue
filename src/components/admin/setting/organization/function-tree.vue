@@ -117,7 +117,7 @@ export default {
 }
 </script>
 <style>
-  @import '../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
+  @import '../../../../../static/zTree_v3.5.27/css/zTreeStyle.css';
 
   #functionTree{
     max-height: 350px;
