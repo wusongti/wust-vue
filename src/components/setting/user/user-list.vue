@@ -126,7 +126,7 @@ export default {
   data () {
     return {
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
         loginName: '',
         realName: '',
         sex: '',
@@ -169,8 +169,13 @@ export default {
         }
       })
     },
+    pageSizeChange: function (e) {
+      this.searchModel.pageDto.showCount = e
+      this.listPage()
+    },
     pageIndexChange: function (e) {
       this.searchModel.pageDto.currentPage = e
+      this.listPage()
     },
     search: function (p) {
       if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询

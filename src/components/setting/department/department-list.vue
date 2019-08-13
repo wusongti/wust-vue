@@ -89,7 +89,7 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import DepartmentCreate from './department-create'
 import DepartmentUpdate from './department-update'
-import DepartmentSearchBar from "./department-search-bar";
+import DepartmentSearchBar from './department-search-bar'
 
 export default {
   name: 'DepartmentList',

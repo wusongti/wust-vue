@@ -12,59 +12,69 @@
       <ul id="tree" class="ztree"></ul>
     </el-aside>
     <el-main style="min-height: 400px;border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
-      <table class="table table-hover table-bordered">
-        <thead>
-        <tr>
-          <th width="200">属性名</th>
-          <th width="100">属性码</th>
-          <th width="100">父级编码</th>
-          <th width="100">根编码</th>
-          <th>语言</th>
-          <th>状态</th>
-          <th>是否显示</th>
-          <th>排序</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr :key="data.id" v-for="data in baseDto.lstDto">
-          <td>
-            {{data.name}}
-          </td>
-          <td>
-            {{data.code}}
-          </td>
-          <td>
-            {{data.parentCode}}
-          </td>
-          <td>
-            {{data.rootCode}}
-          </td>
-          <td>
-            {{data.lan}}
-          </td>
-          <td>
-            {{data.statusLabel}}
-          </td>
-          <td>
-            {{data.visibleLabel}}
-          </td>
-          <td>
-            {{data.sort}}
-          </td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <tr>
-          <td colspan="13">
-            <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                  v-bind:showCount="searchModel.pageDto.showCount"
-                                  v-bind:totalResult="baseDto.page.totalResult"
-                                  v-on:updatePageIndex="pageIndexChange"
-                                  @pageClick="listPage"></pagination-component>
-          </td>
-        </tr>
-        </tfoot>
-      </table>
+      <el-table
+        border
+        size="mini"
+        :data="baseDto.lstDto">
+        style="width: 100%">
+        <el-table-column
+          prop="name"
+          label="属性名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="code"
+          label="属性码"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="parentCode"
+          label="父级编码"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="rootCode"
+          label="根编码"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="lan"
+          label="语言"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="statusLabel"
+          label="状态"
+          width="50">
+        </el-table-column>
+        <el-table-column
+          prop="visibleLabel"
+          label="是否显示"
+          width="70">
+        </el-table-column>
+        <el-table-column
+          prop="sort"
+          label="排序"
+          width="50">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="100">
+          <template slot-scope="scope">
+            <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'CompanyList.update'">修改</button>
+            <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'CompanyList.delete'">删除</button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="pageSizeChange"
+        @current-change="pageIndexChange"
+        :current-page="searchModel.pageDto.currentPage"
+        :page-sizes="searchModel.pageDto.pageSizes"
+        :page-size="searchModel.pageDto.showCount"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="baseDto.page.totalResult">
+      </el-pagination>
     </el-main>
   </el-container>
 </template>
@@ -107,7 +117,7 @@ export default {
       selectedNode: {id: '', pid: '-1', rootCode: '', name: ''},
       searchHitZNodes: [],
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
         code: '',
         parentCode: '',
         name: '',
@@ -191,8 +201,13 @@ export default {
         treeObj.updateNode(this.searchHitZNodes[i])
       }
     },
+    pageSizeChange: function (e) {
+      this.searchModel.pageDto.showCount = e
+      this.listPage()
+    },
     pageIndexChange: function (e) {
       this.searchModel.pageDto.currentPage = e
+      this.listPage()
     },
     listPage: function () {
       Vue.$ajax({

@@ -94,7 +94,7 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import ProjectCreate from './project-create'
 import ProjectUpdate from './project-update'
-import ProjectSearchBar from "./project-search-bar";
+import ProjectSearchBar from './project-search-bar'
 
 export default {
   name: 'ProjectList',
@@ -106,7 +106,7 @@ export default {
   data () {
     return {
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
         name: ''
       },
       baseDto: {page: {totalResult: 0}},
@@ -144,8 +144,13 @@ export default {
         }
       })
     },
+    pageSizeChange: function (e) {
+      this.searchModel.pageDto.showCount = e
+      this.listPage()
+    },
     pageIndexChange: function (e) {
       this.searchModel.pageDto.currentPage = e
+      this.listPage()
     },
     search: function () {
       this.searchModel.pageDto.currentPage = 1
