@@ -3,7 +3,7 @@
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="组织架构">
         <el-container>
-          <el-aside width="30%" style="border: 1px solid #eee;min-height: 450px">
+          <el-aside width="30%" style="border: 5px solid #eee;min-height: 450px">
             <el-form @submit.native.prevent>
               <el-input size="mini" @keyup.enter.native="onSearch">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -12,8 +12,8 @@
             <ul id="tree" class="ztree"></ul>
           </el-aside>
           <el-container>
-            <el-header style="height: 35px;border-top:1px solid #eee;border-right:1px solid #eee;">
-              <el-button-group style="margin-top: 2px" class="pull-left">
+            <el-header style="height: 35px;border-top:5px solid #eee;border-right:5px solid #eee;">
+              <el-button-group style="margin-top: 1px" class="pull-left">
                 <el-button size="mini" @click="initUserOrganizationRelation" v-has-permission="'OrganizationList.initUserOrganizationRelation'"><span class="glyphicon glyphicon-plus" aria-hidden="true">初始化用户组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableDeleteButton" @click="remove" v-has-permission="'OrganizationList.delete'"><span class="glyphicon glyphicon-remove" aria-hidden="true">移出组织</span></el-button>
                 <el-button size="mini" v-bind:disabled="disableSetFunctionPermissionsButton" @click="setFunctionPermissions" v-has-permission="'OrganizationList.setFunctionPermissions'"><span class="glyphicon glyphicon-setting" aria-hidden="true">设置功能权限</span></el-button>
@@ -32,7 +32,7 @@
                 </el-dropdown>
               </el-button-group>
             </el-header>
-            <el-main style="border-bottom:1px solid #eee;border-right: 1px solid #eee;border-top:1px solid #eee;">
+            <el-main style="border-bottom:5px solid #eee;border-right: 5px solid #eee;border-top:5px solid #eee;">
               <div id="chart-container"></div>
             </el-main>
           </el-container>
