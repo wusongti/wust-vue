@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
-        <search-bar v-on:search="search"></search-bar>
+        <company-search-bar v-on:search="search"></company-search-bar>
         <el-button-group class="pull-right">
           <el-button size="mini" type="primary" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
           <el-button size="mini" type="primary" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
@@ -94,12 +94,12 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import CompanyUpdate from './company-update'
 import CompanyCreate from './company-create'
-import SearchBar from './search-bar'
+import CompanySearchBar from './company-search-bar'
 
 export default {
   name: 'CompanyList',
   components: {
-    SearchBar,
+    CompanySearchBar,
     CompanyCreate,
     CompanyUpdate,
     PaginationComponent},

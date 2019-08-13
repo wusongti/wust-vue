@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'search-bar',
+  name: 'company-search-bar',
   data () {
     return {
       isCollapse: false,
