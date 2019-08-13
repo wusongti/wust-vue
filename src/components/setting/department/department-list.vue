@@ -2,16 +2,8 @@
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="部门列表">
-        <form>
-          <div class="col-xs-2 form-group">
-            <input type="text" class="form-control" placeholder="部门名" v-model="searchModel.name"/>
-          </div>
-          <div>
-            <button class="btn btn-danger btn-sm" type="reset">重置</button>
-            <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-          </div>
-        </form>
-        <el-button-group class="pull-right">
+        <department-search-bar v-on:search="search"></department-search-bar>
+        <el-button-group class="pull-right" style="margin-bottom: 2px">
           <el-button size="mini" type="primary" @click="create" v-has-permission="'DepartmentList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
           <el-button size="mini" type="primary" v-export-excel-directive="exportExcelPar" v-has-permission="'DepartmentList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
@@ -97,10 +89,12 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import DepartmentCreate from './department-create'
 import DepartmentUpdate from './department-update'
+import DepartmentSearchBar from "./department-search-bar";
 
 export default {
   name: 'DepartmentList',
   components: {
+    DepartmentSearchBar,
     DepartmentUpdate,
     DepartmentCreate,
     PaginationComponent},
@@ -153,7 +147,14 @@ export default {
       this.searchModel.pageDto.currentPage = e
       this.listPage()
     },
-    search: function () {
+    search: function (p) {
+      if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询
+        if (!Vue.$isNullOrIsBlankOrIsUndefined(p.searchKey)) {
+          this.searchModel.name = p.searchKey
+        }
+      } else {
+        this.searchModel = p.searchModel
+      }
       this.searchModel.pageDto.currentPage = 1
       this.listPage()
     },
