@@ -139,7 +139,7 @@ export default {
       langValue: this.$i18n.locale === 'zh-CN' ? '中文' : 'English',
       dashboardMenu: '系统首页',
       activeMenu: this.activeMenu || this.dashboardMenu,
-      isCollapse: false
+      isCollapse: true
     }
   },
   created: function () {
