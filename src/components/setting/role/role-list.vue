@@ -11,7 +11,7 @@
       </el-button-group>
       <el-table
         border
-        size="small"
+        size="mini"
         :data="baseDto.lstDto">
         style="width: 100%">
         <el-table-column
