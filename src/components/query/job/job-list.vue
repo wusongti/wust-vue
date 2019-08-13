@@ -2,75 +2,62 @@
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="作业列表">
-      <form>
-        <div class="row">
-          <div class="col-xs-2 form-group">
-            <input type="text" class="form-control" placeholder="作业名" v-model="searchModel.name"/>
-          </div>
-          <div>
-            <button class="btn btn-danger btn-sm" type="reset">重置</button>
-            <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-          </div>
-        </div>
-      </form>
-      <div class="panel-body progress-panel">
-        <div class="row">
-          <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-          </div>
-        </div>
-      </div>
-      <table class="table table-hover table-bordered">
-        <thead>
-          <tr>
-            <th width="200">作业名称</th>
-            <th>作业类名称</th>
-            <th width="50">组</th>
-            <th width="100">表达式</th>
-            <th width="50">时区</th>
-            <th width="50">状态</th>
-            <th width="200">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr :key="data.id" v-for="data in baseDto.lstDto">
-            <td>
-              {{data.qrtzJobDetails.jobName}}
-            </td>
-            <td>
-              {{data.qrtzJobDetails.jobClassName}}
-            </td>
-            <td>
-              {{data.qrtzJobDetails.jobGroup}}
-            </td>
-            <td>
-              {{data.qrtzCronTriggers.cronExpression}}
-            </td>
-            <td>
-              {{data.qrtzCronTriggers.timeZoneId}}
-            </td>
-            <td>
-              {{data.qrtzTriggers.triggerState}}
-            </td>
-            <td>
-              <button type="button" class="btn btn-link btn-xs" @click="pause(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'WAITING'">暂停</button>
-              <button type="button" class="btn btn-link btn-xs" @click="resume(data)" v-has-permission="'JobList.update'" v-if="data.qrtzTriggers.triggerState == 'PAUSED'">恢复</button>
-              <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'JobList.update'">修改</button>
-              <button type="button" class="btn btn-link btn-xs" @click="deleteJob(data)" v-has-permission="'JobList.delete'">删除</button>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="13">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                            v-bind:showCount="searchModel.pageDto.showCount"
-                            v-bind:totalResult="baseDto.page.totalResult"
-                            v-on:updatePageIndex="pageIndexChange"
-                            @pageClick="listPage"></pagination-component>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      <job-search-bar v-on:search="search"></job-search-bar>
+        <el-table
+          border
+          size="mini"
+          :data="baseDto.lstDto">
+          style="width: 100%">
+          <el-table-column
+            prop="qrtzJobDetails.jobName"
+            label="作业名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="qrtzJobDetails.jobClassName"
+            label="作业类名称"
+            width="350">
+          </el-table-column>
+          <el-table-column
+            prop="qrtzJobDetails.jobGroup"
+            label="组"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="qrtzCronTriggers.cronExpression"
+            label="表达式"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="qrtzCronTriggers.timeZoneId"
+            label="时区"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="qrtzTriggers.triggerState"
+            label="状态"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="200">
+            <template slot-scope="scope">
+              <button type="button" class="btn btn-link btn-xs" @click="pause(scope.row)" v-has-permission="'JobList.update'" v-if="scope.row.qrtzTriggers.triggerState == 'WAITING'">暂停</button>
+              <button type="button" class="btn btn-link btn-xs" @click="resume(scope.row)" v-has-permission="'JobList.update'" v-if="scope.row.qrtzTriggers.triggerState == 'PAUSED'">恢复</button>
+              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'JobList.update'">修改</button>
+              <button type="button" class="btn btn-link btn-xs" @click="deleteJob(scope.row)" v-has-permission="'JobList.delete'">删除</button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="pageSizeChange"
+          @current-change="pageIndexChange"
+          :current-page="searchModel.pageDto.currentPage"
+          :page-sizes="searchModel.pageDto.pageSizes"
+          :page-size="searchModel.pageDto.showCount"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="baseDto.page.totalResult">
+        </el-pagination>
       </el-tab-pane>
       <el-tab-pane
         v-for="(item) in editableTabs"
@@ -87,16 +74,18 @@
 import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import JobUpdate from './job-update'
+import JobSearchBar from './job-search-bar'
 
 export default {
   name: 'JobList',
   components: {
+    JobSearchBar,
     JobUpdate,
     PaginationComponent},
   data () {
     return {
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1},
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
         name: ''
       },
       baseDto: {page: {totalResult: 0}},
@@ -134,12 +123,29 @@ export default {
         }
       })
     },
+    pageSizeChange: function (e) {
+      this.searchModel.pageDto.showCount = e
+      this.listPage()
+    },
     pageIndexChange: function (e) {
       this.searchModel.pageDto.currentPage = e
-    },
-    search: function () {
-      this.searchModel.pageDto.currentPage = 1
       this.listPage()
+    },
+    search: function (p) {
+      if (p === null) {
+        this.searchModel.pageDto.currentPage = 1
+        this.listPage()
+      } else {
+        if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(p.searchKey)) {
+            this.searchModel.name = p.searchKey
+          }
+        } else {
+          this.searchModel = p.searchModel
+        }
+        this.searchModel.pageDto.currentPage = 1
+        this.listPage()
+      }
     },
     pause: function (data) {
       this.$confirm('您确定要恢复该作业吗？', '询问', {
@@ -169,7 +175,7 @@ export default {
               message: '成功',
               type: 'success'
             })
-            this.search()
+            this.search(null)
           }
         })
       }).catch(() => {
@@ -205,7 +211,7 @@ export default {
               message: res.data.message,
               type: 'success'
             })
-            this.search()
+            this.search(null)
           }
         })
       }).catch(() => {
@@ -240,7 +246,7 @@ export default {
               message: res.data.message,
               type: 'success'
             })
-            this.search()
+            this.search(null)
           }
         })
       }).catch(() => {
@@ -274,7 +280,7 @@ export default {
               activeName = nextTab.name
             } else {
               activeName = this.defaultActiveName
-              this.listPage()
+              this.search(null)
             }
           }
         })
@@ -285,7 +291,7 @@ export default {
     },
     clickTab: function (tab) {
       if (tab.name === this.defaultActiveName) {
-        this.listPage()
+        this.search(null)
       }
     }
   }
