@@ -4,8 +4,8 @@
       <el-tab-pane :name="defaultActiveName" label="公司列表">
         <company-search-bar v-on:search="search"></company-search-bar>
         <el-button-group class="pull-right" style="margin-bottom: 2px">
-          <el-button size="mini" type="primary" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
-          <el-button size="mini" type="primary" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+          <el-button size="mini" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
         <el-table
           border
@@ -15,7 +15,7 @@
           <el-table-column
             prop="code"
             label="编码"
-            width="180">
+            width="80">
           </el-table-column>
           <el-table-column
             prop="name"
