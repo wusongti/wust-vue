@@ -1,4 +1,4 @@
-<template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
+<template>
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="角色列表">

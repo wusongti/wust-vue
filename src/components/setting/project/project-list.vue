@@ -2,79 +2,80 @@
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="项目列表">
-        <form>
-          <div class="col-xs-2 form-group">
-            <input type="text" class="form-control" placeholder="项目名" v-model="searchModel.name"/>
-          </div>
-          <div>
-            <button class="btn btn-danger btn-sm" type="reset">重置</button>
-            <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-          </div>
-        </form>
-        <div class="panel-body progress-panel">
-          <div class="row">
-            <div class="btn-group pull-right btn-group-xs" role="group" aria-label="...">
-              <button type="button" class="btn btn-default" @click="create" v-has-permission="'ProjectList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></button>
-              <button type="button" class="btn btn-default" v-export-excel-directive="exportExcelPar" v-has-permission="'ProjectList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></button>
-            </div>
-          </div>
-        </div>
-          <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-              <th width="60">编码</th>
-              <th>项目名称</th>
-              <th>项目地址</th>
-              <th>描述</th>
-              <th>创建人</th>
-              <th>创建时间</th>
-              <th>更新人</th>
-              <th>最后更新时间</th>
-              <th width="100">操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr :key="data.id" v-for="data in baseDto.lstDto">
-              <td>{{data.code}}</td>
-              <td>
-                {{data.name}}
-              </td>
-              <td>
-                {{data.addr}}
-              </td>
-              <td>
-                {{data.description}}
-              </td>
-              <td>
-                {{data.createrName}}
-              </td>
-              <td>
-                {{data.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                {{data.modifyName}}
-              </td>
-              <td>
-                {{data.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}
-              </td>
-              <td>
-                <button type="button" class="btn btn-link btn-xs" @click="update(data)" v-has-permission="'ProjectList.update'">修改</button>
-                <button type="button" class="btn btn-link btn-xs" @click="deleteById(data.id)" v-has-permission="'ProjectList.delete'">删除</button>
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <td colspan="13">
-                <pagination-component v-bind:currentPage="searchModel.pageDto.currentPage"
-                                      v-bind:showCount="searchModel.pageDto.showCount"
-                                      v-bind:totalResult="baseDto.page.totalResult"
-                                      v-on:updatePageIndex="pageIndexChange"
-                                      @pageClick="listPage"></pagination-component>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
+        <project-search-bar v-on:search="search"></project-search-bar>
+        <el-button-group class="pull-right" style="margin-bottom: 2px">
+          <el-button size="mini" @click="create" v-has-permission="'ProjectList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'ProjectList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+        </el-button-group>
+        <el-table
+          border
+          size="mini"
+          :data="baseDto.lstDto">
+          style="width: 100%">
+          <el-table-column
+            prop="code"
+            label="编码"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="项目名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="addr"
+            label="项目地址"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="description"
+            label="描述"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="createrName"
+            label="创建人"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            label="创建时间"
+            width="180">
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              <span style="margin-left: 10px">{{ scope.row.createTime | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="modifyName"
+            label="更新人"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            label="最后更新时间"
+            width="180">
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              <span style="margin-left: 10px">{{ scope.row.modifyTime | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'ProjectList.update'">修改</button>
+              <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'ProjectList.delete'">删除</button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="pageSizeChange"
+          @current-change="pageIndexChange"
+          :current-page="searchModel.pageDto.currentPage"
+          :page-sizes="searchModel.pageDto.pageSizes"
+          :page-size="searchModel.pageDto.showCount"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="baseDto.page.totalResult">
+        </el-pagination>
       </el-tab-pane>
       <el-tab-pane
         v-for="(item) in editableTabs"
@@ -93,10 +94,12 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import ProjectCreate from './project-create'
 import ProjectUpdate from './project-update'
+import ProjectSearchBar from "./project-search-bar";
 
 export default {
   name: 'ProjectList',
   components: {
+    ProjectSearchBar,
     ProjectUpdate,
     ProjectCreate,
     PaginationComponent},
