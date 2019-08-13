@@ -2,9 +2,9 @@
 * Created by WST on 2019/5/14.
 */
 <template>
-  <div id="company-add">
+  <div id="project-add">
     <el-form :inline="true" label-position="right" @submit.native.prevent class="demo-form-inline" label-width="100px" size="mini">
-      <el-form-item label="角色名">
+      <el-form-item label="项目名">
         <el-input v-model="searchModel.name"></el-input>
       </el-form-item>
       <el-form-item>
@@ -15,7 +15,7 @@
       <thead>
       <tr>
         <th width="60">编码</th>
-        <th>名称</th>
+        <th>项目名称</th>
         <th width="60">操作</th>
       </tr>
       </thead>
@@ -46,12 +46,10 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
 
 export default {
-  name: 'RoleAdd',
+  name: 'ProjectAdd',
   components: {
-    PaginationComponent
   },
   props: ['selectedNode'],
   data () {
@@ -70,7 +68,7 @@ export default {
     listPage: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/RoleController/listPage',
+        url: Vue.$adminServerURL + '/ProjectController/listPage',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
@@ -93,7 +91,7 @@ export default {
       this.listPage()
     },
     onSubmit: function (data) {
-      let d = {pid: this.selectedNode.id, type: '101113', relationId: data.id}
+      let d = {pid: this.selectedNode.id, type: '101109', relationId: data.id}
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/OrganizationController/create',
@@ -113,11 +111,11 @@ export default {
           })
 
           let name = data.name
-          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101113', relationId: data.id}
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101109', relationId: data.id}
           this.addNode(newNode)
         }
       })
-    },
+    } ,
     addNode: function (newNode) {
       this.$emit('addNode', newNode)
     }

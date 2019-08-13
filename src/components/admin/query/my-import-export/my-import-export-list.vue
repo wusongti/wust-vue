@@ -92,14 +92,12 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
 import MyImportExportSearchBar from './my-import-export-search-bar'
 
 export default {
   name: 'ImportExportList',
   components: {
-    MyImportExportSearchBar,
-    PaginationComponent
+    MyImportExportSearchBar
   },
   data () {
     return {

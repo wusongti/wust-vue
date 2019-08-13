@@ -16,15 +16,13 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
 
 export default {
   name: 'FunctionTree',
   components: {
-    PaginationComponent
   },
   props: ['selectedNode'],
   data () {

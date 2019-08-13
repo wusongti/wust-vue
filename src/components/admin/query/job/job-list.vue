@@ -72,7 +72,6 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
 import JobUpdate from './job-update'
 import JobSearchBar from './job-search-bar'
 
@@ -80,8 +79,8 @@ export default {
   name: 'JobList',
   components: {
     JobSearchBar,
-    JobUpdate,
-    PaginationComponent},
+    JobUpdate
+  },
   data () {
     return {
       searchModel: {

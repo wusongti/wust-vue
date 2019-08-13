@@ -8,17 +8,16 @@ import Response401 from '@/components/response/response-401.vue'
 import Response404 from '@/components/response/response-404.vue'
 import ResponseError from '@/components/response/response-error.vue'
 import ResponseUndone from '@/components/response/response-undone.vue'
-import CompanyList from '@/components/setting/company/company-list.vue'
-import DepartmentList from '@/components/setting/department/department-list.vue'
-import ProjectList from '@/components/setting/project/project-list.vue'
-import RoleList from '@/components/setting/role/role-list.vue'
-import UserList from '@/components/setting/user/user-list.vue'
-import OrganizationList from '@/components/setting/organization/organization-list.vue'
-import LookupIndex from '@/components/setting/data-dictionary/lookup-index.vue'
-import MyImportExportList from '@/components/query/my-import-export/my-import-export-list.vue'
-import OperationLogList from '@/components/query/operation-log/operation-log-list.vue'
-import JobList from '@/components/query/job/job-list.vue'
-import DataSourceList from '@/components/setting/data-source/datasource-list.vue'
+import CompanyList from '@/components/admin/setting/company/company-list.vue'
+import DepartmentList from '@/components/admin/setting/department/department-list.vue'
+import ProjectList from '@/components/admin/setting/project/project-list.vue'
+import RoleList from '@/components/admin/setting/role/role-list.vue'
+import UserList from '@/components/admin/setting/user/user-list.vue'
+import OrganizationList from '@/components/admin/setting/organization/organization-list.vue'
+import LookupIndex from '@/components/admin/setting/data-dictionary/lookup-index.vue'
+import MyImportExportList from '@/components/admin/query/my-import-export/my-import-export-list.vue'
+import OperationLogList from '@/components/admin/query/operation-log/operation-log-list.vue'
+import JobList from '@/components/admin/query/job/job-list.vue'
 
 Vue.use(Router)
 
@@ -84,10 +83,6 @@ export default new Router({
         {
           path: '/JobList',
           component: JobList
-        },
-        {
-          path: '/DataSourceList',
-          component: DataSourceList
         },
         {
           path: '/ResponseError',

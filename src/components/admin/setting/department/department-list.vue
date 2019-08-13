@@ -1,13 +1,11 @@
 <template>
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
-      <el-tab-pane :name="defaultActiveName" label="用户列表">
-        <user-search-bar v-on:search="search"></user-search-bar>
+      <el-tab-pane :name="defaultActiveName" label="部门列表">
+        <department-search-bar v-on:search="search"></department-search-bar>
         <el-button-group class="pull-right" style="margin-bottom: 2px">
-          <el-button size="mini" @click="create" v-has-permission="'UserList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
-          <el-button size="mini" v-file-download-directive="'user_template.xls'"><span class="glyphicon glyphicon-download" aria-hidden="true">模板下载</span></el-button>
-          <el-button size="mini" @click="importByExcel" v-has-permission="'UserList.import'"><span class="glyphicon glyphicon-import" aria-hidden="true">导入</span></el-button>
-          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'UserList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+          <el-button size="mini" @click="create" v-has-permission="'DepartmentList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'DepartmentList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
         <el-table
           border
@@ -15,39 +13,19 @@
           :data="baseDto.lstDto">
           style="width: 100%">
           <el-table-column
-            prop="loginName"
-            label="登录账号"
+            prop="code"
+            label="编码"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="realName"
-            label="真实姓名"
-            width="120">
+            prop="name"
+            label="部门名称"
+            width="180">
           </el-table-column>
           <el-table-column
-            prop="mobile"
-            label="联系电话"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="typeLabel"
-            label="用户类型"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="sexLabel"
-            label="性别"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="email"
-            label="邮箱"
-            width="80">
-          </el-table-column>
-          <el-table-column
-            prop="statusLabel"
-            label="状态"
-            width="80">
+            prop="description"
+            label="描述"
+            width="180">
           </el-table-column>
           <el-table-column
             prop="createrName"
@@ -79,8 +57,8 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'UserList.update'">修改</button>
-              <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'UserList.delete'">删除</button>
+              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'CompanyList.update'">修改</button>
+              <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'CompanyList.delete'">删除</button>
             </template>
           </el-table-column>
         </el-table>
@@ -96,53 +74,44 @@
       </el-tab-pane>
       <el-tab-pane
         v-for="(item) in editableTabs"
-        :key="item.name"
+        :key="item.key"
         :label="item.label"
         :name="item.name"
         closable>
-        <user-create v-if="item.key == 'create'"></user-create>
-        <user-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></user-update>
-        <user-import v-if="item.key == 'import'"></user-import>
+        <department-create v-if="item.key == 'create'"></department-create>
+        <department-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></department-update>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
-import UserCreate from './user-create'
-import UserUpdate from './user-update'
-import UserImport from './user-import'
-import UserSearchBar from './user-search-bar'
+import DepartmentCreate from './department-create'
+import DepartmentUpdate from './department-update'
+import DepartmentSearchBar from './department-search-bar'
 
 export default {
-  name: 'UserList',
+  name: 'DepartmentList',
   components: {
-    UserSearchBar,
-    UserImport,
-    UserCreate,
-    UserUpdate,
-    PaginationComponent},
+    DepartmentSearchBar,
+    DepartmentUpdate,
+    DepartmentCreate
+  },
   data () {
     return {
       searchModel: {
         pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
-        loginName: '',
-        realName: '',
-        sex: '',
-        email: '',
-        type: '',
-        status: ''
+        name: ''
       },
       baseDto: {page: {totalResult: 0}},
       selectedModel: {},
       exportExcelPar: {
         fileType: 'xls',
-        xmlName: 'admin_user',
-        moduleName: 'user'
+        xmlName: 'admin_department',
+        moduleName: 'department'
       },
-      defaultActiveName: 'UserList',
-      editableTabsValue: 'UserList',
+      defaultActiveName: 'DepartmentList',
+      editableTabsValue: 'DepartmentList',
       editableTabs: [],
       tabIndex: 2
     }
@@ -154,7 +123,7 @@ export default {
     listPage: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/UserController/listPage',
+        url: Vue.$adminServerURL + '/DepartmentController/listPage',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
@@ -180,7 +149,7 @@ export default {
     search: function (p) {
       if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询
         if (!Vue.$isNullOrIsBlankOrIsUndefined(p.searchKey)) {
-          this.searchModel.loginName = p.searchKey
+          this.searchModel.name = p.searchKey
         }
       } else {
         this.searchModel = p.searchModel
@@ -189,11 +158,11 @@ export default {
       this.listPage()
     },
     create: function () {
-      this.addTab('新建用户', 'CreateUser', 'create')
+      this.addTab('新建部门', 'CreateDepartment', 'create')
     },
     update: function (data) {
       this.selectedModel = data
-      this.addTab('修改用户', 'UpdateUser', 'update')
+      this.addTab('编辑部门信息', 'UpdateDepartment', 'update')
     },
     deleteById: function (id) {
       this.$confirm('您确定删除该记录吗？', '询问', {
@@ -203,7 +172,7 @@ export default {
       }).then(() => {
         Vue.$ajax({
           method: 'delete',
-          url: Vue.$adminServerURL + '/UserController/delete/' + id
+          url: Vue.$adminServerURL + '/DepartmentController/delete/' + id
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
             this.$message({
@@ -220,9 +189,6 @@ export default {
         })
       }).catch(() => {
       })
-    },
-    importByExcel: function () {
-      this.addTab('导入用户', 'ImportUser', 'import')
     },
     addTab: function (label, name, key) {
       let ele = {label: label, name: name, key: key}

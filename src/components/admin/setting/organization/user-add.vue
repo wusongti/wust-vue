@@ -50,7 +50,7 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
+import PaginationComponent from '../../../../common/component/pagination-component.vue'
 
 export default {
   name: 'UserAdd',

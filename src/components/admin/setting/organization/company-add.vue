@@ -2,9 +2,9 @@
 * Created by WST on 2019/5/14.
 */
 <template>
-  <div id="department-add">
+  <div id="company-add">
     <el-form :inline="true" label-position="right" @submit.native.prevent class="demo-form-inline" label-width="100px" size="mini">
-      <el-form-item label="部门名">
+      <el-form-item label="公司名">
         <el-input v-model="searchModel.name"></el-input>
       </el-form-item>
       <el-form-item>
@@ -15,8 +15,9 @@
       <thead>
       <tr>
         <th width="60">编码</th>
-        <th>部门名称</th>
-        <th width="60">操作</th>
+        <th>公司名称</th>
+        <th width="200">类别</th>
+        <th width="50">操作</th>
       </tr>
       </thead>
       <tbody>
@@ -24,6 +25,9 @@
         <td>{{data.code}}</td>
         <td>
           {{data.name}}
+        </td>
+        <td>
+          {{data.typeLabel}}
         </td>
         <td>
           <button type="button" class="btn btn-link btn-xs" @click="onSubmit(data)">选择</button>
@@ -46,10 +50,10 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
+import PaginationComponent from '../../../../common/component/pagination-component.vue'
 
 export default {
-  name: 'DepartmentAdd',
+  name: 'CompanyAdd',
   components: {
     PaginationComponent
   },
@@ -58,19 +62,27 @@ export default {
     return {
       searchModel: {
         pageDto: {showCount: 10, currentPage: 1},
-        name: ''
+        name: '',
+        type: ''
       },
       baseDto: {page: {totalResult: 0}}
     }
   },
   created: function () {
-    this.listPage()
+    if (Vue.$isNullOrIsBlankOrIsUndefined(this.selectedNode.type)) {
+      this.searchModel.type = '101101'
+    } else if (this.selectedNode.type === '101101') {
+      this.searchModel.type = '101104'
+    } else if (this.selectedNode.type === '101104') {
+      this.searchModel.type = '101107'
+    }
+    this.search()
   },
   methods: {
     listPage: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/DepartmentController/listPage',
+        url: Vue.$adminServerURL + '/CompanyController/listPage',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
@@ -93,7 +105,7 @@ export default {
       this.listPage()
     },
     onSubmit: function (data) {
-      let d = {pid: this.selectedNode.id, type: '101111', relationId: data.id}
+      let d = {pid: this.selectedNode.id, type: this.searchModel.type, relationId: data.id}
       Vue.$ajax({
         method: 'post',
         url: Vue.$adminServerURL + '/OrganizationController/create',
@@ -113,7 +125,7 @@ export default {
           })
 
           let name = data.name
-          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: '101111', relationId: data.id}
+          let newNode = {id: res.data.obj, pId: this.selectedNode.id, name: name, type: this.searchModel.type, relationId: data.id}
           this.addNode(newNode)
         }
       })

@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
-      <el-tab-pane :name="defaultActiveName" label="公司列表">
-        <company-search-bar v-on:search="search"></company-search-bar>
+      <el-tab-pane :name="defaultActiveName" label="项目列表">
+        <project-search-bar v-on:search="search"></project-search-bar>
         <el-button-group class="pull-right" style="margin-bottom: 2px">
-          <el-button size="mini" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
-          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+          <el-button size="mini" @click="create" v-has-permission="'ProjectList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'ProjectList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
         <el-table
           border
@@ -19,12 +19,12 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="公司名称"
+            label="项目名称"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="typeLabel"
-            label="类别"
+            prop="addr"
+            label="项目地址"
             width="100">
           </el-table-column>
           <el-table-column
@@ -62,8 +62,8 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'CompanyList.update'">修改</button>
-              <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'CompanyList.delete'">删除</button>
+              <button type="button" class="btn btn-link btn-xs" @click="update(scope.row)" v-has-permission="'ProjectList.update'">修改</button>
+              <button type="button" class="btn btn-link btn-xs" @click="deleteById(scope.row.id)" v-has-permission="'ProjectList.delete'">删除</button>
             </template>
           </el-table-column>
         </el-table>
@@ -79,49 +79,44 @@
       </el-tab-pane>
       <el-tab-pane
         v-for="(item) in editableTabs"
-        :key="item.key"
+        :key="item.name"
         :label="item.label"
         :name="item.name"
         closable>
-        <company-create v-if="item.key == 'create'"></company-create>
-        <company-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></company-update>
+        <project-create v-if="item.key == 'create'"></project-create>
+        <project-update v-if="item.key == 'update'" v-bind:selectedModel="selectedModel"></project-update>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
-import CompanyUpdate from './company-update'
-import CompanyCreate from './company-create'
-import CompanySearchBar from './company-search-bar'
+import ProjectCreate from './project-create'
+import ProjectUpdate from './project-update'
+import ProjectSearchBar from './project-search-bar'
 
 export default {
-  name: 'CompanyList',
+  name: 'ProjectList',
   components: {
-    CompanySearchBar,
-    CompanyCreate,
-    CompanyUpdate,
-    PaginationComponent},
+    ProjectSearchBar,
+    ProjectUpdate,
+    ProjectCreate
+  },
   data () {
     return {
       searchModel: {
-        pageDto: {
-          showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]
-        },
-        name: '',
-        type: '',
-        description: ''
+        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
+        name: ''
       },
       baseDto: {page: {totalResult: 0}},
       selectedModel: {},
       exportExcelPar: {
         fileType: 'xls',
-        xmlName: 'admin_company',
-        moduleName: 'company'
+        xmlName: 'admin_project',
+        moduleName: 'project'
       },
-      defaultActiveName: 'CompanyList',
-      editableTabsValue: 'CompanyList',
+      defaultActiveName: 'ProjectList',
+      editableTabsValue: 'ProjectList',
       editableTabs: [],
       tabIndex: 2
     }
@@ -133,7 +128,7 @@ export default {
     listPage: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$adminServerURL + '/CompanyController/listPage',
+        url: Vue.$adminServerURL + '/ProjectController/listPage',
         data: this.searchModel
       }).then(res => {
         if (res.data.flag === 'SUCCESS') {
@@ -156,44 +151,35 @@ export default {
       this.searchModel.pageDto.currentPage = e
       this.listPage()
     },
-    search: function (p) {
-      if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询
-        if (!Vue.$isNullOrIsBlankOrIsUndefined(p.searchKey)) {
-          this.searchModel.name = p.searchKey
-        }
-      } else {
-        this.searchModel = p.searchModel
-      }
+    search: function () {
       this.searchModel.pageDto.currentPage = 1
       this.listPage()
     },
     create: function () {
-      this.addTab('新建公司', 'CreateCompany', 'create')
+      this.addTab('新建项目', 'CreateProject', 'create')
     },
     update: function (data) {
       this.selectedModel = data
-      this.addTab('编辑公司信息', 'UpdateCompany', 'update')
+      this.addTab('编辑项目', 'UpdateProject', 'update')
     },
     deleteById: function (id) {
-      this.$confirm('您确定删除该记录吗', '询问', {
+      this.$confirm('您确定删除该记录吗？', '询问', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         Vue.$ajax({
           method: 'delete',
-          url: Vue.$adminServerURL + '/CompanyController/delete/' + id
+          url: Vue.$adminServerURL + '/ProjectController/delete/' + id
         }).then(res => {
           if (res.data.flag !== 'SUCCESS') {
-            if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.message)) {
-              this.$message({
-                message: res.data.message,
-                type: 'warning'
-              })
-            }
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            })
           } else {
             this.$message({
-              message: '成功',
+              message: res.data.message,
               type: 'success'
             })
             this.listPage()

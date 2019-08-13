@@ -56,11 +56,10 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
-import '../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
-import '../../../../static/orgchart/jquery.orgchart'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.core.js'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.excheck.js'
+import '../../../../../static/zTree_v3.5.27/js/jquery.ztree.exedit.js'
+import '../../../../../static/orgchart/jquery.orgchart'
 import CompanyAdd from './company-add'
 import DepartmentAdd from './department-add'
 import RoleAdd from './role-add'
@@ -76,8 +75,8 @@ export default {
     UserAdd,
     RoleAdd,
     DepartmentAdd,
-    CompanyAdd,
-    PaginationComponent},
+    CompanyAdd
+  },
   data () {
     return {
       setting: {

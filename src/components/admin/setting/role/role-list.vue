@@ -94,7 +94,6 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
 import RoleCreate from './role-create'
 import RoleUpdate from './role-update'
 import RoleImport from './role-import'
@@ -106,8 +105,8 @@ export default {
     RoleSearchBar,
     RoleImport,
     RoleCreate,
-    RoleUpdate,
-    PaginationComponent},
+    RoleUpdate
+  },
   data () {
     return {
       searchModel: {

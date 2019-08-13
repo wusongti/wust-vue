@@ -60,14 +60,12 @@
 </template>
 <script>
 import Vue from 'vue'
-import PaginationComponent from '../../../common/component/pagination-component.vue'
 import OperationLogSearchBar from './operation-log-search-bar'
 
 export default {
   name: 'OprationLogList',
   components: {
-    OperationLogSearchBar,
-    PaginationComponent
+    OperationLogSearchBar
   },
   data () {
     return {

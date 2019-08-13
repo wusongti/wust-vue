@@ -8,15 +8,15 @@
 </template>
 <script>
 import Vue from 'vue'
-import FileUploadComponent from '../../../common/component/file-upload-component.vue'
+import FileUploadComponent from '../../../../common/component/file-upload-component.vue'
 export default {
-  name: 'RoleImport',
+  name: 'UserImport',
   components: {
     FileUploadComponent
   },
   data () {
     return {
-      uploadUrl: Vue.$adminServerURL + '/RoleController/importByExcel?moduleName=role'
+      uploadUrl: Vue.$adminServerURL + '/UserController/importByExcel?moduleName=user'
     }
   },
   methods: {
