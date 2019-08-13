@@ -2,21 +2,14 @@
   <div>
     <el-tabs v-model="editableTabsValue"  @tab-remove="removeTab" @tab-click="clickTab">
       <el-tab-pane :name="defaultActiveName" label="公司列表">
-        <form>
-            <div class="col-xs-2 form-group">
-              <input type="text" class="form-control" placeholder="公司名" v-model="searchModel.name"/>
-            </div>
-            <div>
-              <button class="btn btn-danger btn-sm" type="reset">重置</button>
-              <button class="btn btn-primary btn-sm" type="button" @click="search">查询</button>
-            </div>
-        </form>
+        <search-bar v-on:search="search"></search-bar>
         <el-button-group class="pull-right">
-          <el-button size="mini" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
-          <el-button size="mini" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
+          <el-button size="mini" type="primary" @click="create" v-has-permission="'CompanyList.create'"><span class="glyphicon glyphicon-plus" aria-hidden="true">新建</span></el-button>
+          <el-button size="mini" type="primary" v-export-excel-directive="exportExcelPar" v-has-permission="'CompanyList.export'"><span class="glyphicon glyphicon-export" aria-hidden="true">导出</span></el-button>
         </el-button-group>
         <el-table
           border
+          size="small"
           :data="baseDto.lstDto">
           style="width: 100%">
           <el-table-column
@@ -101,18 +94,24 @@ import Vue from 'vue'
 import PaginationComponent from '../../../common/component/pagination-component.vue'
 import CompanyUpdate from './company-update'
 import CompanyCreate from './company-create'
+import SearchBar from './search-bar'
 
 export default {
   name: 'CompanyList',
   components: {
+    SearchBar,
     CompanyCreate,
     CompanyUpdate,
     PaginationComponent},
   data () {
     return {
       searchModel: {
-        pageDto: {showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]},
-        name: ''
+        pageDto: {
+          showCount: 10, currentPage: 1, pageSizes: [10, 20, 30, 100]
+        },
+        name: '',
+        type: '',
+        description: ''
       },
       baseDto: {page: {totalResult: 0}},
       selectedModel: {},
@@ -157,7 +156,14 @@ export default {
       this.searchModel.pageDto.currentPage = e
       this.listPage()
     },
-    search: function () {
+    search: function (p) {
+      if (!p.isCollapse) { // 非高级查询，则只需要根据关键字查询
+        if (!Vue.$isNullOrIsBlankOrIsUndefined(p.searchKey)) {
+          this.searchModel.name = p.searchKey
+        }
+      } else {
+        this.searchModel = p.searchModel
+      }
       this.searchModel.pageDto.currentPage = 1
       this.listPage()
     },
