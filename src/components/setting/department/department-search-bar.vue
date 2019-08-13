@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div style="margin-bottom: 5px">
-      <el-form :inline="true" label-width="150px"  size="small">
+      <el-form :inline="true" label-width="150px"  size="small" @submit.prevent>
         <el-form-item label="查询关键字">
           <el-input size="small" v-model="searchKey">
             <el-button slot="append" @click="toggleCollapse" :icon="isCollapse ? 'el-icon-remove-outline':'el-icon-circle-plus-outline'">高级</el-button>
@@ -12,7 +12,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-form :model="searchModel" label-width="150px"  size="small" v-bind:style="isCollapse ? 'display:block':'display:none'">
+    <el-form :model="searchModel" label-width="150px"  size="small" v-bind:style="isCollapse ? 'display:block':'display:none'" @submit.prevent>
     </el-form>
   </div>
 </template>

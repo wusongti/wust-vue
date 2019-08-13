@@ -2,7 +2,7 @@
 * Created by WST on 2019/5/16.
 */
 <template>
-  <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="100px">
+  <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="100px" @submit.prevent>
     <el-form-item label="部门编码">
       <el-input
         v-model="updateModel.code"

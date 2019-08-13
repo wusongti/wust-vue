@@ -2,7 +2,7 @@
 * Created by WST on 2019/5/24.
 */
 <template>
-  <el-form  label-width="100px">
+  <el-form  label-width="100px" @submit.prevent>
     <file-upload-component :src="uploadUrl" :fileType="'xls,xlsx'" :fileSize="10" v-on:importCallback="importCallback"></file-upload-component>
   </el-form>
 </template>

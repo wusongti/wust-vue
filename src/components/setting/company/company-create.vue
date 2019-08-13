@@ -2,7 +2,7 @@
 * Created by WST on 2019/5/14.
 */
 <template xmlns:v-data-dictionary-directive="http://www.w3.org/1999/xhtml">
-  <el-form ref="addModel" :model="addModel" :rules="rules" label-width="100px">
+  <el-form ref="addModel" :model="addModel" :rules="rules" label-width="100px" @submit.prevent>
     <el-form-item label="公司名" prop="name">
       <el-input v-model="addModel.name"></el-input>
     </el-form-item>

@@ -2,7 +2,7 @@
 * Created by WST on 2019/6/13.
 */
 <template>
-  <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="200px">
+  <el-form ref="updateModel" :model="updateModel" :rules="rules" label-width="200px" @submit.prevent>
     <el-form-item label="作业名" prop="jobName">
       <el-input v-model="updateModel.jobName" :disabled="true">
       </el-input>
