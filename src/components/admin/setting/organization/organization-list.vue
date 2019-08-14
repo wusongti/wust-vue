@@ -152,12 +152,18 @@ export default {
         if (res.data.flag === 'SUCCESS') {
           let zNodes = JSON.parse(res.data.obj.leftTree)
 
+          if (Vue.$isNullOrIsBlankOrIsUndefined(zNodes)) {
+            zNodes = [{id: '-1', pId: null, name: '企业基础平台组织架构', type: '', relationId: ''}]
+          }
+
           // 初始化右树
-          // eslint-disable-next-line no-undef
-          $('#chart-container').orgchart({
-            'data': JSON.parse(res.data.obj.rightTree),
-            'nodeContent': 'title'
-          })
+          if (!Vue.$isNullOrIsBlankOrIsUndefined(res.data.obj.rightTree)) {
+            // eslint-disable-next-line no-undef
+            $('#chart-container').orgchart({
+              'data': JSON.parse(res.data.obj.rightTree),
+              'nodeContent': 'title'
+            })
+          }
 
           // eslint-disable-next-line no-undef
           let treeObj = $.fn.zTree.init($('#tree'), this.setting, zNodes)
