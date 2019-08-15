@@ -43,10 +43,7 @@ module.exports = {
 
 
     proxyTable: proxyConf.proxy,
-    BASE_URL : "http://localhost:8080",
-    SSO_SERVER_URL : this.BASE_URL + "/api-sso-server",
-    ADMIN_SERVER_URL : this.BASE_URL + "/api-admin-server",
-    AUTOTASK_SERVER_URL : this.BASE_URL + "/api-autotask-server"
+    BASE_URL : "http://localhost:8080"
   },
 
   build: {
@@ -81,9 +78,6 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report,
 
 
-    BASE_URL : "http://localhost:8080",
-    SSO_SERVER_URL : this.BASE_URL + "/api-sso-server",
-    ADMIN_SERVER_URL : this.BASE_URL + "/api-admin-server",
-    AUTOTASK_SERVER_URL : this.BASE_URL + "/api-autotask-server"
+    BASE_URL : "http://dev.zhsq.com"
   }
 }
