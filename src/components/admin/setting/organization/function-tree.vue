@@ -3,14 +3,14 @@
 */
 <template>
   <div id="function-tree">
-    <el-form label-width="100px">
+    <el-form label-width="100px"  @submit.prevent>
       <div class="text-left">
         <label style="color: red;font-size: small;margin-left: 8px;">当前角色：{{this.selectedNode.name}}</label>
         <ul id="functionTree" class="ztree"></ul>
       </div>
-      <el-form-item>
+      <div>
         <el-button type="primary" @click="onSubmit()" size="mini">提交</el-button>
-      </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -121,6 +121,7 @@ export default {
 
   #functionTree{
     max-height: 350px;
+    overflow-y:scroll;
   }
 
 </style>
