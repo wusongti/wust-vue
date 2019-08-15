@@ -44,8 +44,9 @@ module.exports = {
 
     proxyTable: proxyConf.proxy,
     BASE_URL : "http://localhost:8080",
-    SSO_URL : this.BASE_URL + "/sso",
-    ADMIN_URL : this.BASE_URL + "/admin"
+    SSO_SERVER_URL : this.BASE_URL + "/sso",
+    ADMIN_SERVER_URL : this.BASE_URL + "/admin",
+    AUTOTASK_SERVER_URL : this.BASE_URL + "/api-autotask-server"
   },
 
   build: {
@@ -81,7 +82,8 @@ module.exports = {
 
 
     BASE_URL : "http://localhost:8080",
-    SSO_URL : this.BASE_URL + "/sso",
-    ADMIN_URL : this.BASE_URL + "/admin"
+    SSO_SERVER_URL : this.BASE_URL + "/sso",
+    ADMIN_SERVER_URL : this.BASE_URL + "/admin",
+    AUTOTASK_SERVER_URL : this.BASE_URL + "/api-autotask-server"
   }
 }
