@@ -27,7 +27,12 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="userRealName"
+            prop="source"
+            label="日志来源"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="createrName"
             label="操作用户"
             width="120">
           </el-table-column>
@@ -63,7 +68,7 @@ import Vue from 'vue'
 import OperationLogSearchBar from './operation-log-search-bar'
 
 export default {
-  name: 'OprationLogList',
+  name: 'operation-log-list',
   components: {
     OperationLogSearchBar
   },
