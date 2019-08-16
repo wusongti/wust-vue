@@ -58,6 +58,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            fixed="right"
             label="操作"
             width="180">
             <template slot-scope="scope">
@@ -78,7 +79,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog
-      title="提示"
+      title="结果日志"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose">

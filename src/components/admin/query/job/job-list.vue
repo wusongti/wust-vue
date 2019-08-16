@@ -16,7 +16,7 @@
           <el-table-column
             prop="qrtzJobDetails.jobClassName"
             label="作业类名称"
-            width="350">
+            width="450">
           </el-table-column>
           <el-table-column
             prop="qrtzJobDetails.jobGroup"
@@ -40,6 +40,7 @@
           </el-table-column>
           <el-table-column
             label="操作"
+            fixed="right"
             width="200">
             <template slot-scope="scope">
               <button type="button" class="btn btn-link btn-xs" @click="pause(scope.row)" v-has-permission="'JobList.update'" v-if="scope.row.qrtzTriggers.triggerState == 'WAITING'">暂停</button>

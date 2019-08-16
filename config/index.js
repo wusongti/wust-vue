@@ -78,7 +78,7 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report,
 
 
-    BASE_URL : "http://test.zhsq.com"
+    BASE_URL : "http://14n7r36134.iok.la"
   },
 
   build: {
