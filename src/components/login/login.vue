@@ -53,7 +53,7 @@ export default {
     login: function () {
       Vue.$ajax({
         method: 'post',
-        url: Vue.$baseURL + '/api-sso-server/LoginController/login',
+        url: Vue.$ssoServerURL + '/LoginController/login',
         data: {
           'loginName': this.loginName,
           'password': this.password
